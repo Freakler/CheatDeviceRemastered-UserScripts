@@ -1,0 +1,264 @@
+#Game: Vice City Stories
+#Author: MicSuit
+#Version: 1.0
+#Category: Radio
+#Date: 2022-07-05
+#Description: A portable radio to listen to your favourite radio stations!
+
+0005: $1 = 0.4 // Button Guide Text Size
+0005: $2 = 0.75 // Radio Station Name Text Size
+0004: $30 = 0 // Radio ID
+0006: $31 = 'FEA_FM0' // Radio Name
+
+0006: $999 = 'Hide/Show Radio - ~h~Up~w~'
+0006: $1001 = 'Play Radio Station - ~h~X~w~'
+0006: $1002 = 'Stop Radio Station - ~h~Square~w~'
+0006: $1003 = 'Terminate Script - ~h~Down~w~'
+
+0004: $32 = 0 // Audio Playing Check
+
+0004: $33 = 350.0 // Text align
+
+0004: $1000 = 0 // Check
+
+007E:   is_char_in_any_car $PLAYER_CHAR  // Is player in car
+0021: goto_if_true @IN_CAR_ERROR
+
+0107: set_player_control $PLAYER_CHAR to 0
+
+:SHOW_BG
+044E: unknown_empire_display_command_7317 0 1 // Show to screen
+0453: unknown_empire_display_command_7217 0 0 0 0 500 // Border settings
+0452: unknown_empire_display_command_3866 0 25 25 25 150 // Background settings
+0451: unknown_empire_display_command_6b43 0 175 25 // Size settings
+0450: unknown_empire_display_command_91e4 0 300 130 // Position on screen
+
+:MAIN
+0001: wait 0
+007F: is_button_pressed 0 button 9 // Down
+0021: goto_if_true @BAILOUT_MAIN
+ 
+:BAILOUT_CONTINUE
+0204: set_text_scale $1 $1
+0203: display_text 386.0 260.0 gxt $999
+0204: set_text_scale $1 $1
+0203: display_text 382.0 247.0 gxt $1001
+0204: set_text_scale $1 $1
+0203: display_text 355.0 234.0 gxt $1002
+0204: set_text_scale $1 $1
+0203: display_text 373.0 221.0 gxt $1003
+
+0204: set_text_scale $2 $2
+0203: display_text $33 135.0 gxt $31
+0204: set_text_scale $2 $2
+0203: display_text 300.0 133.0 gxt 'AMM_LEF'
+0204: set_text_scale $2 $2
+0203: display_text 464.0 133.0 gxt 'AMM_RIG'
+001B:   $1000 == 0
+0021: goto_if_true @CHECKS_VALID
+
+0009: $1000 -= 1
+
+0002: goto @MAIN
+
+:CHECKS_VALID
+007E:   is_char_in_any_car $PLAYER_CHAR
+0021: goto_if_true @MAIN
+001B:   $32 == 1
+0021: goto_if_true @AUDIO_FOLLOW_PLAYER
+0002: goto @CHECKS_BUTTONS_1
+
+:AUDIO_FOLLOW_PLAYER
+0418: unknown_audio_command_8451 point 1@ 2@ 3@ // Stops audio
+0043: get_char_coordinates $PLAYER_CHAR store_to 1@ 2@ 3@ 
+0417: unknown_audio_command_7532 point 1@ 2@ 3@ values 150 $30 // Play audio at this coordinates
+
+:CHECKS_BUTTONS_1
+007F:   is_buttton_pressed 0 button 8 // Up
+0021: goto_if_true @HS_RADIO
+001B:   $1 == 0.01 // (int) var == num
+0022: goto_if_false @CHECKS_BUTTONS_2
+0002: goto @MAIN
+
+:CHECKS_BUTTONS_2
+007F:   is_button_pressed 0 button 11 //Right
+0021: goto_if_true @INC_ID
+007F:   is_button_pressed 0 button 10
+0021: goto_if_true @DEC_ID
+007F:   is_button_pressed 0 button 16 // X
+0021: goto_if_true @PLAY_RADIO
+007F:   is_button_pressed 0 button 14 // Square
+0021: goto_if_true @STOP_RADIO
+0002: goto @MAIN
+
+
+:INC_ID
+0015:   $30 >= 8 // (int) var > num
+0022: goto_if_false @INC_2_ID
+0002: goto @MAIN
+
+
+:INC_2_ID
+0004: $1000 = 3
+0007: $30 += 1 // (int)
+0002: goto @CHK_ID_NAME
+
+:DEC_ID
+0015:   $30 >= 1 // (int) var > num
+0021: goto_if_true @DEC_2_ID
+0002: goto @MAIN
+
+
+:DEC_2_ID
+0004: $1000 = 3
+0009: $30 -= 1 // (int)
+
+
+:CHK_ID_NAME
+001B:   $30 == 0
+0021: goto_if_true @NAME_0
+001B:   $30 == 1
+0021: goto_if_true @NAME_1
+001B:   $30 == 2
+0021: goto_if_true @NAME_2
+001B:   $30 == 3
+0021: goto_if_true @NAME_3
+001B:   $30 == 4
+0021: goto_if_true @NAME_4
+001B:   $30 == 5
+0021: goto_if_true @NAME_5
+001B:   $30 == 6
+0021: goto_if_true @NAME_6
+001B:   $30 == 7
+0021: goto_if_true @NAME_7
+001B:   $30 == 8
+0021: goto_if_true @NAME_8
+
+:NAME_0
+0006: $31 = 'FEA_FM0' // Radio Name
+0006: $33 = 350.0
+0002: goto @MAIN
+
+:NAME_1
+0006: $31 = 'FEA_FM1'
+0006: $33 = 357.0 
+0002: goto @MAIN
+
+:NAME_2
+0006: $31 = 'FEA_FM2'
+0006: $33 = 353.0 
+0002: goto @MAIN
+
+:NAME_3
+0006: $31 = 'FEA_FM3'
+0006: $33 = 362.5 
+0002: goto @MAIN
+
+:NAME_4
+0006: $31 = 'FEA_FM4'
+0006: $33 = 344.0 
+0002: goto @MAIN
+
+:NAME_5
+0006: $31 = 'FEA_FM5'
+0006: $33 = 334.0 
+0002: goto @MAIN
+
+:NAME_6
+0006: $31 = 'FEA_FM6'
+0006: $33 = 334.0 
+0002: goto @MAIN
+
+:NAME_7
+0006: $31 = 'FEA_FM7'
+0006: $33 = 346.0 
+0002: goto @MAIN
+
+:NAME_8
+0006: $31 = 'FEA_FM8'
+0006: $33 = 336.5 
+0002: goto @MAIN
+
+
+:HS_RADIO
+001B:   $1 == 0.01 // (int) var == num
+0021: goto_if_true @SHOW_RADIO
+
+0107: set_player_control $PLAYER_CHAR to 1
+044E: unknown_empire_display_command_7317 0 0 // Show to screen
+0005: $1 = 0.01 // Text Size
+0005: $2 = 0.01
+007F:   is_buttton_pressed 0 button 8 // Up
+0021: goto_if_true @WH
+0002: goto @MAIN
+
+:SHOW_RADIO
+0107: set_player_control $PLAYER_CHAR to 0
+044E: unknown_empire_display_command_7317 0 1 // Show to screen
+0005: $1 = 0.4 // Text Size
+0005: $2 = 0.75
+007F:   is_buttton_pressed 0 button 8 // Up
+0021: goto_if_true @WH
+0002: goto @MAIN
+
+
+:WH
+0001: wait 0
+0204: set_text_scale $1 $1
+0203: display_text 386.0 260.0 gxt $999
+0204: set_text_scale $1 $1
+0203: display_text 382.0 247.0 gxt $1001
+0204: set_text_scale $1 $1
+0203: display_text 355.0 234.0 gxt $1002
+0204: set_text_scale $1 $1
+0203: display_text 373.0 221.0 gxt $1003
+
+0204: set_text_scale $2 $2
+0203: display_text $33 135.0 gxt $31
+0204: set_text_scale $2 $2
+0203: display_text 300.0 133.0 gxt 'AMM_LEF'
+0204: set_text_scale $2 $2
+0203: display_text 464.0 133.0 gxt 'AMM_RIG'
+007F:   is_buttton_pressed 0 button 8 // Up
+0021: goto_if_true @WH
+
+0002: goto @MAIN
+
+:PLAY_RADIO
+0004: $32 = 1
+0002: goto @MAIN
+
+:STOP_RADIO
+0004: $32 = 0
+0418: unknown_audio_command_8451 point 1@ 2@ 3@ // Stops audio
+0002: goto @MAIN
+
+
+:BAILOUT_MAIN
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 //do nothing for the first 1000
+0021: goto_if_true @BAILOUT_CONTINUE 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+0021: goto_if_true @BAILOUT_EXIT 
+0267: print_help 'Use~h~ the down button ~w~again to end the script.'  //like 'CAN_CON'
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @BAILOUT_CONTINUE
+
+:BAILOUT_EXIT
+0268: clear_help
+0002: goto @TERMINATE_RADIO
+
+:IN_CAR_ERROR
+0267: print_help 'Cannot use ~h~Mobile Radio~w~ while in a ~r~vehicle~w~.'
+0023: terminate_this_script
+ 
+
+:TERMINATE_RADIO
+044E: unknown_empire_display_command_7317 0 0 // Show to screen
+0107: set_player_control $PLAYER_CHAR to 1
+0418: unknown_audio_command_8451 point 1@ 2@ 3@ // Stops audio
+0023: terminate_this_script
