@@ -1,0 +1,9 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Debug
+#Date: 2022-02-22
+#Description: Start the hidden Debug Menu's Character Viewer
+
+0055: set_player_coordinates $PLAYER_CHAR to 1436.50 -1150.5 12.0
+0002: goto @CVIEW

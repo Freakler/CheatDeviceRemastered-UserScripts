@@ -1,0 +1,10 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Miscellaneous
+#Date: 2022-01-24
+#Description: The iconic soundtrack will start playing in the background when activated
+
+
+0444: play_end_of_game_tune
+004E: terminate_this_script

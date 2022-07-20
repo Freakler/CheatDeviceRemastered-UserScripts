@@ -1,0 +1,161 @@
+#Game: Liberty City Stories
+#Author: MicSuit
+#Version: 1.2
+#Category: Missions
+#Date: 2022-06-05
+#Description: A mission made with SCM tools. Have fun and please don't cheat. :P
+
+0004: $MISSION_REWARD = 3000
+
+0038:   $ONMISSION == 0 
+004D: goto_if_false @TERMINATE_SCRIPT
+
+
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0.0 5.0 0.0 store_to 1@ 2@ 3@ // Get coordinates with an offset
+
+024C: request_model 132 // Idaho
+0390: load_all_models_now
+
+00A5: create_car 132 at 1@ 2@ 3@ store_to 4@ // Spawn Idaho (id = 132)
+
+01CC: dont_remove_object 4@
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+
+0002: goto @CHECK_CAR
+
+:GET_BACK_CAR1
+03C2: remove_sphere $1833
+0005: $1833 = 0
+0169: remove_blip $1525
+0005: $1525 = 0
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+
+:GET_BACK_CAR2
+0001: wait 0
+00BB: print 'Go back to the ~b~Idaho~w~!' time 1 flag 1
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_MISSION_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @GET_BACK_CAR2
+0169: remove_blip 5@
+018F: add_blip_for_coord $1 $2 $3 store_to $1525
+03C1: add_sphere $1 $2 $3 radius 4.0 store_to $1833
+0002: goto @CHECK_SPHERE
+
+:GET_BACK_CAR3
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+
+:GET_BACK_CAR4
+0001: wait 0
+00BB: print 'Go back to the ~b~Idaho~w~!' time 1 flag 1
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_MISSION_FAILED
+00E5:   is_player_in_any_car $PLAYER_CHAR
+004D: goto_if_false @GET_BACK_CAR4
+80E1:   not is_player_in_car $PLAYER_CHAR car 4@
+004C: goto_if_true @END_MISSION_FAILED
+0169: remove_blip 5@
+0002: goto @WHILE_POLICE
+
+
+
+:CHECK_CAR
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_MISSION_FAILED
+00BC: print_now 'Enter the ~b~Idaho~w~!' time 1 flag 1  // ~w~You need a car to be in this race!
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_MISSION_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CHECK_CAR
+
+0169: remove_blip 5@
+
+:SPAWN_BS
+0001: wait 0
+0005: $1 = -263.91
+0005: $2 = -1474.36
+0005: $3 = 5.66
+018F: add_blip_for_coord $1 $2 $3 store_to $1525
+03C1: add_sphere $1 $2 $3 radius 4.0 store_to $1833
+03EA: print_help 'Go to the ~y~yellow marker~w~.'
+
+
+:CHECK_SPHERE
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_MISSION_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_MISSION_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @GET_BACK_CAR1
+00FC:   locate_player_in_car_3d $PLAYER_CHAR coord $1 $2 $3 radius 4.0 4.0 4.0 sphere 1
+004D: goto_if_false @CHECK_SPHERE
+
+:REMOVE_BS
+0001: wait 0
+0169: remove_blip $1525
+0005: $1525 = 0
+03C2: remove_sphere $1833
+0005: $1833 = 0
+
+01B9: set_player_control $PLAYER_CHAR to 0 
+016E: set_fading_colour 0 0 0 
+016F: do_fade 500 fade 0
+
+:FADING
+0001: wait 0
+0170:   get_fading_status 
+004D: goto_if_false @POLICE_ALERT 
+0001: wait 0 
+0002: goto @FADING
+
+:POLICE_ALERT
+0001: wait 1000
+0229: set_car_health 4@ to 500
+0112: alter_wanted_level $PLAYER_CHAR to 5
+01B9: set_player_control $PLAYER_CHAR to 1 
+016F: do_fade 500 fade 1
+00BC: print_now 'Some ~r~idiots~w~ damaged your ~b~Idaho~w~ and called the ~b~cops~w~ on you! ~n~Escape them!' time 4000 flag 1  // ~w~You need a car to be in this race!
+0002: goto @WHILE_POLICE
+
+:STARS_5
+0112: alter_wanted_level $PLAYER_CHAR to 5
+
+:WHILE_POLICE
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_MISSION_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_MISSION_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @GET_BACK_CAR3
+0114:   is_wanted_level_greater $PLAYER_CHAR than 0
+004C: goto_if_true @WHILE_POLICE
+
+
+
+:END_MISSION_PASSED
+0001: wait 0
+01E8: print_with_number_big 'M_PASS' number $MISSION_REWARD time 2000 style 1
+010E: add_score $PLAYER_CHAR value $MISSION_REWARD // money
+0399: play_mission_passed_tune 1
+0002: goto @TERMINATE_SCRIPT
+
+:END_MISSION_FAILED
+0001: wait 0
+00BA: print_big 'M_FAIL' time 1000 style 1  // ~Y~MISSION FAILED!
+0169: remove_blip $1525
+0005: $1525 = 0
+03C2: remove_sphere $1833
+0005: $1833 = 0
+0169: remove_blip 5@
+0112: alter_wanted_level $PLAYER_CHAR to 0
+
+
+:TERMINATE_SCRIPT
+0001: wait 0
+004E: terminate_this_script

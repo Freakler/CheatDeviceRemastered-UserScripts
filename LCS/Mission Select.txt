@@ -3,6 +3,6 @@
 #Version: 1.0
 #Category: Debug
 #Date: 2022-02-22
-#Description: Start the hidden Debug Menu's Building Viewer
+#Description: Start the hidden Debug Menu's Level Skip menu
 
-0002: goto @BVIEW
+0002: goto @LEVSKIP

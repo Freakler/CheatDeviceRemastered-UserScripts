@@ -1,0 +1,148 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 0.1
+#Category: World
+#Date: 2022-03-10
+#Description: Example how to load and enter interiors.
+
+///add enter sphere and blib
+0005: $1 = 1112.32
+0005: $2 = -481.17
+0005: $3 = 21.81
+018F: add_blip_for_coord $1 $2 $3 store_to $2346 
+03C1: add_sphere $1 $2 $3 radius 1.0 store_to $2347 //$3932
+
+
+//wait for player to enter sphere
+:loop
+0001: wait 0 
+00FB:   locate_player_on_foot_3d $PLAYER_CHAR coord $1 $2 $3 radius 1.0 1.0 1.0 sphere 1  
+004D: goto_if_false @loop 
+
+
+01B9: set_player_control $PLAYER_CHAR to 0 
+016E: set_fading_colour 0 0 0 
+016F: do_fade 500 fade 0
+
+:fading_in
+0170:   get_fading_status 
+004D: goto_if_false @removeenter 
+0001: wait 0 
+0002: goto @fading_in 
+
+//remove sphere and blib
+:removeenter
+03C2: remove_sphere $2347 
+0004: $2347 = 0 
+0169: remove_blip $2346 
+0006: $2346  = 0 
+
+//0001: wait 1000 //1 sec
+
+
+//load her apartment
+0635: swap_building 19 1 //maria on
+03BB: swap_nearest_building_model 1071.592 -439.308 26.933 radius 50.0 from 909 to 3886		//from #IND_MAINTEN3 to #IZZY_MARIAAPTINT 
+03BB: swap_nearest_building_model 1071.592 -439.308 26.933 radius 50.0 from 681 to 1113		//from #LOD_MAINTEN3 to #MARIA_NULL 
+03D0: load_scene 1071.592 -439.308 26.933
+
+
+//teleport player inside
+0055: set_player_coordinates $PLAYER_CHAR to 1106.83 -477.82 31.80
+0176: set_player_heading $PLAYER_CHAR to 235.0 
+0378: set_camera_behind_player 
+01B9: set_player_control $PLAYER_CHAR to 1 
+
+
+//create Maria
+029B: unload_special_character 1
+0241: load_special_character 1 model 'MAR_01'
+0390: load_all_models_now 
+0001: wait 500
+009A: create_char 21 model 109 at 1111.39 -483.20 32.00 store_to $3912
+024A: set_anim_group_for_char $3912 to 45
+0178: set_char_heading $3912 to 16.0 
+0232: char_look_at_player_always $3912 player $PLAYER_CHAR
+
+
+016F: do_fade 500 fade 1 
+
+:fading_out
+0170:   get_fading_status 
+004D: goto_if_false @loaded 
+0001: wait 0 
+0002: goto @fading_out
+
+
+:loaded
+0001: wait 1000 //1 sec
+0655: print_subtitle_now_version_a 'POMOB6B' time 4000 flag 1 //~w~I swear I can only find that bitch when she needs money!
+//'MORG_02' = Antonio! How wonderful to see you!
+//'CONT_01' = Shut up, you ungrateful bitch.
+
+
+
+
+///add leave sphere
+0005: $1 = 1105.37
+0005: $2 = -477.58
+0005: $3 = 32.84
+03C1: add_sphere $1 $2 $3 radius 1.0 store_to $2347 //$3932
+
+//wait for player to enter leave sphere
+:loop2
+0001: wait 0 
+00FB:   locate_player_on_foot_3d $PLAYER_CHAR coord $1 $2 $3 radius 1.0 1.0 1.0 sphere 1  
+004D: goto_if_false @loop2 
+
+01B9: set_player_control $PLAYER_CHAR to 0 
+016F: do_fade 500 fade 0
+
+
+:fading_in2
+0170:   get_fading_status 
+004D: goto_if_false @removeleave
+0001: wait 0 
+0002: goto @fading_in2 
+
+//remove leave sphere
+:removeleave
+03C2: remove_sphere $2347 
+0004: $2347 = 0 
+
+
+//unload maria
+0354: remove_char_elegantly $3912
+
+
+//unload her apartment
+0635: swap_building 19 0 //maria off
+03BB: swap_nearest_building_model 1071.592 -439.308 26.933 radius 50.0 from 3886 to 909		//from #IZZY_MARIAAPTINT to #IND_MAINTEN3 
+03BB: swap_nearest_building_model 1071.592 -439.308 26.933 radius 50.0 from 1113 to 681		//from #MARIA_NULL to #LOD_MAINTEN3 
+03D0: load_scene 1071.592 -439.308 26.933
+
+
+//teleport player back outside
+0055: set_player_coordinates $PLAYER_CHAR to 1117.70 -481.10 19.00
+0176: set_player_heading $PLAYER_CHAR to 270.0
+03CD: set_camera_in_front_of_player
+01B9: set_player_control $PLAYER_CHAR to 1
+
+
+016F: do_fade 500 fade 1 
+
+:fading_out2
+0170:   get_fading_status 
+004D: goto_if_false @loaded2 
+0001: wait 0 
+0002: goto @fading_out2
+
+
+:loaded2
+00BA: print_big 'M_PASSN' time 1000 style 1  // ~Y~MISSION PASSED!
+//00BA: print_big 'M_OVER' time 1000 style 1  // MISSION OVER!
+0399: play_mission_passed_tune 1 
+
+
+
+004E: terminate_this_script 

@@ -1,0 +1,166 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Miscellaneous
+#Date: 2022-03-10
+#Description: Save the game almost anywhere and almost anytime!
+
+//TODO: 
+// - check if player is saving inside a safehouse
+// - keep current time
+// - keep current weather
+// - 
+
+
+
+
+//error-check if on a mission
+0038:   $ONMISSION == 0 
+004D: goto_if_false @error_mission 
+
+//error-check if in vehicle
+00E5:   is_player_in_any_car $PLAYER_CHAR
+004C: goto_if_true @error_vehicle
+
+//error-check if in underground
+03CB:   is_collision_in_memory island_id 4 //cannot save in the underground, sorry
+004C: goto_if_true @error_underground 
+
+/////////////////////////////////////////////////////////////////////
+
+016E: set_fading_colour 0 0 0 
+016F: do_fade 500 fade 0
+
+:fading_in
+0170:   get_fading_status 
+004D: goto_if_false @values 
+0001: wait 0 
+0002: goto @fading_in 
+
+//save current stuff to vars used for savegame
+:values
+0054: get_player_coordinates $PLAYER_CHAR store_to $_7 $_8 $_9			//player xyz coords
+000D: $_9 -= 0.5
+0175: get_player_heading $PLAYER_CHAR store_to $_162					//faceing direction
+
+0474: store_player $PLAYER_CHAR currently_armed_weapon_to $_158			//selected weapon slot
+04E2: get_char_armour $PLAYER_ACTOR store_to $_160						//armor
+0110: store_score $PLAYER_CHAR to $_161 								//money
+
+064D: get_pickup_value $1100 store_to $_290
+064D: get_pickup_value $1102 store_to $_291
+064D: get_pickup_value $1104 store_to $_292
+064D: get_pickup_value $1106 store_to $_293
+
+01C5: store_wanted_level $PLAYER_CHAR store_to $_159					//wanted level
+
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 36 store_to $_124 	//Ammo
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 1 store_to $_125 	//..
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 2 store_to $_126 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 7 store_to $_127 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 3 store_to $_128 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 4 store_to $_129 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 6 store_to $_130 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 8 store_to $_131 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 10 store_to $_132 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 5 store_to $_133 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 9 store_to $_134 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 11 store_to $_135 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 12 store_to $_136 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 15 store_to $_137 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 14 store_to $_138 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 13 store_to $_139 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 17 store_to $_140 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 18 store_to $_141 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 19 store_to $_142 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 20 store_to $_143 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 21 store_to $_144 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 22 store_to $_145 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 24 store_to $_146 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 23 store_to $_147 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 25 store_to $_148 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 27 store_to $_149 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 26 store_to $_150 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 30 store_to $_151 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 32 store_to $_152 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 31 store_to $_153 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 33 store_to $_154 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 28 store_to $_155 
+041E: get_ammo_in_player_weapon $PLAYER_CHAR weapon 29 store_to $_156
+
+03CB:   is_collision_in_memory island_id 1 //portland
+004C: goto_if_true @portland 
+
+03CB:   is_collision_in_memory island_id 2 //staunton
+004C: goto_if_true @staunton 
+
+03CB:   is_collision_in_memory island_id 3 //shoreside
+004C: goto_if_true @shoreside 
+
+
+//trick is to set different island so that outside world gets re-loaded
+
+:portland
+0004: $_211 = 2 //savehouse to load Portland = 1, Staunton = 2 ...					
+0002: goto @save
+
+:staunton			
+0004: $_211 = 1 //savehouse to load Portland = 1, Staunton = 2 ...								
+0002: goto @save
+
+:shoreside			
+0004: $_211 = 1 //savehouse to load Portland = 1, Staunton = 2 ...								
+
+
+/////////////////////////////////////////////////////////////////////
+
+
+//initiate the save dialog
+:save
+00BF: get_time_of_day $1876 $1875 //before save
+03DD: activate_save_menu 
+0001: wait 0 
+
+//:still_saving
+//83DE:   not has_save_game_finished 
+//004D: goto_if_false @save_done 
+//0001: wait 0 
+//0002: goto @still_saving 
+//:save_done
+
+016F: do_fade 500 fade 1 
+
+:fading_out
+0170:   get_fading_status 
+004D: goto_if_false @back_in_game 
+0001: wait 0 
+0002: goto @fading_out
+
+
+:back_in_game
+
+//print success msg
+00BF: get_time_of_day $1874 $1875  //after save
+003A:   $1876 == $1874
+004C: goto_if_true @finished
+
+0001: wait 500 //0.5 sec
+03EA: print_help 'FESZ_L1' // Game saved successfully!
+
+
+:finished
+004E: terminate_this_script 
+
+/////////////////////////////////////////////////////////////////////
+
+:error_mission
+03EA: print_help 'CNTSAV' // Can't save the game. On a mission.
+0002: goto @finished 
+
+:error_vehicle
+03EA: print_help 'CNCSAV' // Can't save thee game. You're in a car.
+0002: goto @finished 
+
+:error_underground
+03EA: print_help 'NOGMSV' // Can save only at your hideout.
+0002: goto @finished 

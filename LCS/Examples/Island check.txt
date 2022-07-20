@@ -1,0 +1,38 @@
+
+03CB:   is_collision_in_memory island_id 1 //portland
+004C: goto_if_true @portland 
+
+03CB:   is_collision_in_memory island_id 2 //staunton
+004C: goto_if_true @staunton 
+
+03CB:   is_collision_in_memory island_id 3 //shoreside
+004C: goto_if_true @shoreside 
+
+03CB:   is_collision_in_memory island_id 4 //underground
+004C: goto_if_true @underground 
+
+
+:error //shouldn't be reachable since it MUST be one of the above cases!
+03EA: print_help 'CDERROR'
+004E: terminate_this_script 
+
+
+:portland
+03EA: print_help 'IND_ZON'
+004E: terminate_this_script 
+
+:staunton
+03EA: print_help 'COM_ZON'
+004E: terminate_this_script 
+
+:shoreside
+03EA: print_help 'SUB_ZON'
+004E: terminate_this_script 
+
+:underground
+03EA: print_help 'TRAIN'
+004E: terminate_this_script 
+
+
+
+
