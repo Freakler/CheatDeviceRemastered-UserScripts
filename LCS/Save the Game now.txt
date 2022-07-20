@@ -7,11 +7,7 @@
 
 //TODO: 
 // - check if player is saving inside a safehouse
-// - keep current time
 // - keep current weather
-// - 
-
-
 
 
 //error-check if on a mission
@@ -24,7 +20,7 @@
 
 //error-check if in underground
 03CB:   is_collision_in_memory island_id 4 //cannot save in the underground, sorry
-004C: goto_if_true @error_underground 
+004C: goto_if_true @error_underground
 
 /////////////////////////////////////////////////////////////////////
 
@@ -127,7 +123,7 @@
 //0001: wait 0 
 //0002: goto @still_saving 
 //:save_done
-
+00C0: set_time_of_day $1876 $1875 // Fix time issue
 016F: do_fade 500 fade 1 
 
 :fading_out
@@ -140,7 +136,6 @@
 :back_in_game
 
 //print success msg
-00BF: get_time_of_day $1874 $1875  //after save
 003A:   $1876 == $1874
 004C: goto_if_true @finished
 
@@ -162,5 +157,5 @@
 0002: goto @finished 
 
 :error_underground
-03EA: print_help 'NOGMSV' // Can save only at your hideout.
-0002: goto @finished 
+03EA: print_help 'Cant save in the underground.' // Can save only at your hideout.
+0002: goto @finished
