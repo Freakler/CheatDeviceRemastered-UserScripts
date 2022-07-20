@@ -1,0 +1,96 @@
+#Game: Liberty City Stories
+#Author: MicSuit
+#Version: 1.0
+#Category: Cars
+#Date: 2022-07-20
+#Description: Spawn a train with 5 mananas. Press the up button twice to disable.
+
+0004: 1@ = 134 // Linerunner ID
+0004: 11@ = 141 // Manana ID
+0005: 30@ = 5.4 // Offset
+0005: 31@ = -5.4 // Negative Offset
+0005: 32@ = -0.95 // Another Offset (lol)
+
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 3.0 0.0 0.0 store_to 2@ 3@ 4@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset -100.0 -200.0 -250.0 store_to 16@ 17@ 18@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 100.0 200.0 250.0 store_to 19@ 20@ 21@
+
+024C: request_model 1@
+024C: request_model 11@      // Request the models we need
+0390: load_all_models_now
+
+039A: clear_area 2@ 3@ 4@ radius 100.0 clear_particles 0
+03BF: clear_area_of_cars 16@ 17@ 18@ to 19@ 20@ 21@  // Clear area of cars
+
+
+
+// Spawn Cars
+00A5: create_car 1@ at 2@ 3@ 4@ store_to 13@ // Linerunner
+000D: 3@ -= 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 14@  // vvv Baggage Handlers
+000D: 3@ -= 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 15@
+000D: 3@ -= 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 16@
+000D: 3@ -= 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 17@
+000D: 3@ -= 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 18@  // ^^^ Baggage Handlers
+
+03FA: set_car_can_be_damaged 13@ to 0
+03FA: set_car_can_be_damaged 14@ to 0
+03FA: set_car_can_be_damaged 15@ to 0
+03FA: set_car_can_be_damaged 16@ to 0  // Disable Cars Damage
+03FA: set_car_can_be_damaged 17@ to 0  
+03FA: set_car_can_be_damaged 18@ to 0
+
+:CAR_FOLLOW_OTHER
+0001: wait 0
+
+	/// Press UP twice to exit out ///////////
+	00E6: is_button_pressed 0 button 8
+	004C: goto_if_true @BAILOUT_MAIN 
+	:BAILOUT_CONTINUE
+	//////////////////////////////////////////
+
+040C: get_offset_from_car_in_world_coords 13@ offset 0.0 -8.0 -1.60 store_to 8@ 9@ 10@  // Follow the car in front
+00AB: set_car_coordinates 14@ to 8@ 9@ 10@
+0179: get_car_heading 13@ store_to 27@
+017A: set_car_heading 14@ to 27@
+
+040C: get_offset_from_car_in_world_coords 14@ offset 0.0 31@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 15@ to 8@ 9@ 10@
+017A: set_car_heading 15@ to 27@
+
+040C: get_offset_from_car_in_world_coords 15@ offset 0.0 31@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 16@ to 8@ 9@ 10@
+017A: set_car_heading 16@ to 27@
+
+040C: get_offset_from_car_in_world_coords 16@ offset 0.0 31@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 17@ to 8@ 9@ 10@
+017A: set_car_heading 17@ to 27@
+
+040C: get_offset_from_car_in_world_coords 17@ offset 0.0 31@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 18@ to 8@ 9@ 10@
+017A: set_car_heading 18@ to 27@
+0002: goto @CAR_FOLLOW_OTHER
+
+:BAILOUT_MAIN
+01C2: get_game_timer $1531
+0004: $1448 = $1531
+002C:   $1450 >= $1448 //do nothing for the first 1000
+004C: goto_if_true @BAILOUT_CONTINUE 
+0004: $1450 = $1531
+0008: $1450 += 1000
+002C:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+004C: goto_if_true @BAILOUT_EXIT 
+03EA: print_help 'Press~h~ ~k~ ~TGSUB~~w~ again to cancel the script.'  //like 'CAN_CON'
+0004: $1449 = $1531 
+0008: $1449 += 3500
+0002: goto @BAILOUT_CONTINUE
+
+:BAILOUT_EXIT
+03EB: clear_help
+
+:TERMINATE_SCRIPT
+004E: terminate_this_script

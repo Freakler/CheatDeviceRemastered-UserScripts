@@ -3,13 +3,13 @@
 #Version: 1.0
 #Category: Cars
 #Date: 2022-06-17
-#Description: Spawn a train with 5 baggage handlers. Press Up to disable
+#Description: Spawn a train with 5 baggage handlers. Press the up button twice to disable
 
 0004: 1@ = 216 // Linerunner ID
 0004: 11@ = 174 // Baggage Handler ID
-0004: 30@ = 4.1 // Offset
-0004: 31@ = -4.1 // Negative Offset
-0004: 32@ = -0.725 // Another Offset (lol)
+0005: 30@ = 4.1 // Offset
+0005: 31@ = -4.1 // Negative Offset
+0005: 32@ = -0.725 // Another Offset
 
 02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 3.0 0.0 0.0 store_to 2@ 3@ 4@
 02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset -100.0 -200.0 -250.0 store_to 16@ 17@ 18@
