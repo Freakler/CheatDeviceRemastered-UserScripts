@@ -1,0 +1,8 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Debug
+#Date: 2022-02-22
+#Description: Start the hidden Debug Menu's Building Viewer
+
+0002: goto @BVIEW
