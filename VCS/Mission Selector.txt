@@ -1,0 +1,8 @@
+//Game: Vice City Stories
+//Author: Freakler
+//Version: 1.0
+//Category: Misc
+//Date: 2022-03-05
+//Description: Opens Rockstars build-in Mission select menu
+
+0002: jump @LEVSKIP

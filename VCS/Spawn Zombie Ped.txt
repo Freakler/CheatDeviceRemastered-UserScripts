@@ -1,0 +1,29 @@
+#Game: Vice City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Pedestrians
+#Date: 2022-03-18
+#Description: Spawn a Zombie following you.
+
+
+
+
+0138: generate_random_float_in_range -3.0 3.0 store_to 5@ //left right of player
+0138: generate_random_float_in_range 2.0 5.0 store_to 6@ //in front of player
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 5@ 6@ 0.0 store_to 5@ 6@ 7@
+
+
+0160: request_model 154
+0228: load_all_models_now
+003E: create_char 21 model 154 at 5@ 6@ 7@ store_to $5348
+
+0443: request_anims 83
+015F: set_anim_group_for_char $5348 to 83 
+
+
+014B: set_char_health $5348 to 20 
+0278: set_char_money $5348 to 0 
+00F3: set_char_obj_walk_to_char $5348 char $PLAYER_CHAR
+
+
+0023: end_thread	//23 00

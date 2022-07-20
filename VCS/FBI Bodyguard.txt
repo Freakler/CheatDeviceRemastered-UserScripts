@@ -1,0 +1,41 @@
+#Game: Vice City Stories
+#Author: Metehan989
+#Version: 1.0
+#Category: Pedestrians
+#Date: 2022-05-06
+#Description: Spawn a FBI guy with a MP5.
+
+
+:CHAR_POS
+0138: generate_random_float_in_range -3.0 3.0 store_to 5@ //left right of player
+0138: generate_random_float_in_range 2.0 5.0 store_to 6@ //in front of player
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 5@ 6@ 0.0 store_to 5@ 6@ 7@
+
+:CRE_CHAR
+0160: request_model 10
+0228: load_all_models_now
+003E: create_char 21 model 10 at 5@ 6@ 7@ store_to $5348
+
+:SET_STATS_CHAR
+014B: set_char_health $5348 to 20 
+0278: set_char_money $5348 to 0 
+00F3: set_char_obj_walk_to_char $5348 char $PLAYER_CHAR
+
+:SET_CHAR_OBJC
+0119: tie_char $5348 to_char $PLAYER_CHAR
+01EC: set_char $5348 running 1
+0310: set_char_as_player_friend $5348 player $PLAYER_CHAR on 1
+0347: set_char_never_targetted $5348 to 1
+0331: set_char_in_players_group_can_fight $5348 can_fight 1
+02A5: set_char_suffers_critical_hits $5348 enable 0
+0324: set_char_can_be_damaged_by_members_of_gang $5348 gang_ID 6 unk3 0 
+01A4: set_char_heed_threats $5348 flag 1
+04D3: clear_char_leadership $5348 
+01C9: set_char_accuracy $5348 to 100
+03D5: set_char_max_health $5348 to 2000 
+014B: set_char_health $5348 to 2000 
+0106: give_weapon_to_char $5348 weapon 27 ammo 9999
+
+
+:END
+0023: terminate_this_script

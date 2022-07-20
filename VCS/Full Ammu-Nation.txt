@@ -1,0 +1,338 @@
+#Game: Vice City Stories
+#Author: MicSuit
+#Version: 1.1
+#Category: Weapons
+#Date: 2022-06-21
+#Description: Buy all weapons in the files of GTA VCS!
+
+0004: $30 = 1 // Weapon id
+
+0005: $1 = 234.46
+0005: $2 = -132.35
+0005: $3 = 8.09
+00C3: add_blip_for_coord $1 $2 $3 store_to $2879
+0248: add_sphere $1 $2 $3 radius 3.0 store_to $2878
+
+0006: $3000 = 'WEAP03' // Name of the weapon
+0006: $3001 = '~y~Weapon ID: ~1~'
+
+0004: $1000 = 0 // Check
+
+0002: goto @CHECK_SPHERE
+
+:CHECK_SPHERE
+0001: wait 0
+008A:    locate_char_on_foot_3d $PLAYER_CHAR coord $1 $2 $3 radius 3.0 3.0 3.0 sphere 1
+0022: goto_if_false @CHECK_SPHERE
+
+:removebs
+00BB: remove_blip $2879
+0004: $2879 = 0
+0249: remove_sphere $2878
+0004: $2878 = 0
+0005: 1@ = 257.69
+0005: 2@ = -55.78
+0005: 3@ = 20.15
+0107: set_player_control $PLAYER_CHAR to 0
+00B9: set_fixed_camera_position 1@ 2@ 3@ rotation 100 100 100
+00BA: point_camera_at_point 214.35 -145.12 6.52 switchstyle 2
+0002: goto @AMMU
+
+
+
+:AMMU
+0001: wait 0
+0207: set_text_centre 1
+0204: set_text_scale 1.2 1.2
+0055: print_big 'LG_04' time 1 style 5
+0203: display_text 164.0 120.0 gxt $3000
+02B1: display_text_with_number 164.0 60.0 gxt $3001 number $30
+0203: display_text 10.0 120.0 gxt 'AMM_LEF'
+0203: display_text 456.0 120.0 gxt 'AMM_RIG'
+001B:   $1000 == 0
+0021: goto_if_true @CHECKS_BUTTONS
+0009: $1000 -= 1 
+0002: goto @AMMU
+
+
+:CHECKS_BUTTONS
+007F:   is_button_pressed 0 button 17
+0021: goto_if_true @TERMINATE_SCRIPT
+007F:   is_button_pressed 0 button 11
+0021: goto_if_true @INCREMENT_ID
+007F:   is_button_pressed 0 button 10
+0021: goto_if_true @DECREMENT_ID
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @GIVE_WEAPON
+
+0002: goto @AMMU
+
+:INCREMENT_ID
+0015: $30 >= 39
+0022: goto_if_false @INC_2
+0002: goto @AMMU
+
+:INC_2
+0004: $1000 = 2
+0007: $30 += 1
+0002: goto @ID_TO_NAME
+
+:DECREMENT_ID
+0010: $30 > 1
+0021: goto_if_true @DEC_2
+0002: goto @AMMU
+
+:DEC_2
+0004: $1000 = 2
+0009: $30 -= 1
+0002: goto @ID_TO_NAME
+
+:ID_TO_NAME
+001B:   $30 == 1
+0021: goto_if_true @NAME_1
+001B:   $30 == 2
+0021: goto_if_true @NAME_2
+001B:   $30 == 3
+0021: goto_if_true @NAME_3
+001B:   $30 == 4
+0021: goto_if_true @NAME_4
+001B:   $30 == 5
+0021: goto_if_true @NAME_5
+001B:   $30 == 6
+0021: goto_if_true @NAME_6
+001B:   $30 == 7
+0021: goto_if_true @NAME_7
+001B:   $30 == 8
+0021: goto_if_true @NAME_8
+001B:   $30 == 9
+0021: goto_if_true @NAME_9
+001B:   $30 == 10
+0021: goto_if_true @NAME_10
+001B:   $30 == 11
+0021: goto_if_true @NAME_11
+001B:   $30 == 12
+0021: goto_if_true @NAME_12
+001B:   $30 == 13
+0021: goto_if_true @NAME_13
+001B:   $30 == 14
+0021: goto_if_true @NAME_14
+001B:   $30 == 15
+0021: goto_if_true @NAME_15
+001B:   $30 == 16
+0021: goto_if_true @NAME_16
+001B:   $30 == 17
+0021: goto_if_true @NAME_17
+001B:   $30 == 18
+0021: goto_if_true @NAME_18
+001B:   $30 == 19
+0021: goto_if_true @NAME_19
+001B:   $30 == 20
+0021: goto_if_true @NAME_20
+001B:   $30 == 21
+0021: goto_if_true @NAME_21
+001B:   $30 == 22
+0021: goto_if_true @NAME_22
+001B:   $30 == 23
+0021: goto_if_true @NAME_23
+001B:   $30 == 24
+0021: goto_if_true @NAME_24
+001B:   $30 == 25
+0021: goto_if_true @NAME_25
+001B:   $30 == 26
+0021: goto_if_true @NAME_26
+001B:   $30 == 27
+0021: goto_if_true @NAME_27
+001B:   $30 == 28
+0021: goto_if_true @NAME_28
+001B:   $30 == 29
+0021: goto_if_true @NAME_29
+001B:   $30 == 30
+0021: goto_if_true @NAME_30
+001B:   $30 == 31
+0021: goto_if_true @NAME_31
+001B:   $30 == 32
+0021: goto_if_true @NAME_32
+001B:   $30 == 33
+0021: goto_if_true @NAME_33
+001B:   $30 == 34
+0021: goto_if_true @NAME_34
+001B:   $30 == 35
+0021: goto_if_true @NAME_35
+001B:   $30 == 36
+0021: goto_if_true @NAME_36
+001B:   $30 == 37
+0021: goto_if_true @NAME_37
+001B:   $30 == 38
+0021: goto_if_true @NAME_38
+001B:   $30 == 39
+0021: goto_if_true @NAME_39
+
+
+:NAME_1
+0006: $3000 = 'Brass Knuckles'
+0002: goto @AMMU
+
+:NAME_2
+0006: $3000 = 'WEAP04'
+0002: goto @AMMU
+
+:NAME_3
+0006: $3000 = 'WEAP05'
+0002: goto @AMMU
+
+:NAME_4
+0006: $3000 = 'WEAP02'
+0002: goto @AMMU
+
+:NAME_5
+0006: $3000 = 'WEAP06'
+0002: goto @AMMU
+
+:NAME_6
+0006: $3000 = 'WEAP01'
+0002: goto @AMMU
+
+:NAME_7
+0006: $3000 = 'WEAP07'
+0002: goto @AMMU
+
+:NAME_8
+0006: $3000 = 'WEAP08'
+0002: goto @AMMU
+
+:NAME_9
+0006: $3000 = 'WEAP09'
+0002: goto @AMMU
+
+:NAME_10
+0006: $3000 = 'WEAP10'
+0002: goto @AMMU
+
+:NAME_11
+0006: $3000 = 'WEAP11'
+0002: goto @AMMU
+
+:NAME_12
+0006: $3000 = 'WEAP13'
+0002: goto @AMMU
+
+:NAME_13
+0006: $3000 = 'WEAP15'
+0002: goto @AMMU
+
+:NAME_14
+0006: $3000 = 'WEAP34'
+0002: goto @AMMU
+
+:NAME_15
+0006: $3000 = 'Sea Mine'
+0002: goto @AMMU
+
+:NAME_16
+0006: $3000 = 'WEAP14'
+0002: goto @AMMU
+
+:NAME_17
+0006: $3000 = 'Molotov'
+0002: goto @AMMU
+
+:NAME_18
+0006: $3000 = 'Missile'
+0002: goto @AMMU
+
+:NAME_19
+0006: $3000 = 'WEAP16'
+0002: goto @AMMU
+
+:NAME_20
+0006: $3000 = 'Python/Equalizer'
+0002: goto @AMMU
+
+:NAME_21
+0006: $3000 = 'WEAP25'
+0002: goto @AMMU
+
+:NAME_22
+0006: $3000 = 'WEAP24'
+0002: goto @AMMU
+
+:NAME_23
+0006: $3000 = 'WEAP26'
+0002: goto @AMMU
+
+:NAME_24
+0006: $3000 = 'WEAP19'
+0002: goto @AMMU
+
+:NAME_25
+0006: $3000 = 'WEAP18'
+0002: goto @AMMU
+
+:NAME_26
+0006: $3000 = 'WEAP21'
+0002: goto @AMMU
+
+:NAME_27
+0006: $3000 = 'WEAP20'
+0002: goto @AMMU
+
+:NAME_28
+0006: $3000 = 'WEAP23'
+0002: goto @AMMU
+
+:NAME_29
+0006: $3000 = 'AK-47'
+0002: goto @AMMU
+
+:NAME_30
+0006: $3000 = 'WEAP31'
+0002: goto @AMMU
+
+:NAME_31
+0006: $3000 = 'WEAP32'
+0002: goto @AMMU
+
+:NAME_32
+0006: $3000 = 'WEAP29'
+0002: goto @AMMU
+
+:NAME_33
+0006: $3000 = 'WEAP30'
+0002: goto @AMMU
+
+:NAME_34
+0006: $3000 = 'WEAP27'
+0002: goto @AMMU
+
+:NAME_35
+0006: $3000 = 'WEAP28'
+0002: goto @AMMU
+
+:NAME_36
+0006: $3000 = 'Detonator (Remote Grenades)'
+0002: goto @AMMU
+
+:NAME_37
+0006: $3000 = 'WEAP27'
+0002: goto @AMMU
+
+:NAME_38
+0006: $3000 = 'WEAP00'
+0002: goto @AMMU
+
+:NAME_39
+0006: $3000 = 'Binoculars'
+0002: goto @AMMU
+ 
+
+:GIVE_WEAPON
+0106: give_weapon_to_char $PLAYER_CHAR weapon $30 ammo 99999
+0002: goto @AMMU
+
+
+
+:TERMINATE_SCRIPT
+0001: wait 0
+00B6: restore_camera
+0107: set_player_control $PLAYER_CHAR to 1
+0023: terminate_this_script

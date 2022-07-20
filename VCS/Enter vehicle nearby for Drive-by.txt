@@ -1,0 +1,55 @@
+#Game: Vice City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Misc
+#Date: 2022-04-22
+#Description: Warp into close-by vehicle as passenger for a drive-by
+
+//init stuff
+0004: 5@ = -1 // (int)
+
+//get car in range
+0043: get_char_coordinates $PLAYER_CHAR store_to 8@ 9@ 10@ 
+0036: 11@ = 8@ // (float vars) 
+0036: 12@ = 9@ // (float vars) 
+0036: 13@ = 10@ // (float vars) 
+000A: 8@ -= 15.0 // (float) 
+000A: 9@ -= 15.0 // (float) 
+0008: 11@ += 15.0 // (float) 
+0008: 12@ += 15.0 // (float) 
+03A3: get_random_car_in_area_no_save from 8@ 9@ to 11@ 12@ store_to 5@
+
+//was a vehicle found check
+001B:   5@ == -1 // (int) var == num
+0021: goto_if_true @terminate 
+
+//enter it as passenger
+//00E9: set_char_obj_enter_car_as_passenger $PLAYER_CHAR car 5@
+0298: warp_char_into_car_as_passenger $PLAYER_CHAR car 5@ seat -1
+
+//pause a little (looks cooler)
+0001: wait 1000 
+
+//set flag to drive-by
+0442: unknown_char_set_command_2691 $PLAYER_CHAR flag 1
+
+//stuff to play with (maybe)
+014C: set_car_health 5@ to 99999 
+01B2: set_car_proofs 5@ BP 1 FP 1 EP 1 CP 1 MP 1 
+023D: set_car_strong 5@ to 1
+0050: set_car_cruise_speed 5@ to 50.0 
+//0236: set_car_status 5@ to 3
+//013A: lock_car_doors 5@ mode 2
+//02B9: set_car_stay_in_fast_lane 5@ to 1
+//004B: car_wander_randomly 5@ 
+//0052: set_car_mission 5@ to 1
+//0051: set_car_driving_style 5@ to 2
+//004A: car_goto_coordinates 5@ coords 0.0 0.0 0.0 
+//00F2: set_car_obj_flee_car 5@ car -1
+
+//unset flag to drive-by (vic will stay in drive by position though)
+0001: wait 1000 
+0442: unknown_char_set_command_2691 $PLAYER_CHAR flag 0
+
+:terminate
+0023: terminate_this_script

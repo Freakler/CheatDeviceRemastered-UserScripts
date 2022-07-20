@@ -1,0 +1,47 @@
+#Game: Vice City Stories
+#Author: MicSuit
+#Version: 1.1
+#Category: Player Coordinates
+#Date: 2022-04-25
+#Description: Show player current coordinates. Press Up to disable
+
+
+
+:SHOW_COORDINATES
+0001: wait 0
+
+	/// Press UP twice to exit out ///////////
+	007F: is_button_pressed 0 button 8
+	0021: goto_if_true @BAILOUT_MAIN 
+	:BAILOUT_CONTINUE
+	//////////////////////////////////////////
+
+0043: get_char_coordinates $PLAYER_CHAR store_to 1@ 2@ 3@ // Get player's coordinates
+0038: 1@ = float 1@ to_integer
+0038: 2@ = float 2@ to_integer  // Rounding to int all floats
+0038: 3@ = float 3@ to_integer
+01DB: print_with_3_numbers 'Current Coordinates: ~Y~X: ~1~~w~ ~b~Y: ~1~~w~ ~g~Z: ~1~~w~' numbers 1@ 2@ 3@ time 1 flag 1 
+0002: goto @SHOW_COORDINATES // Start showing coordinates
+
+
+
+:BAILOUT_MAIN
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 //do nothing for the first 1000
+0021: goto_if_true @BAILOUT_CONTINUE 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+0021: goto_if_true @BAILOUT_EXIT 
+0267: print_help 'Use~h~ ~k~ ~TGSUB~ ~w~again to cancel the script.'  //like 'CAN_CON'
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @BAILOUT_CONTINUE
+:BAILOUT_EXIT
+0268: clear_help
+
+
+
+:TERMINATE_SCRIPT
+0023: terminate_this_script  // End script

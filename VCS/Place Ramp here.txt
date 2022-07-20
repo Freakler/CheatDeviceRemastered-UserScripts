@@ -1,0 +1,39 @@
+#Game: Vice City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Objects
+#Date: 2022-03-18
+#Description: Spawn a ramp in front of player.
+
+
+//CARDBOARDBOX = -50
+//DR_BIGSKIPJUMP = -67	6389
+//dr_bigskipa = 6388
+//waterjump1 = 654
+//waterjump2 = 653
+//waterjumpx2 = 677
+//landjump = 655
+//landjump2 = 656
+//JM_HELIGATE = -103
+
+
+0004: 0@ = 654 // (int)
+0160: request_model 0@
+0228: load_all_models_now
+0001: wait 0 
+
+//:loop
+//8161:   not has_model_loaded 0@
+//0022: goto_if_false @continue 
+//0001: wait 0 
+//0002: goto @loop 
+//:continue
+
+
+00CE: get_char_heading $PLAYER_CHAR store_to 4@
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 5@ 8.0 -1.2 store_to 5@ 6@ 7@ //coord 8m in front of player at ~ground
+
+0092: create_object 0@ at 5@ 6@ 7@ store_to $5342 
+00D3: set_object_heading $5342 to 4@
+
+0023: end_thread	//23 00

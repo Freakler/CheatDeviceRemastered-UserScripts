@@ -1,0 +1,14 @@
+#Game: Vice City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Misc
+#Date: 2022-04-25
+#Description: Set all Garages to hold 4 vehicles as maximum.
+
+0353: set_garage $_1533 max_cars_to 4 
+0353: set_garage $_1534 max_cars_to 4
+0353: set_garage $_1535 max_cars_to 4
+
+0267: print_help 'Done!'
+
+0023: end_thread

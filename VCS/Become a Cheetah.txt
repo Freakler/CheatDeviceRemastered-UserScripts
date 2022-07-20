@@ -1,0 +1,25 @@
+//Game: Vice City Stories
+//Author: Freakler
+//Version: 1.0
+//Category: Vehicles
+//Date: 2022-02-12
+//Description: Spawns Cheetah where you are standing and teleports player inside.
+
+
+0006: 20@ = 172 //Vehicle ID
+
+// Examples: 
+// 172 = Cheetah
+// 187 = Deluxo
+// 214 = Hunter
+// ..
+																//Sanny:
+0160: request_model 20@ 										//60 01 08 xx 00 
+0228: load_all_models_now 										//28 02 
+0043: get_char_coordinates $PLAYER_CHAR store_to 0@ 1@ 2@ 		//43 00 D0 0E 0D 0E 0F 
+00CE: get_char_heading $PLAYER_CHAR store_to 3@ 				//CE 00 D0 0E 10 
+01BB: get_ground_z_for_3d_coord 0@ 1@ 2@ store_to 4@ 			//BB 01 0D 0E 0F 11 
+0048: create_car 20@ at 0@ 1@ 4@ store_to 5@ 					//48 00 08 xx 00 0D 0E 11 12 
+00D1: set_car_heading 5@ to 3@ 									//D1 00 12 10 
+021C: warp_char_into_car $PLAYER_CHAR to 5@ 					//1C 02 D0 0E 12 
+0023: end_thread												//23 00
