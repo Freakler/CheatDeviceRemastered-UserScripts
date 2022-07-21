@@ -1,9 +1,9 @@
 #Game: Vice City Stories
 #Author: MicSuit
 #Version: 1.1
-#Category: Player Coordinates
+#Category: World
 #Date: 2022-04-25
-#Description: Show player current coordinates. Press Up to disable
+#Description: Show player current coordinates. Press the up button to disable.
 
 
 

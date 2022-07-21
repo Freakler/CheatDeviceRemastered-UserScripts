@@ -75,7 +75,6 @@
 0169: remove_blip 5@
 
 :SPAWN_BS
-0001: wait 0
 0005: $1 = -263.91
 0005: $2 = -1474.36
 0005: $3 = 5.66
@@ -96,7 +95,6 @@
 004D: goto_if_false @CHECK_SPHERE
 
 :REMOVE_BS
-0001: wait 0
 0169: remove_blip $1525
 0005: $1525 = 0
 03C2: remove_sphere $1833
@@ -139,14 +137,12 @@
 
 
 :END_MISSION_PASSED
-0001: wait 0
 01E8: print_with_number_big 'M_PASS' number $MISSION_REWARD time 2000 style 1
 010E: add_score $PLAYER_CHAR value $MISSION_REWARD // money
 0399: play_mission_passed_tune 1
 0002: goto @TERMINATE_SCRIPT
 
 :END_MISSION_FAILED
-0001: wait 0
 00BA: print_big 'M_FAIL' time 1000 style 1  // ~Y~MISSION FAILED!
 0169: remove_blip $1525
 0005: $1525 = 0
@@ -157,5 +153,4 @@
 
 
 :TERMINATE_SCRIPT
-0001: wait 0
 004E: terminate_this_script

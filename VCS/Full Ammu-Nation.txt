@@ -3,7 +3,7 @@
 #Version: 1.1
 #Category: Weapons
 #Date: 2022-06-21
-#Description: Buy all weapons in the files of GTA VCS!
+#Description: Buy all weapons of GTA VCS!
 
 0004: $30 = 1 // Weapon id
 

@@ -1,0 +1,47 @@
+#Game: Liberty City Stories
+#Author: MicSuit
+#Version: 1.0
+#Category: Pedestrians
+#Date: 2022-07-21
+#Description: Spawns a random ped that tries to kill you! Kill him first!
+
+:COORDINATES_ENEMY
+020D: generate_random_float_in_range -3.0 3.0 store_to 5@ //left right of player
+020D: generate_random_float_in_range 2.0 5.0 store_to 6@ //in front of player
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 5@ 6@ 0.0 store_to 5@ 6@ 7@
+
+:SPAWN_ENEMY
+020E: generate_random_int_in_range 0 37 store_to 10@ // Give the killer a random weapon
+0039:   10@ == 11 // Can't spawn chainsaw, uzi or m4, it crashes the game
+004C: goto_if_true @NOT_CRASH
+0039:   10@ == 22 
+004C: goto_if_true @NOT_CRASH
+0039:   10@ == 24 
+004C: goto_if_true @NOT_CRASH
+
+:SPAWN_ENEMY_2
+01EA: print_with_number_now '~b~Weapon ID: ~1~~w~' numbers 10@ time 1500 flag 1
+024C: request_model 10@
+0390: load_all_models_now
+
+:SPAWN_ENEMY_3
+0001: wait 0
+824D:   not has_model_loaded 10@
+004C: goto_if_true @SPAWN_ENEMY_3
+
+037B: create_random_char 5@ 6@ 7@ store_to $5348
+0002: goto @ENEMY_SETTINGS
+
+:NOT_CRASH
+000A: 10@ += 1
+0002: goto @SPAWN_ENEMY_2
+
+:ENEMY_SETTINGS
+0228: set_char_health $5348 to 100 // Health = 100
+0403: set_char_money $5348 to 0 // Money = 0$ 
+04C7: set_char_obj_walk_to_char $5348 char $PLAYER_ACTOR // Walk to player
+01B7: give_weapon_to_char $5348 weapon 10@ ammo 9999 // Give the weapon to the random ped
+01CE: set_char_obj_kill_char_on_foot $5348 char $PLAYER_ACTOR // Kill player
+
+:TERMINATE_SCRIPT
+004E: terminate_this_script

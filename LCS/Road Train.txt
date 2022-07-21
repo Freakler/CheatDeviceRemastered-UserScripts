@@ -27,7 +27,7 @@
 // Spawn Cars
 00A5: create_car 1@ at 2@ 3@ 4@ store_to 13@ // Linerunner
 000D: 3@ -= 30@
-00A5: create_car 11@ at 2@ 3@ 4@ store_to 14@  // vvv Baggage Handlers
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 14@  // vvv Mananas
 000D: 3@ -= 30@
 00A5: create_car 11@ at 2@ 3@ 4@ store_to 15@
 000D: 3@ -= 30@
@@ -35,7 +35,7 @@
 000D: 3@ -= 30@
 00A5: create_car 11@ at 2@ 3@ 4@ store_to 17@
 000D: 3@ -= 30@
-00A5: create_car 11@ at 2@ 3@ 4@ store_to 18@  // ^^^ Baggage Handlers
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 18@  // ^^^ Mananas
 
 03FA: set_car_can_be_damaged 13@ to 0
 03FA: set_car_can_be_damaged 14@ to 0
@@ -84,7 +84,7 @@
 0008: $1450 += 1000
 002C:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
 004C: goto_if_true @BAILOUT_EXIT 
-03EA: print_help 'Press~h~ ~k~ ~TGSUB~~w~ again to cancel the script.'  //like 'CAN_CON'
+03EA: print_help 'Press~h~ ~k~ ~TGSUB~~w~ again to cancel the script.'
 0004: $1449 = $1531 
 0008: $1449 += 3500
 0002: goto @BAILOUT_CONTINUE

@@ -1,5 +1,5 @@
 #Game: Vice City Stories
-#Author: Micsuit
+#Author: MicSuit
 #Version: 1.0
 #Category: Pedestrians
 #Date: 2022-04-25
