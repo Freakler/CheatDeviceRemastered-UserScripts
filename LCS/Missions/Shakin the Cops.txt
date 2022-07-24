@@ -1,15 +1,14 @@
 #Game: Liberty City Stories
 #Author: MicSuit
-#Version: 1.2
+#Version: 1.2.1
 #Category: Missions
 #Date: 2022-06-05
 #Description: A mission made with SCM tools. Have fun and please don't cheat. :P
 
-0004: $MISSION_REWARD = 3000
+0004: $3101 = 3000
 
 0038:   $ONMISSION == 0 
 004D: goto_if_false @TERMINATE_SCRIPT
-
 
 04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0.0 5.0 0.0 store_to 1@ 2@ 3@ // Get coordinates with an offset
 
@@ -137,8 +136,8 @@
 
 
 :END_MISSION_PASSED
-01E8: print_with_number_big 'M_PASS' number $MISSION_REWARD time 2000 style 1
-010E: add_score $PLAYER_CHAR value $MISSION_REWARD // money
+01E8: print_with_number_big 'M_PASS' number $3101 time 2000 style 1
+010E: add_score $PLAYER_CHAR value $3101 // money
 0399: play_mission_passed_tune 1
 0002: goto @TERMINATE_SCRIPT
 
