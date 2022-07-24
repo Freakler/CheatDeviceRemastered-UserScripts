@@ -1,0 +1,167 @@
+#Game: Vice City Stories
+#Author: MicSuit
+#Version: 1.0
+#Category: Vehicles
+#Date: 2022-07-24
+#Description: The Well-Known Flying Learjet Cheat Now For CheatDevice Remastered!
+
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+//
+// Original Cheat for Cheat Device made by Upaluppa.
+// See his video about the old cheat: https://www.youtube.com/watch?v=YgVVUWruFzY
+// Old Flying Learjet source: https://web.archive.org/web/20110214121053/http://upaluppa.wetpaint.com/page/Flyable+Learjet
+//
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+0004: 1@ = 7453 // Learjet ID
+0004: 30@ = 7454 // Stopped Learjet ID
+0004: 2@ = 222 //  Biplane ID
+
+0004: $1000 = 0 // Stop vehicle check
+
+0160: request_model 2@
+0160: request_model 1@
+0160: request_model 30@
+0228: load_all_models_now
+
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0.0 10.0 -1.2 store_to 5@ 6@ 7@
+0048: create_car 2@ at 5@ 6@ 7@ store_to 3@
+00CE: get_char_heading $PLAYER_CHAR store_to 13@
+00D1: set_car_heading 3@ to 13@
+0275: set_car_can_be_damaged 3@ to 0
+04DD: make_vehicle_invisible 3@
+0201: set_car_visible 3@ 0
+
+0267: print_help 'Enter the ~h~Learjet~w~ by the door. Press the ~h~down button~w~ to lift the Learjet. Press the ~h~up button~w~ twice to end the script. Have fun!'
+
+0002: goto @STOP_LEARJET
+
+:START_FL
+00D0: get_car_heading 3@ store_to 9@
+004D: get_car_coordinates 3@ store_to 5@ 6@ 7@
+0092: create_object 1@ at 5@ 6@ 7@ store_to 8@ 
+00D3: set_object_heading 8@ to 9@
+0225: set_object_collision 8@ enable 0
+
+:LEARJET_POS
+0001: wait 0
+007F:   is_button_pressed 0 button 8 // up
+0021: goto_if_true @BAILOUT_MAIN
+     
+:BAILOUT_CONTINUE
+007F:   is_button_pressed 0 button 9 // down
+0021: goto_if_true @LIFT_JET	
+004D: get_car_coordinates 3@ store_to 5@ 6@ 7@
+000A: 7@ -= 1.0
+03B8: get_car_rotation 3@ store_to 10@ 11@ 12@
+
+010D: set_object_coordinates 8@ to 5@ 6@ 7@
+02AC: set_object_rotation 8@ to 11@ 10@ 12@
+807C:   not is_char_in_car $PLAYER_CHAR car 3@
+0021: goto_if_true @STOP_LEARJET
+0002: goto @LEARJET_POS
+
+:LIFT_JET
+0001: wait 0
+007F:   is_button_pressed 0 button 9 // while holding down
+0021: goto_if_true @LIFT_JET
+027F: get_offset_from_car_in_world_coords 3@ offset 0.0 0.0 50.0 store_to 5@ 6@ 7@
+004E: set_car_coordinates 3@ to 5@ 6@ 7@
+0002: goto @LEARJET_POS
+
+:STOP_LEARJET
+027F: get_offset_from_car_in_world_coords 3@ offset -2.0 6.0 -1.0 store_to 5@ 6@ 7@
+001B:   $1000 == 1 // (int) var == num
+0021: goto_if_true @STOP_LEARJET_2
+0004: $1000 = 1
+0002: goto @STOP_LEARJET_3
+
+:STOP_LEARJET_2
+0044: set_char_coordinates $PLAYER_CHAR to 5@ 6@ 7@
+0250: set_camera_in_front_of_player
+
+:STOP_LEARJET_3
+0093: delete_object 8@
+0092: create_object 30@ at 5@ 6@ 7@ store_to 14@ 
+
+00D3: set_object_heading 14@ to 9@
+0225: set_object_collision 14@ enable 1
+
+:STOPPED_LEARJET_POS
+0001: wait 0
+007F:   is_button_pressed 0 button 8
+0021: goto_if_true @BAILOUT_MAIN1
+
+:BAILOUT_CONTINUE1
+004D: get_car_coordinates 3@ store_to 5@ 6@ 7@
+000A: 7@ -= 1.0 // (float)
+03B8: get_car_rotation 3@ store_to 10@ 11@ 12@
+
+010D: set_object_coordinates 14@ to 5@ 6@ 7@
+02AC: set_object_rotation 14@ to 11@ 10@ 12@
+007C:   is_char_in_car $PLAYER_CHAR car 3@
+0021: goto_if_true @RUN_LEARJET
+027F: get_offset_from_car_in_world_coords 3@ offset -2.5 6.0 0.5 store_to 5@ 6@ 7@
+008A:   locate_char_on_foot_3d $PLAYER_CHAR coord 5@ 6@ 7@ radius 1.5 1.5 1.5 sphere 0
+0021: goto_if_true @ENTER_LEARJET_DOOR
+0002: goto @STOPPED_LEARJET_POS
+
+:RUN_LEARJET
+0093: delete_object 14@
+0002: goto @START_FL
+
+:ENTER_LEARJET_DOOR
+007F:   is_button_pressed 0 button 15 // triangle
+0021: goto_if_true @ENTER_LEARJET_DOOR2
+0002: goto @STOPPED_LEARJET_POS
+
+:ENTER_LEARJET_DOOR2
+0001: wait 0
+007F:   is_button_pressed 0 button 15 // triangle
+0021: goto_if_true @ENTER_LEARJET_DOOR2
+021C: warp_char_into_car $PLAYER_CHAR to 3@  
+0002: goto @RUN_LEARJET
+
+:BAILOUT_MAIN
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 //do nothing for the first 1000
+0021: goto_if_true @BAILOUT_CONTINUE 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+0021: goto_if_true @BAILOUT_EXIT 
+0267: print_help 'Use~h~ ~k~ ~TGSUB~ ~w~again to cancel the script.'  //like 'CAN_CON'
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @BAILOUT_CONTINUE
+
+:BAILOUT_MAIN1
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 
+0021: goto_if_true @BAILOUT_CONTINUE1 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 
+0021: goto_if_true @BAILOUT_EXIT1 
+0267: print_help 'Use~h~ ~k~ ~TGSUB~ ~w~again to cancel the script.'  
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @BAILOUT_CONTINUE1
+
+:BAILOUT_EXIT
+0268: clear_help
+00F1: char $PLAYER_CHAR exit_car
+0001: wait 750
+0093: delete_object 8@
+0049: delete_car 3@
+0002: goto @TERMINATE_SCRIPT
+
+:BAILOUT_EXIT1
+0268: clear_help
+0093: delete_object 14@
+0049: delete_car 3@
+
+:TERMINATE_SCRIPT
+0023: terminate_this_script
