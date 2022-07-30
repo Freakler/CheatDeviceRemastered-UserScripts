@@ -1,0 +1,597 @@
+#Game: Vice City Stories
+#Author: MicSuit
+#Version: 1.0
+#Category: Pedestrians
+#Date: 2022-07-30
+#Description: Make your own full customizable Bodyguard with Bodyguard Editor!
+
+0004: $1 = 34 // Weapon ID
+0004: $2 = 8 // Model ID
+0004: $3 = 100 // Health
+
+0004: $1000 = 1
+
+0004: $1001 = 255  // Normal option
+
+0004: $1002 = 150  // Selected option
+0004: $1003 = 0
+
+0004: $1004 = 2 // Check
+
+0006: $2000 = 'Bodyguard Editor'
+0006: $2001 = 'Model'
+0006: $2002 = 'MPI04'
+0006: $2003 = 'MPI02'
+
+0006: $3000 = 'POLICAR' // Had to rename 'Police Officer' to 'Police' because of the custom strings limit of CDR :(
+0006: $3001 = 'WEAP27'
+0006: $3002 = 'DBG_OF1'
+0005: $3003 = 346.0
+0005: $3004 = 339.0
+0005: $3006 = 336.5
+
+0006: $4000 = 'Hide/Show Editor - ~h~L + R~w~~n~Spawn Bodyguard - ~h~Down'
+0006: $4001 = 'Use~h~ ~k~ ~TGSUB~ ~w~again to end the script.'
+0006: $4002 = 'Use ~k~ ~VEWEP~ again to end the script.'
+
+0267: print_help 'Welcome to the ~h~Bodyguard Editor~w~! To quit the script while you are on the editor press ~k~ ~VEWEP~, else, press~h~ ~k~ ~TGSUB~~w~.'  // You cannot save while on a mission.
+
+:SETUP_CREATOR
+0160: request_model 8
+0160: request_model 9
+0160: request_model 10
+0160: request_model 11
+0160: request_model 97        // Models Peds
+0160: request_model 98
+0160: request_model 107
+0160: request_model 108
+0160: request_model 133
+
+0160: request_model 20
+0160: request_model 22
+0160: request_model 27        // Models Weapons
+0160: request_model 28
+0160: request_model 34
+0160: request_model 35
+0228: load_all_models_now
+
+
+:START_CREATOR
+044E: unknown_empire_display_command_7317 0 1 // Show to screen
+0453: unknown_empire_display_command_7217 0 0 0 0 500 // Border settings
+0452: unknown_empire_display_command_3866 0 25 25 25 150 // Background settings
+0451: unknown_empire_display_command_6b43 0 175 190 // Size settings
+0450: unknown_empire_display_command_91e4 0 275 30 // Position on screen
+03A1: set_wants_to_draw_hud 0
+0107: set_player_control $PLAYER_CHAR to 0
+0200: set_char_visible $PLAYER_CHAR 0
+
+:SETUP_BODYGUARD_THINGS
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0.0 7.0 0.0 store_to 1@ 2@ 3@
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+03D5: set_char_max_health $6 to $3
+014B: set_char_health $6 to $3 
+0278: set_char_money $6 to 0
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+
+:SETUP_BT_2
+02EE: get_offset_from_char_in_world_coords $6 offset -2.5 3.5 -0.8 store_to 4@ 5@ 6@
+00B9: set_fixed_camera_position 4@ 5@ 6@ rotation 0 0 0
+000A: 2@ -= 2.5 // (float)
+00BA: point_camera_at_point 1@ 2@ 3@ switchstyle 2
+0008: 2@ += 2.9 // (float)
+000A: 3@ -= 0.9
+
+:LOOP_CREATOR
+0001: wait 0
+0266: set_text_right_justify 1
+0204: set_text_scale 0.43 0.43
+0203: display_text 0.0 250.0 gxt $4000
+
+0204: set_text_scale 0.9 0.9
+0205: set_text_colour 0 255 255 255
+0203: display_text 285.0 35.0 gxt $2000
+
+0204: set_text_scale 0.8 0.8
+0205: set_text_colour 0 255 125 255
+0203: display_text 335.0 70.0 gxt $2001
+
+0204: set_text_scale 0.8 0.8
+0205: set_text_colour 0 255 125 255
+0203: display_text 329.0 120.0 gxt $2002
+
+0204: set_text_scale 0.8 0.8
+0205: set_text_colour 0 255 125 255
+0203: display_text 334.5 170.0 gxt $2003
+
+007F:   is_button_pressed 0 button 9
+0021: goto_if_true @DOWN_LIST
+
+007F:   is_button_pressed 0 button 8
+0021: goto_if_true @UP_LIST
+
+007F:   is_button_pressed 0 button 10
+0021: goto_if_true @LEFT_LIST
+
+007F:   is_button_pressed 0 button 11
+0021: goto_if_true @RIGHT_LIST
+
+0015:   $1004 >= 2 // (int) var > num
+0022: goto_if_false @CHECK_INC
+
+007F:   is_button_pressed 0 button 4 // Hide Editor step 1
+0021: goto_if_true @EXIT_EDITOR_1
+
+007F: is_button_pressed 0 button 17
+0021: goto_if_true @BAILOUT_MAIN
+
+
+:SELECTED_1
+001B:   $1000 == 1 // (int) var == num
+0021: goto_if_true @SELECT_1
+
+0204: set_text_scale 0.75 0.75
+0205: set_text_colour $1001 $1001 $1001 255
+0203: display_text $3006 92.5 gxt $3000
+
+:SELECTED_2
+001B:   $1000 == 2 // (int) var == num
+0021: goto_if_true @SELECT_2
+
+0204: set_text_scale 0.7 0.7
+0205: set_text_colour $1001 $1001 $1001 255
+0203: display_text $3004 142.5 gxt $3001
+
+:SELECTED_3
+001B:   $1000 == 3 // (int) var == num
+0021: goto_if_true @SELECT_3
+
+0204: set_text_scale 0.75 0.75
+0205: set_text_colour $1001 $1001 $1001 255
+02B1: display_text_with_number $3003 192.0 gxt $3002 number $3
+
+
+0002: goto @LOOP_CREATOR
+
+:SELECT_1
+0204: set_text_scale 0.75 0.75
+0205: set_text_colour $1001 $1002 $1003 255
+0203: display_text $3006 92.5 gxt $3000
+0002: goto @SELECTED_2
+
+:SELECT_2
+0204: set_text_scale 0.7 0.7
+0205: set_text_colour $1001 $1002 $1003 255
+0203: display_text $3004 142.5 gxt $3001
+0002: goto @SELECTED_3
+
+:SELECT_3
+0204: set_text_scale 0.75 0.75
+0205: set_text_colour $1001 $1002 $1003 255
+02B1: display_text_with_number $3003 192.0 gxt $3002 number $3
+0002: goto @LOOP_CREATOR
+
+:CHECK_INC
+0007: $1004 += 1 // (int)
+0002: goto @SELECTED_1
+
+
+:DOWN_LIST
+001B:   $1004 == 2
+0022: goto_if_false @SELECTED_1
+0004: $1004 = 0
+0015:   $1000 >= 3
+0021: goto_if_true @SELECTED_1
+
+:DOWN_LIST2
+0007: $1000 += 1
+0002: goto @SELECTED_1
+
+:UP_LIST
+001B:   $1004 == 2
+0022: goto_if_false @SELECTED_1
+0004: $1004 = 0
+000F:   $1000 > 1
+0022: goto_if_false @SELECTED_1
+
+:UP_LIST2
+0009: $1000 -= 1 // (int)
+0002: goto @SELECTED_1
+
+:LEFT_LIST
+001B:   $1004 == 2
+0022: goto_if_false @SELECTED_1
+0004: $1004 = 0
+001B:   $1000 == 1 // (int) var == num
+0021: goto_if_true @MODEL_LIST_LEFT
+001B:   $1000 == 2 // (int) var == num
+0021: goto_if_true @WEAPON_LIST_LEFT
+001B:   $1000 == 3 // (int) var == num
+0021: goto_if_true @HEALTH_LIST_LEFT
+
+0002: goto @SELECTED_1
+
+:RIGHT_LIST
+001B:   $1004 == 2
+0022: goto_if_false @SELECTED_1
+0004: $1004 = 0
+001B:   $1000 == 1 // (int) var == num
+0021: goto_if_true @MODEL_LIST_RIGHT
+001B:   $1000 == 2 // (int) var == num
+0021: goto_if_true @WEAPON_LIST_RIGHT
+001B:   $1000 == 3 // (int) var == num
+0021: goto_if_true @HEALTH_LIST_RIGHT
+
+0002: goto @SELECTED_1
+
+
+:HEALTH_LIST_LEFT
+000F:   $3 > 25 // (int) var >= num
+0021: goto_if_true @H_LEFT
+
+0002: goto @SELECTED_1
+
+:HEALTH_LIST_RIGHT
+001B:   $3 == 75 // (int) var == num
+0021: goto_if_true @H_100
+0015:   $3 >= 800 // (int) var >= num
+0022: goto_if_false @H_RIGHT
+
+0002: goto @SELECTED_1
+
+:H_100
+0004: $3 = 100
+0005: $3003 = 346.0
+0002: goto @SELECTED_1
+
+:H_RIGHT
+0007: $3 += 25
+0002: goto @SELECTED_1
+
+:H_LEFT
+0009: $3 -= 25
+0015:   $3 >= 100 // (int) var >= num
+0021: goto_if_true @SELECTED_1
+0005: $3003 = 350.0
+0002: goto @SELECTED_1
+
+
+:WEAPON_LIST_LEFT
+001B:   $1 == 35 // (int) var == num
+0021: goto_if_true @W_34 
+001B:   $1 == 34 // (int) var == num
+0021: goto_if_true @W_28
+001B:   $1 == 28 // (int) var == num
+0021: goto_if_true @W_27 
+001B:   $1 == 27 // (int) var == num
+0021: goto_if_true @W_22
+001B:   $1 == 22 // (int) var == num
+0021: goto_if_true @W_20
+
+0002: goto @SELECTED_1
+
+:WEAPON_LIST_RIGHT
+001B:   $1 == 34 // (int) var == num
+0021: goto_if_true @W_344 // +1
+001B:   $1 == 28 // (int) var == num
+0021: goto_if_true @W_34 
+001B:   $1 == 27 // (int) var == num
+0021: goto_if_true @W_28 
+001B:   $1 == 22 // (int) var == num
+0021: goto_if_true @W_27
+001B:   $1 == 20 // (int) var == num
+0021: goto_if_true @W_22
+
+0002: goto @SELECTED_1
+
+:W_344 // laziness
+0007: $1 += 1
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @CHECK_NAME_WEAPON
+
+:W_34 // laziness
+0004: $1 = 34
+0005: $3004 = 339.0
+0006: $3001 = 'WEAP27'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:W_27
+0004: $1 = 27
+0005: $3004 = 343.5
+0006: $3001 = 'WEAP20'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:W_28
+0004: $1 = 28
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @CHECK_NAME_WEAPON
+
+:W_22
+0004: $1 = 22
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0005: $3004 = 332.0
+0006: $3001 = 'WEAP24'
+0002: goto @SELECTED_1
+
+:W_20
+0004: $1 = 20
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0005: $3004 = 329.0
+0006: $3001 = 'WEAP17'
+0002: goto @SELECTED_1
+
+:CHECK_NAME_WEAPON
+001B:   $1 == 28
+0021: goto_if_true @NAME_WEAPON_28
+001B:   $1 == 35
+0021: goto_if_true @NAME_WEAPON_35
+0002: goto @SELECTED_1
+
+:NAME_WEAPON_28
+0005: $3004 = 315.0
+0006: $3001 = 'WEAP23'
+0002: goto @SELECTED_1
+
+:NAME_WEAPON_35
+0005: $3004 = 333.0
+0006: $3001 = 'WEAP28'
+0002: goto @SELECTED_1
+
+:MODEL_LIST_LEFT
+001B:   $2 == 133 // (int) var == num
+0021: goto_if_true @M_108 //
+001B:   $2 == 108 // (int) var == num
+0021: goto_if_true @M_97
+001B:   $2 == 97 // (int) var == num
+0021: goto_if_true @M_11
+001B:   $2 == 11 // (int) var == num
+0021: goto_if_true @M_10
+001B:   $2 == 10 // (int) var == num
+0021: goto_if_true @M_9 
+001B:   $2 == 9 // (int) var == num
+0021: goto_if_true @M_8 
+
+0002: goto @SELECTED_1
+
+:MODEL_LIST_RIGHT
+001B:   $2 == 108 // (int) var == num
+0021: goto_if_true @M_133
+001B:   $2 == 97 // (int) var == num
+0021: goto_if_true @M_108
+001B:   $2 == 11 // (int) var == num
+0021: goto_if_true @M_97
+001B:   $2 == 10 // (int) var == num
+0021: goto_if_true @M_11 
+001B:   $2 == 9 // (int) var == num
+0021: goto_if_true @M_10
+001B:   $2 == 8
+0021: goto_if_true @M_9 
+
+0002: goto @SELECTED_1
+
+:M_133
+0004: $2 = 133
+0005: $3006 = 332.0
+003F: delete_char $6
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+0006: $3000 = 'RATNG37'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:M_108
+0004: $2 = 108
+0005: $3006 = 314.0
+003F: delete_char $6
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+0006: $3000 = 'Gang Guard'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:M_97        
+0004: $2 = 97
+0005: $3006 = 325.0
+003F: delete_char $6
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+0006: $3000 = 'Soldier 2'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:M_11
+0004: $2 = 11
+0005: $3006 = 333.0
+003F: delete_char $6
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+0006: $3000 = 'JER_A01'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:M_10
+0004: $2 = 10
+0005: $3006 = 320.0
+003F: delete_char $6
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+0006: $3000 = 'FBI Guard'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:M_9
+0004: $2 = 9
+0005: $3006 = 311.0
+003F: delete_char $6
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+0006: $3000 = 'SWAT Guard'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:M_8
+0004: $2 = 8
+0005: $3006 = 336.5
+003F: delete_char $6
+003E: create_char 21 model $2 at 1@ 2@ 3@ store_to $6
+0006: $3000 = 'POLICAR' // 'Police'
+0106: give_weapon_to_char $6 weapon $1 ammo 9999
+0002: goto @SELECTED_1
+
+:EXIT_EDITOR_1
+007F:   is_button_pressed 0 button 6
+0022: goto_if_false @SELECTED_1
+
+:EXIT_EDITOR_2
+0001: wait 0
+
+// i don't like this approach but whatever
+0266: set_text_right_justify 1
+0204: set_text_scale 0.43 0.43
+0203: display_text 0.0 250.0 gxt $4000
+
+0204: set_text_scale 0.9 0.9
+0205: set_text_colour 0 255 255 255
+0203: display_text 285.0 35.0 gxt $2000
+
+0204: set_text_scale 0.8 0.8
+0205: set_text_colour 0 255 125 255
+0203: display_text 335.0 70.0 gxt $2001
+
+0204: set_text_scale 0.8 0.8
+0205: set_text_colour 0 255 125 255
+0203: display_text 329.0 120.0 gxt $2002
+
+0204: set_text_scale 0.8 0.8
+0205: set_text_colour 0 255 125 255
+0203: display_text 334.5 170.0 gxt $2003
+
+0204: set_text_scale 0.75 0.75
+0205: set_text_colour $1001 $1001 $1001 255
+0203: display_text $3006 92.5 gxt $3000
+
+0204: set_text_scale 0.7 0.7
+0205: set_text_colour $1001 $1001 $1001 255
+0203: display_text $3004 142.5 gxt $3001
+
+0204: set_text_scale 0.75 0.75
+0205: set_text_colour $1001 $1001 $1001 255
+02B1: display_text_with_number $3003 192.0 gxt $3002 number $3
+
+007F:   is_button_pressed 0 button 4
+0021: goto_if_true @EXIT_EDITOR_3
+
+
+:EXIT_EDITOR_3
+007F:   is_button_pressed 0 button 6
+0021: goto_if_true @EXIT_EDITOR_2
+
+:EXIT_EDITOR_4
+044E: unknown_empire_display_command_7317 0 0 // Show to screen
+00B6: restore_camera
+0221: set_camera_behind_player
+03A1: set_wants_to_draw_hud 1
+0200: set_char_visible $PLAYER_CHAR 1
+003F: delete_char $6
+0107: set_player_control $PLAYER_CHAR to 1
+
+
+
+:LOOP_OUT_EDITOR
+0001: wait 0
+
+007F:   is_button_pressed 0 button 4 // Enter Editor step 1
+0021: goto_if_true @ENTER_EDITOR_1
+
+007F:   is_button_pressed 0 button 9
+0021: goto_if_true @SPAWN_BODYGUARD_1
+
+007F: is_button_pressed 0 button 8
+0021: goto_if_true @BAILOUT_MAIN1 
+
+:LOOP_OUT_EDITOR_1
+
+0002: goto @LOOP_OUT_EDITOR
+
+
+
+:ENTER_EDITOR_1
+007F:   is_button_pressed 0 button 6 
+0022: goto_if_false @LOOP_OUT_EDITOR_1
+
+:ENTER_EDITOR_2
+0001: wait 0
+
+007F:   is_button_pressed 0 button 4
+0021: goto_if_true @ENTER_EDITOR_3
+
+
+:ENTER_EDITOR_3
+007F:   is_button_pressed 0 button 6
+0021: goto_if_true @ENTER_EDITOR_2
+0002: goto @START_CREATOR
+
+:SPAWN_BODYGUARD_1
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0 3.0 0.0 store_to 7@ 8@ 9@
+003E: create_char 21 model $2 at 7@ 8@ 9@ store_to $7
+03D5: set_char_max_health $7 to $3
+014B: set_char_health $7 to $3 
+0278: set_char_money $7 to 0
+0106: give_weapon_to_char $7 weapon $1 ammo 9999
+0119: tie_char $7 to_char $PLAYER_CHAR
+01EC: set_char $7 running 1
+0310: set_char_as_player_friend $7 player $PLAYER_CHAR on 1
+0347: set_char_never_targetted $7 to 1
+0331: set_char_in_players_group_can_fight $7 can_fight 1
+02A5: set_char_suffers_critical_hits $7 enable 0
+04D3: clear_char_leadership $7
+01C9: set_char_accuracy $7 to 100
+0331: set_char_in_players_group_can_fight $7 can_fight 1 
+
+:SPAWN_BODYGUARD_2
+0001: wait 0
+
+007F:   is_button_pressed 0 button 9 
+0021: goto_if_true @SPAWN_BODYGUARD_2
+0002: goto @LOOP_OUT_EDITOR_1
+
+:BAILOUT_MAIN
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 //do nothing for the first 1000
+0021: goto_if_true @SELECTED_1 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+0021: goto_if_true @BAILOUT_EXIT 
+0267: print_help $4002  //like 'CAN_CON'
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @SELECTED_1
+
+:BAILOUT_EXIT
+0268: clear_help
+044E: unknown_empire_display_command_7317 0 0 // Show to screen
+00B6: restore_camera
+0221: set_camera_behind_player
+03A1: set_wants_to_draw_hud 1
+0200: set_char_visible $PLAYER_CHAR 1
+003F: delete_char $6
+0107: set_player_control $PLAYER_CHAR to 1
+0002: goto @END_CREATOR
+
+:BAILOUT_MAIN1
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 //do nothing for the first 1000
+0021: goto_if_true @LOOP_OUT_EDITOR_1 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+0021: goto_if_true @BAILOUT_EXIT1 
+0267: print_help $4001  //like 'CAN_CON'
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @LOOP_OUT_EDITOR_1
+
+:BAILOUT_EXIT1
+0268: clear_help
+
+:END_CREATOR
+0023: terminate_this_script
