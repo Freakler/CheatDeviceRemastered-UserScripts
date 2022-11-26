@@ -72,15 +72,15 @@
 :STOP_LEARJET
 027F: get_offset_from_car_in_world_coords 3@ offset -2.0 6.0 -1.0 store_to 5@ 6@ 7@
 001B:   $1000 == 1 // (int) var == num
-0021: goto_if_true @STOP_LEARJET_2
+0021: goto_if_true @STOP_LEARJET2
 0004: $1000 = 1
-0002: goto @STOP_LEARJET_3
+0002: goto @STOP_LEARJET3
 
-:STOP_LEARJET_2
+:STOP_LEARJET2
 0044: set_char_coordinates $PLAYER_CHAR to 5@ 6@ 7@
 0250: set_camera_in_front_of_player
 
-:STOP_LEARJET_3
+:STOP_LEARJET3
 0093: delete_object 8@
 0092: create_object 30@ at 5@ 6@ 7@ store_to 14@ 
 
