@@ -1,0 +1,93 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: World
+#Date: 2022-11-26
+#Description: Explore the abandoned Subway System
+
+
+// add enter sphere and blib
+0005: $1 = 348.20
+0005: $2 = -253.00
+0005: $3 = 16.00
+018F: add_blip_for_coord $1 $2 $3 store_to $2346 
+03C1: add_sphere $1 $2 $3 radius 3.0 store_to $2347
+
+
+// wait for player to enter sphere
+:loop
+0001: wait 0 
+00FA:   locate_char_any_means_3d $PLAYER_CHAR coord $1 $2 $3 radius 3.0 3.0 3.0 sphere 1
+004D: goto_if_false @loop 
+
+01B9: set_player_control $PLAYER_CHAR to 0 
+016E: set_fading_colour 0 0 0 
+016F: do_fade 500 fade 0
+
+
+:fading_in
+0170:   get_fading_status 
+004D: goto_if_false @removeenter 
+0001: wait 0 
+0002: goto @fading_in 
+
+
+// remove sphere and blib
+:removeenter
+03C2: remove_sphere $2347 
+0004: $2347 = 0 
+0169: remove_blip $2346 
+0006: $2346  = 0 
+
+
+:LOAD_SUBWAY
+0635: swap_building 30 1 // on
+03BB: swap_nearest_building_model 210.0 -65.0 -4.35 radius 150.0 from 4045 to 2102
+03BB: swap_nearest_building_model 271.744 -81.072 -4.35 radius 150.0 from 4050 to 2157
+03BB: swap_nearest_building_model 267.143 -69.786 -4.333 radius 150.0 from 4044 to 2095
+03BB: swap_nearest_building_model 330.0 -74.737 -6.365 radius 150.0 from 4046 to 2163
+03BB: swap_nearest_building_model 370.0 -65.0 -4.35 radius 150.0 from 4047 to 2162 
+03BB: swap_nearest_building_model 410.0 -65.0 -4.35 radius 150.0 from 4048 to 2096
+03BB: swap_nearest_building_model 321.491 -144.571 -0.757 radius 150.0 from 4043 to 2099
+03BB: swap_nearest_building_model 339.57 -163.573 -1.418 radius 150.0 from 4042 to 2100
+03BB: swap_nearest_building_model 365.205 -199.129 -4.45 radius 150.0 from 4041 to 2093
+03BB: swap_nearest_building_model 348.779 -250.0 -1.596 radius 150.0 from 4040 to 2165
+03BB: swap_nearest_building_model 351.078 -306.744 -4.45 radius 150.0 from 4049 to 2094
+03BB: swap_nearest_building_model 278.364 -346.425 -0.757 radius 150.0 from 4039 to 2098
+03BB: swap_nearest_building_model 260.46 -355.346 -0.861 radius 150.0 from 4038 to 2097
+
+ 
+:CHECK_ONFOOT
+044F:   is_player_on_foot $PLAYER_CHAR
+004D: goto_if_false @CHECK_VEHICLE
+0055: set_player_coordinates $PLAYER_CHAR to 311.0 -265.40 -0.30
+0176: set_player_heading $PLAYER_CHAR to 270.0 
+0378: set_camera_behind_player
+0002: goto @CHECK_DONE
+
+:CHECK_VEHICLE
+00E5:   is_player_in_any_car $PLAYER_CHAR 
+004D: goto_if_false @CHECK_ONFOOT
+03C6: store_car_player_is_in_no_save $PLAYER_CHAR store_to 8@
+00AB: set_car_coordinates 8@ to 210.0 -265.40 -0.80
+03A4: turn_car_to_face_coord 8@ 311.0 -265.40
+04BF: set_car_forward_speed 8@ to 30.0 
+00AD: set_car_cruise_speed 8@ to 30.0 
+03CD: set_camera_in_front_of_player
+
+:CHECK_DONE
+01B9: set_player_control $PLAYER_CHAR to 1
+016F: do_fade 500 fade 1 
+
+
+:fading_out
+0170:   get_fading_status 
+004D: goto_if_false @loaded 
+0001: wait 0 
+0002: goto @fading_out
+
+
+:loaded
+// more todo ?!
+
+004E: terminate_this_script 
