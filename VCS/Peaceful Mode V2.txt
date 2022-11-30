@@ -1,0 +1,57 @@
+#Game: Vice City Stories
+#Author: Metehan989
+#Version: 2.0
+#Category: Misc
+#Date: 26-11-2022
+#Description: Enabling this cheat forces you to be peaceful or else...(pressing up is your only escape)
+
+0267: print_help 'Peaceful mode activated!'
+
+:Loop
+
+0001: wait 0
+
+007F: is_button_pressed 0 button 8
+0021: goto_if_true @BAILOUT_MAIN 
+:BAILOUT_CONTINUE
+
+007F:   is_button_pressed 0 button 17
+0021: goto_if_true @WHYYOUNOPEACEFUL
+0002: goto @Loop
+
+:WHYYOUNOPEACEFUL
+
+0267: print_help 'Bad little Vic!!!'
+02D4: remove_all_char_weapons $PLAYER_CHAR
+0143: print_big_q 'Weapons have been removed, because violence is never the answer.' time 2000 style 8 
+
+0001: wait 500
+0138: generate_random_float_in_range -3.0 3.0 store_to 5@ //left right of player
+0138: generate_random_float_in_range 2.0 5.0 store_to 6@ //in front of player
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 5@ 6@ 1.0 store_to 5@ 6@ 7@
+013C: add_explosion 5@ 6@ 7@ type 2
+
+0002: goto @Loop
+
+:BAILOUT_MAIN
+
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 //do nothing for the first 1000
+0021: goto_if_true @BAILOUT_CONTINUE 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+0021: goto_if_true @BAILOUT_EXIT 
+0267: print_help 'Use~h~ ~k~ ~TGSUB~ ~w~again to cancel the script.'  //like 'CAN_CON'
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @BAILOUT_CONTINUE
+
+:BAILOUT_EXIT
+0268: clear_help
+
+:END_SCRIPT
+
+0267: print_help 'Peaceful mode off!'
+0023: terminate_this_script
