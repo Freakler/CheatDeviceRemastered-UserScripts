@@ -1,0 +1,448 @@
+#Game: Vice City Stories
+#Author: nielsB
+#Version: 1.0
+#Category: Fun
+#Date: 2022-12-12
+#Description: Spawns ramps airpuerto.
+
+0160: request_model -58
+0160: request_model -48
+0160: request_model 138
+0160: request_model 217
+0160: request_model 93
+0160: request_model 265
+0160: request_model 27
+0160: request_model 147
+0160: request_model 243
+0160: request_model 241
+0160: request_model 71
+0160: request_model 76
+
+0228: load_all_models_now
+
+0004: $ONMISSION = 1
+
+0001: wait 0 
+0125: set_car_density_multiplier 0 
+0264: set_ped_density_multiplier 0
+
+0005: 1@ = 398.27
+0005: 2@ = -987.17
+0005: 3@ = 11.00
+00C3: add_blip_for_coord 1@ 2@ 3@ store_to $4
+0248: add_sphere 1@ 2@ 3@ radius 5.0 store_to $5
+
+:WAIT
+0001: wait 0
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @FAILED
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+0081:   locate_char_on_foot_2d $PLAYER_CHAR coord 1@ 2@ radius 5.0 5.0 sphere 1
+0022: goto_if_false @WAIT 
+
+00BB: remove_blip $4
+
+0249: remove_sphere $5
+
+005B: set_time_of_day 22 30 
+0109: force_weather_now 0
+
+
+0107: set_player_control $PLAYER_CHAR to 0 
+00C8: set_fading_colour 0 0 0 
+00C9: do_fade 1000 fade 0 
+
+0001: wait 2000
+
+0044: set_char_coordinates $PLAYER_CHAR to 378.10 -960.33 11.07
+00CF: set_char_heading $PLAYER_CHAR to 268.00
+003E: create_char 4 model 138 at 378.10 -959.62 11.07 store_to $6 //ml
+00CF: set_char_heading $6 to 268.00
+
+0417: unknown_audio_command_7532 point 388.20 -959.40 11.00 values 40 0
+0092: create_object -58 at -17.45 -70.65 10.20 store_to $999 
+010D: set_object_coordinates $999 to 388.20 -961.40 10.07
+00D3: set_object_heading $999 to 94.00
+0092: create_object -58 at -17.45 -70.65 10.20 store_to $998 
+010D: set_object_coordinates $998 to 388.20 -957.40 10.07
+00D3: set_object_heading $998 to 94.00
+0092: create_object -48 at -17.45 -70.65 10.20 store_to $997 
+010D: set_object_coordinates $997 to 388.20 -959.40 10.07 
+00D3: set_object_heading $997 to 94.00
+
+0001: wait 5000
+
+0443: request_anims 21
+0220: set_char $PLAYER_CHAR anim 21 wait_state_time -1 ms
+0220: set_char $6 anim 21 wait_state_time -1 ms
+
+00C9: do_fade 1000 fade 1
+01AE: switch_widescreen 1
+00B9: set_fixed_camera_position 383.39 -957.03 11.00 rotation 0 0 0 
+
+00BA: point_camera_at_point 378.45 -960.33 11.00 switchstyle 2 
+
+0001: wait 3000
+0057: print_now 'vic: I had a bad dream last night. I dreamed that I died in a simple exchange' time 6000 flag 1 
+
+0001: wait 3000
+0057: print_now 'Louise: It was only a dream it isnt suppose to come out.' time 6000 flag 1 
+
+0001: wait 3000
+013C: add_explosion 347.44 -958.59 11.00 type 4 
+0057: print_now 'Vic: What the hell was that.' time 6000 flag 1
+
+0048: create_car 217 at 314.63 -953.41 10.32 store_to $7 
+00D1: set_car_heading $7 to 152.00
+
+0048: create_car 265 at 306.84 -970.87 10.69 store_to $8
+00D1: set_car_heading $8 to 251.00
+014C: set_car_health $8 to 100
+
+003E: create_char 4 model 93 at 306.80 -968.63 11.07 store_to $9
+003E: create_char 4 model 93 at 306.65 -973.01 11.07 store_to $10
+01F9: create_pickup_with_ammo 354 type 11 ammo 100 at at 306.80 -968.63 11.07 store_to $111
+01F9: create_pickup_with_ammo 354 type 11 ammo 100 at at 306.65 -973.01 11.07 store_to $110
+
+0001: wait 1000
+0444: remove_anims 21
+0001: wait 1000
+
+00C9: do_fade 1000 fade 0
+0001: wait 2000
+
+0044: set_char_coordinates $PLAYER_CHAR to 321.65 -951.82 11.07
+00CF: set_char_heading $PLAYER_CHAR to 147.00
+
+0044: set_char_coordinates $6 to 323.74 -951.45 10.06
+00CF: set_char_heading $6 to 147.00
+
+003E: create_char 4 model 147 at 318.63 -954.15 11.07 store_to $11
+00CF: set_char_heading $11 to 303.00
+
+00B9: set_fixed_camera_position 317.50 -949.08 11.00 rotation 0 0 0 
+00BA: point_camera_at_point 326.44 -959.33 11.00 switchstyle 2 
+0001: wait 1000
+
+00C9: do_fade 1000 fade 1
+
+0057: print_now 'Phil: The Cholos are trying to stop the ~g~holidiays with 2 ~r~car bombs' time 6000 flag 1
+0001: wait 2000
+0443: request_anims 12
+0220: set_char $11 anim 12 wait_state_time -1 ms
+
+0057: print_now 'MarieLou: Phil have you been drinking again? vic you better do this alone. I will help Phil.' time 6000 flag 1
+0001: wait 5000
+0057: print_now 'Kill the ~g~holiday ~r~Saboteurs!!' time 6000 flag 1
+0001: wait 5000
+
+0001: wait 1000
+0444: remove_anims 12
+
+00EA: set_char_obj_enter_car_as_driver $6 car $7 
+0001: wait 100
+00E9: set_char_obj_enter_car_as_passenger $11 car $7 
+0001: wait 5000
+
+01CF: restore_camera_jumpcut
+01AE: switch_widescreen 0
+0107: set_player_control $PLAYER_CHAR to 1
+012E: set_police_ignore_player $PLAYER_CHAR to 1
+0125: set_car_density_multiplier 0.5 
+0264: set_ped_density_multiplier 1.0
+
+0048: create_car 243 at 236.48 -1329.78 10.92 store_to $20
+00D1: set_car_heading $20 to 167.00
+00A4: create_char_inside_car $20 pedtype 2 model 93 store_to $21
+0106: give_weapon_to_char $21 weapon 27 ammo 100
+003E: create_char 1 model 93 at -744.77 -1266.98 14.49  store_to $22
+0106: give_weapon_to_char $22 weapon 27 ammo 100
+0298: warp_char_into_car_as_passenger $22 car $20 seat 0
+0051: set_car_driving_style $20 to 2 
+0050: set_car_cruise_speed $20 to 70.0 
+0300: set_car_straight_line_distance $20 to 50 
+014C: set_car_health $20 to 1000
+013A: lock_car_doors $20 mode 2 
+00C0: add_blip_for_car $20 store_to $29
+
+:CAR
+0001: wait 0
+0045:   is_char_still_alive $6
+0022: goto_if_false @FAILED
+0045:   is_char_still_alive $11
+0022: goto_if_false @FAILED 
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @FAILED
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+00D8:   is_car_health_greater $20 than 360 
+0022: goto_if_false @EXIT
+0002: goto @CAR 
+ 
+:EXIT
+0001: wait 0
+020D: remove_char_elegantly $6 
+020D: remove_char_elegantly $11 
+013A: lock_car_doors $20 mode 0
+0001: wait 50
+00E5: set_char_obj_kill_char_any_means $21 char $PLAYER_CHAR
+00E5: set_char_obj_kill_char_any_means $22 char $PLAYER_CHAR 
+0002: goto @DESTROY
+ 
+:DESTROY
+0001: wait 0
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @FAILED
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+004F:   is_car_still_alive $20
+0022: goto_if_false @DESTROY
+ 
+0001: wait 3000
+ 
+:REMOVE
+0001: wait 0
+00BB: remove_blip $29
+
+0001: wait 2000
+
+0048: create_car 241 at 87.23 1008.75 11.00 store_to $40
+00D1: set_car_heading $40 to 242.00
+00A4: create_char_inside_car $40 pedtype 2 model 93 store_to $41
+0106: give_weapon_to_char $41 weapon 27 ammo 100
+003E: create_char 1 model 93 at -744.77 -1266.98 14.49  store_to $42
+0106: give_weapon_to_char $42 weapon 27 ammo 100
+0298: warp_char_into_car_as_passenger $42 car $40 seat 0
+0051: set_car_driving_style $40 to 1 
+0050: set_car_cruise_speed $40 to 90.0 
+0300: set_car_straight_line_distance $20 to 100 
+014C: set_car_health $40 to 1000
+ 013A: lock_car_doors $40 mode 2
+00C0: add_blip_for_car $40 store_to $49
+ 
+:CAR2
+0001: wait 0
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @FAILED
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+00D8:   is_car_health_greater $40 than 360 
+0022: goto_if_false @EXIT2
+0002: goto @CAR2 
+ 
+:EXIT2
+0001: wait 0
+013A: lock_car_doors $40 mode 0
+0001: wait 50
+00E5: set_char_obj_kill_char_any_means $41 char $PLAYER_CHAR
+00E5: set_char_obj_kill_char_any_means $42 char $PLAYER_CHAR 
+0002: goto @DESTROY2
+ 
+:DESTROY2
+0001: wait 0
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @FAILED
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+004F:   is_car_still_alive $40
+0022: goto_if_false @DESTROY2
+ 
+0001: wait 3000
+ 
+:REMOVE2
+0001: wait 0
+00BB: remove_blip $49
+
+0001: wait 2000
+
+0472: add_pager_message 'Phil: Check out Vice Point thats where they are hiding somewhere.' 100 1 0 
+
+0005: 1@ = 368.42
+0005: 2@ = 624.96
+0005: 3@ = 11.43
+00C3: add_blip_for_coord 1@ 2@ 3@ store_to $4
+0248: add_sphere 1@ 2@ 3@ radius 3.0 store_to $5
+
+
+
+:WAIT2
+0001: wait 0
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+0080:   locate_char_any_means_2d $PLAYER_CHAR coord 1@ 2@ radius 3.0 3.0 sphere 1
+0022: goto_if_false @WAIT2
+
+00BB: remove_blip $4
+
+0249: remove_sphere $5
+
+00C9: do_fade 1000 fade 0
+
+0001: wait 2000
+
+0417: unknown_audio_command_7532 point 429.49 618.75 20.00 values 100 5
+
+0443: request_anims 2
+
+01AE: switch_widescreen 1
+003E: create_char 1 model 93 at 428.49 608.58 18.85 store_to $62
+00CF: set_char_heading $62 to 0
+
+0001: wait 300
+003E: create_char 2 model 93 at 429.78 608.00 18.80 store_to $63
+00CF: set_char_heading $63 to 0
+0001: wait 300
+
+00C9: do_fade 1000 fade 1
+
+003E: create_char 3 model 93 at 426.67 608.00 18.85 store_to $64
+00CF: set_char_heading $64 to 0
+003E: create_char 1 model 93 at 439.69 606.74 18.80 store_to $65
+
+0220: set_char $64 anim 2 wait_state_time 1000 ms
+00B9: set_fixed_camera_position 428.49 620.58 18.80 rotation 0 0 0
+00BA: point_camera_at_point 428.49 609.58 18.80 switchstyle 2
+0057: print_now 'Thug: Boss !! The guy who destroyed our bomb trucks is here.' time 6000 flag 1
+
+
+0001: wait 2000
+
+00B5: point_camera_at_char $65 mode 15 switchstyle 1
+ 013E: turn_char_to_face_char $65 char $62
+0158: set_char_obj_run_to_coord $65 run_to 429.03 607.77 
+0001: wait 2000
+0158: set_char_obj_run_to_coord $62 run_to 428.09 608.08 
+0057: print_now 'Boss:Shoot him on sight. GOD I hate this time of the year!' time 4000 flag 1
+0001: wait 2000
+003E: create_char 1 model 93 at 442.52 618.44 12.05 store_to $66
+00CF: set_char_heading $66 to 317.00
+003E: create_char 1 model 93 at 418.39 621.46 12.14 store_to $67
+00CF: set_char_heading $67 to 310.00
+0443: request_anims 28
+003E: create_char 21 model 71 at 443.72 619.59 12.05 store_to $68
+003E: create_char 22 model 76 at 448.50 620.07 12.10 store_to $69
+020E: set_char_stay_in_same_place $69 to 1
+020E: set_char_stay_in_same_place $68 to 1 
+0001: wait 2000
+
+0220: set_char $68 anim 28 wait_state_time 1 ms
+0220: set_char $69 anim 28 wait_state_time 1 ms
+
+0106: give_weapon_to_char $62 weapon 27 ammo 1000000
+0106: give_weapon_to_char $63 weapon 27 ammo 1000000
+0106: give_weapon_to_char $64 weapon 27 ammo 1000000
+0106: give_weapon_to_char $65 weapon 27 ammo 1000000
+0106: give_weapon_to_char $66 weapon 27 ammo 1000000
+0106: give_weapon_to_char $67 weapon 27 ammo 1000000
+0444: remove_anims 28
+
+020E: set_char_stay_in_same_place $62 to 1 
+034F: set_char_stop_shoot_dont_seek_entity $62 on 1 
+0344: set_char_ignore_threats_behind_objects $62 on 0 
+00E4: set_char_obj_kill_char_on_foot $62 char $PLAYER_CHAR 
+020E: set_char_stay_in_same_place $63 to 1 
+034F: set_char_stop_shoot_dont_seek_entity $63 on 1 
+0344: set_char_ignore_threats_behind_objects $63 on 0 
+00E4: set_char_obj_kill_char_on_foot $63 char $PLAYER_CHAR 
+020E: set_char_stay_in_same_place $64 to 1 
+034F: set_char_stop_shoot_dont_seek_entity $64 on 1 
+0344: set_char_ignore_threats_behind_objects $64 on 0 
+00E4: set_char_obj_kill_char_on_foot $64 char $PLAYER_CHAR 
+020E: set_char_stay_in_same_place $65 to 1 
+034F: set_char_stop_shoot_dont_seek_entity $65 on 1 
+0344: set_char_ignore_threats_behind_objects $65 on 0 
+00E4: set_char_obj_kill_char_on_foot $65 char $PLAYER_CHAR 
+020E: set_char_stay_in_same_place $66 to 1 
+034F: set_char_stop_shoot_dont_seek_entity $66 on 1 
+0344: set_char_ignore_threats_behind_objects $66 on 0 
+00E4: set_char_obj_kill_char_on_foot $66 char $PLAYER_CHAR 
+020E: set_char_stay_in_same_place $67 to 1 
+034F: set_char_stop_shoot_dont_seek_entity $67 on 1 
+0344: set_char_ignore_threats_behind_objects $67 on 0 
+00E4: set_char_obj_kill_char_on_foot $67 char $PLAYER_CHAR 
+01B0: set_car_only_damaged_by_player $62 to 1
+01B0: set_car_only_damaged_by_player $63 to 1
+01B0: set_car_only_damaged_by_player $64 to 1
+01B0: set_car_only_damaged_by_player $65 to 1
+01B0: set_car_only_damaged_by_player $66 to 1
+01B0: set_car_only_damaged_by_player $67 to 1
+
+01CF: restore_camera_jumpcut
+01AE: switch_widescreen 0
+012E: set_police_ignore_player $PLAYER_CHAR to 0
+
+00C1: add_blip_for_char $62 store_to $90 
+00C1: add_blip_for_char $63 store_to $91 
+00C1: add_blip_for_char $64 store_to $92 
+00C1: add_blip_for_char $65 store_to $93 
+00C1: add_blip_for_char $66 store_to $94 
+00C1: add_blip_for_char $67 store_to $95
+
+0057: print_now 'Kill the last ~r~Holiday ~g~saboteurs' time 4000 flag 1 
+
+:BLIPS
+0001: wait 0
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED2
+8045:   not is_char_still_alive $66 
+0022: goto_if_false @BLIPS
+00BB: remove_blip $94
+8045:   not is_char_still_alive $67 
+0022: goto_if_false @BLIPS
+00BB: remove_blip $95
+8045:   not is_char_still_alive $64 
+0022: goto_if_false @BLIPS
+00BB: remove_blip $92
+8045:   not is_char_still_alive $65 
+0022: goto_if_false @BLIPS
+00BB: remove_blip $93
+8045:   not is_char_still_alive $62 
+0022: goto_if_false @BLIPS
+00BB: remove_blip $90
+8045:   not is_char_still_alive $63 
+0022: goto_if_false @BLIPS
+00BB: remove_blip $91
+
+
+:PASS
+0001: wait 0
+0055: print_big 'M_PASSN' time 4000 style 1 
+0002: goto @CONT
+
+
+:FAILED2
+0001: wait 0
+0055: print_big 'M_FAIL' time 4000 style 1
+00BB: remove_blip $62
+00BB: remove_blip $63
+00BB: remove_blip $64
+00BB: remove_blip $65
+00BB: remove_blip $66
+00BB: remove_blip $67
+0002: goto @CONT
+
+:FAILED
+0001: wait 0
+0055: print_big 'M_FAIL' time 4000 style 1
+00BB: remove_blip $4
+0249: remove_sphere $5
+00BB: remove_blip $49
+00BB: remove_blip $29
+
+:CONT
+0001: wait 0
+0112: mark_char_as_no_longer_needed $62
+0112: mark_char_as_no_longer_needed $63
+0112: mark_char_as_no_longer_needed $64
+0112: mark_char_as_no_longer_needed $65
+0112: mark_char_as_no_longer_needed $66
+0112: mark_char_as_no_longer_needed $67
+0112: mark_char_as_no_longer_needed $68
+0112: mark_char_as_no_longer_needed $69
+0098: alter_wanted_level $PLAYER_CHAR to 0
+012E: set_police_ignore_player $PLAYER_CHAR to 0
+0125: set_car_density_multiplier 1 
+0264: set_ped_density_multiplier 1
+0004: $ONMISSION == 0
+0023: terminate_this_script
