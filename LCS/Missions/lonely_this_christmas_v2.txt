@@ -1,0 +1,371 @@
+#Game: Liberty City Stories
+#Author: NielsB
+#Version: 3.5
+#Category: missions
+#Date: 2022-12-12
+#Description: Trapped
+
+0004: $ONMISSION = 1
+024C: request_model 150 
+024C: request_model 157 
+024C: request_model 156 
+024C: request_model 143 
+024C: request_model 12
+024C: request_model 81
+024C: request_model 23
+024C: request_model 6
+024C: request_model 7
+024C: request_model 172
+
+0390: load_all_models_now 
+01BB: force_weather_now 7
+00C0: set_time_of_day 0 30 
+03E3: set_ped_density_multiplier 0
+01F0: set_car_density_multiplier 0
+
+0005: $11 = 1149.79
+0005: $12 = -262.77
+0005: $13 = 17.30
+018F: add_blip_for_coord $11 $12 $13 store_to $9
+03C1: add_sphere $11 $12 $13 radius 1.00 store_to $10
+
+:APPDOOR
+0001: wait 0 
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $11 $12 $13 radius 1.00 1.00 1.00  sphere 1  
+004D: goto_if_false @APPDOOR
+
+0112: alter_wanted_level $PLAYER_CHAR to 0 
+0169: remove_blip $9
+03C2: remove_sphere $10 
+
+
+04DC: freeze_char_position $PLAYER_ACTOR set_to 1 
+00BC: print_now 'Someone broke into your apartment go inside.' time 5000 flag 1
+0001: wait 5000
+04DC: freeze_char_position $PLAYER_ACTOR set_to 0
+01FC: set_police_ignore_player $PLAYER_CHAR to 1 
+00A5: create_car 143 at 1155.06 -242.16 17.35 store_to $1
+01CC: dont_remove_object $1
+017A: set_car_heading $1 to 201.00 
+022E: change_car_colour $1 primary_to 0 secondary_to 0
+020F: lock_car_doors $1 mode 2
+
+03C1: add_sphere 1142.60 -246.03 23.05 radius 10.00 store_to $168
+
+:APPART
+0001: wait 0 
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord 1142.60 -246.03 23.05 radius 10.00 10.00 10.00  sphere 1
+004D: goto_if_false @APPART
+
+03C2: remove_sphere $168
+
+03C1: add_sphere 1137.98 -244.74 23.00 radius 1.00 store_to $16
+ 
+ 
+:APPARTMENT
+0001: wait 0 
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord 1137.98 -244.74 23.00 radius 1.00 1.00 1.00  sphere 1  
+004D: goto_if_false @APPARTMENT
+
+03C2: remove_sphere $16 
+
+00BC: print_now 'Letter: I have been watching. I have seen each and every one of your misdeeds.' time 5000 flag 1
+0001: wait 6000
+00BC: print_now 'you stole and smuggled and even killed people. I  allways looked away when something happened in Liberty city.' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Bring back the car you stole and we will talk.' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Exit your apartment and return the ~r~stolen ~g~car.' time 5000 flag 1
+0001: wait 5000
+020F: lock_car_doors $1 mode 1
+CARBLIP
+0001: wait 0
+018B: add_blip_for_car $1 store_to 5@
+016A: change_blip_colour 5@ to 1
+
+:BLIP
+0001: wait 0
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car $1
+004D: goto_if_false @BLIP
+0370: switch_car_radio 0 
+0169: remove_blip 5@
+03E3: set_ped_density_multiplier 0
+01F0: set_car_density_multiplier 0
+0002: goto @MISSION
+
+
+:CAR1
+0001: wait 0 
+03C2: remove_sphere $16
+0169: remove_blip $17 
+018B: add_blip_for_car $1 store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIP
+
+:MISSION
+0005: $11 = 1157.19
+0005: $12 = -212.75
+0005: $13 = 18.50
+03C1: add_sphere $11 $12 $13 radius 10.00 store_to $16
+018F: add_blip_for_coord $11 $12 $13 store_to $17
+
+:TEXT
+0001: wait 0
+00E1:   is_player_in_car $PLAYER_CHAR car $1
+004D: goto_if_false @CAR1
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $11 $12 $13 radius 10.00 10.00 10.00  sphere 1  
+004D: goto_if_false @TEXT
+
+0001: wait 0 
+03C2: remove_sphere $16
+0169: remove_blip $17
+00C0: set_time_of_day 23 30 
+
+00A5: create_car 150 at 804.75 -967.52 5.05 store_to $100 //es
+017A: set_car_heading $100 to 165.00
+0229: set_car_health $100 to 249
+00A5: create_car 157 at 810.60 -945.27 5.88 store_to $101 //pol
+017A: set_car_heading $101 to 92.00
+039C: switch_car_siren $101 to 1 
+00A5: create_car 156 at 814.91 -971.13 4.72 store_to $102 //hea
+017A: set_car_heading $102 to 195.00
+009A: create_char 1 model 7 at 807.23 -967.57 4.72 store_to $103 
+0228: set_char_health $103 to 5
+
+01CC: dont_remove_object $100
+01CC: dont_remove_object $101
+01CC: dont_remove_object $102
+
+0005: $11 = 816.20
+0005: $12 = -922.34
+0005: $13 = 8.30
+
+:BLIP1
+0001: wait 0
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car $1
+004D: goto_if_false @BLIP1 
+0169: remove_blip 5@
+0002: goto @MISSIONC
+
+
+:CAR2
+0001: wait 0 
+03C2: remove_sphere $16
+0169: remove_blip $17
+018B: add_blip_for_car $1 store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIP1
+
+:MISSIONC
+03C1: add_sphere $11 $12 $13 radius 10.00 store_to $16
+018F: add_blip_for_coord $11 $12 $13 store_to $17
+
+:NEXT
+0001: wait 0
+00E1:   is_player_in_car $PLAYER_CHAR car $1
+004D: goto_if_false @CAR2
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $11 $12 $13 radius 10.00 10.00 10.00  sphere 1  
+004D: goto_if_false @NEXT
+00BC: print_now 'Tony: Oh shit better be carefull.' time 5000 flag 1
+
+0001: wait 0 
+03C2: remove_sphere $16
+0169: remove_blip $17
+
+0005: $11 = 899.73
+0005: $12 = -991.13
+0005: $13 = 4.85
+
+:BLIP2
+0001: wait 0
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car $1
+004D: goto_if_false @BLIP2
+0169: remove_blip 5@
+0002: goto @MISSIONB
+
+:CAR3
+0001: wait 0 
+03C2: remove_sphere $16
+0169: remove_blip $17
+018B: add_blip_for_car $1 store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIP2
+
+:MISSIONB
+03C1: add_sphere $11 $12 $13 radius 10.00 store_to $16
+018F: add_blip_for_coord $11 $12 $13 store_to $17
+
+:VEXT
+0001: wait 0
+00E1:   is_player_in_car $PLAYER_CHAR car $1
+004D: goto_if_false @CAR3
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $11 $12 $13 radius 10.00 10.00 10.00  sphere 1  
+004D: goto_if_false @VEXT
+
+0001: wait 0 
+03C2: remove_sphere $16
+0169: remove_blip $17
+
+:EXITC
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00BC: print_now 'exit the car.' time 5000 flag 1
+00AC:   is_car_still_alive $1
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car $1
+004C: goto_if_true @EXITC
+
+016E: set_fading_colour 0 0 0 
+0001: wait 1000
+016F: do_fade 1000 fade 0
+0001: wait 1000
+
+02A8: switch_widescreen 1
+
+:GO 
+00A1: set_char_coordinates $PLAYER_ACTOR to 754.53 139.57 3.55
+0178: set_char_heading $PLAYER_ACTOR to 11.00 
+01B9: set_player_control $PLAYER_CHAR to 0
+009A: create_char 1 model 12 at 754.28 140.78 4.29 store_to $104 
+0228: set_char_health $104 to 250
+0178: set_char_heading $104 to 190.00
+009A: create_char 1 model 81 at 756.28 143.78 4.29 store_to $105 
+0228: set_char_health $105 to 150
+0178: set_char_heading $105 to 190.00
+009A: create_char 1 model 81 at 753.28 143.78 4.29 store_to $106
+0228: set_char_health $106 to 150
+0178: set_char_heading $106 to 190.00
+009A: create_char 1 model 81 at 753.28 147.78 4.29 store_to $107
+0228: set_char_health $107 to 150
+009A: create_char 1 model 81 at 753.28 147.78 4.29 store_to $108
+0228: set_char_health $108 to 150
+
+0494: remove_all_char_weapons $PLAYER_ACTOR
+0164: set_fixed_camera_position 761.51 141.71 5.00 rotation 0 0 0 
+0165: point_camera_at_point 756.28 140.78 4.29 switchstyle 2
+
+0001: wait 1000 
+016F: do_fade 1000 fade 1
+
+00BC: print_now 'Gangster:How is your head? My guys knocked you out. Anyway you stole my car and because of that I lost my familly diner. Guards finnish him!' time 6000 flag 1
+0001: wait 6000
+01FC: set_police_ignore_player $PLAYER_CHAR to 1
+01B9: set_player_control $PLAYER_CHAR to 1
+0378: set_camera_behind_player 
+02F0: restore_camera_jumpcut 
+02A8: switch_widescreen 0
+
+01FC: set_police_ignore_player $PLAYER_CHAR to 1 
+01B7: give_weapon_to_char $PLAYER_ACTOR weapon 17 ammo 50
+01B7: give_weapon_to_char $106 weapon 6 ammo 0
+01B7: give_weapon_to_char $105 weapon 6 ammo 0
+01B7: give_weapon_to_char $107 weapon 7 ammo 0
+01B7: give_weapon_to_char $108 weapon 7 ammo 0
+01B7: give_weapon_to_char $104 weapon 23 ammo 9999
+
+01CF: set_char_obj_kill_player_on_foot $106 player $PLAYER_CHAR 
+01CF: set_char_obj_kill_player_on_foot $105 player $PLAYER_CHAR 
+01CF: set_char_obj_kill_player_on_foot $107 player $PLAYER_CHAR 
+01CF: set_char_obj_kill_player_on_foot $108 player $PLAYER_CHAR 
+
+:KILL
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED 
+011D:   is_char_dead $106
+ 004D: goto_if_false @KILL
+011D:   is_char_dead $105
+004D: goto_if_false @KILL
+011D:   is_char_dead $107
+ 004D: goto_if_false @KILL
+011D:   is_char_dead $108
+004D: goto_if_false @KILL
+
+01CF: set_char_obj_kill_player_on_foot $104 player $PLAYER_CHAR
+
+:KILLW
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+011D:   is_char_dead $104
+004D: goto_if_false @KILLW
+
+:CREATE
+00A5: create_car 172 at 1339.51 -456.95 49.72 store_to 66@
+017A: set_car_heading 66@ to 91.00
+01CC: dont_remove_object 66@
+
+0001: wait 500
+
+016F: do_fade 1000 fade 0
+0001: wait 1000
+
+0055: set_player_coordinates $PLAYER_CHAR to 1349.09 -455.58 50.50
+036F: warp_char_into_car $PLAYER_ACTOR car 66@ 
+0001: wait 1000
+
+016F: do_fade 1000 fade 1
+0001: wait 2000 
+00BC: print_now 'phone: Antony its Sal. I want you to invite for the familly diner. ~r~It ~g~all ~r~was ~g~a ~g~bad ~g~dream. ' time 5000 flag 1
+0001: wait 1900
+
+00BA: print_big 'M_PASSN' time 1000 style 1  // ~Y~MISSION PASSED!
+0001: wait 2000
+0004: $MISSION_REWARD = 242022
+010E: add_score $PLAYER_CHAR value $MISSION_REWARD 
+0399: play_mission_passed_tune 1
+0002: goto @MES
+
+:MES
+0001: wait 6000
+00BA: print_big '~r~Happy ~g~Holidays' time 2000 style 1
+0002: goto @TERMINATE
+
+:END_FAILED
+0001: wait 0
+00BA: print_big 'M_FAIL' time 1000 style 1
+0169: remove_blip 5@
+03C2: remove_sphere $16
+0169: remove_blip $17
+0002: goto @TERMINATE
+
+:TERMINATE
+0001: wait 0
+0004: $ONMISSION = 0
+01FC: set_police_ignore_player $PLAYER_CHAR to 0
+03E3: set_ped_density_multiplier 1
+01F0: set_car_density_multiplier 1
+01C8: mark_car_as_no_longer_needed $1 
+01C8: mark_car_as_no_longer_needed $100 
+01C8: mark_car_as_no_longer_needed $102 
+01C8: mark_car_as_no_longer_needed $101 
+004E: terminate_this_script
