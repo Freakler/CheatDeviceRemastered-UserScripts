@@ -1,0 +1,366 @@
+#Game: Liberty City Stories
+#Author: NielsB
+#Version: 9
+#Category: missions
+#Date: 2022-12-20
+#Description: mission for salvatore.
+
+0004: $ONMISSION = 1
+024C: request_model 133 
+0390: load_all_models_now
+01BB: force_weather_now 0 
+00C0: set_time_of_day 9 30 
+03E3: set_ped_density_multiplier 2.0
+01F0: set_car_density_multiplier 2.0
+00A5: create_car 133 at 1347.77 -449.55 49.81 store_to 4@ 
+017A: set_car_heading 4@ to 5.0
+022E: change_car_colour 4@ primary_to 6 secondary_to 6 
+0530: set_char_answering_mobile $PLAYER_ACTOR on 1
+00BC: print_now 'ring ring ring Tony picks up his phone' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Tony its Sal: Tony you know you"re like the son I"ve never had.' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Tony: Mister Leone this means a lot for me.' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Sal: The only thing is bothering me is that the mayors car is so good looking.' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Tony: yeah boss it is a very nice car.' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Sal: I want you to steal it for me.' time 5000 flag 1
+0001: wait 5000
+00BC: print_now 'Tony: You sure boss?? The line is dead' time 5000 flag 1
+0001: wait 5000
+0530: set_char_answering_mobile $PLAYER_ACTOR on 0
+00BC: print_now 'Steal the ~b~sports ~b~car ~w~for Mister Leone' time 5000 flag 1
+
+0005: $1 = 1369.01
+0005: $2 = -444.94
+0005: $3 = 49.00
+
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+
+:BLIP
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @BLIP 
+0169: remove_blip 5@
+0002: goto @MISSIONC
+
+:CAR
+0001: wait 0 
+03C2: remove_sphere $11
+0169: remove_blip $10
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIP
+
+:MISSIONC
+03C1: add_sphere $1 $2 $3 radius 10.00 store_to $11
+018F: add_blip_for_coord $1 $2 $3 store_to $10
+
+:DETECTPLAYER
+0001: wait 0 
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CAR
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $1 $2 $3 radius 5.0 5.0 5.0 sphere 1  
+004D: goto_if_false @DETECTPLAYER
+0112: alter_wanted_level $PLAYER_CHAR to 3
+00BC: print_now 'The cops where watching the car. Take it to the pay and spray' time 2000 style 2
+
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+0005: $1 = 1259.13
+0005: $2 = -389.27
+0005: $3 = 30.00
+
+:BLIP2
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @BLIP2
+0169: remove_blip 5@
+0002: goto @MISSIONC2
+
+:CAR2
+0001: wait 0 
+03C2: remove_sphere $11
+0169: remove_blip $10
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIP2
+
+:MISSIONC2
+03C1: add_sphere $1 $2 $3 radius 10.00 store_to $11
+018F: add_blip_for_coord $1 $2 $3 store_to $10
+
+:WAIT2
+0001: wait 0 
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CAR2
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $1 $2 $3 radius 5.0 5.0 5.0 sphere 1  
+004D: goto_if_false @WAIT2 
+
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+0005: $1 = 1149.13
+0005: $2 = -399.27
+0005: $3 = 26.00
+
+:BLIPF
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @BLIPF
+0169: remove_blip 5@
+0002: goto @MISSIONCF
+
+:CARF
+0001: wait 0 
+03C2: remove_sphere $11
+0169: remove_blip $10
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIPF
+
+:MISSIONCF
+03C1: add_sphere $1 $2 $3 radius 10.00 store_to $11
+018F: add_blip_for_coord $1 $2 $3 store_to $10
+
+:WAITF
+0001: wait 0 
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CARF
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $1 $2 $3 radius 5.0 5.0 5.0 sphere 1  
+004D: goto_if_false @WAITF 
+
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+0005: $1 = 1078.11
+0005: $2 = -407.17
+0005: $3 = 15.00
+
+:BLIP3
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @BLIP3
+0169: remove_blip 5@
+0002: goto @MISSIONC3
+
+:CAR3
+0001: wait 0 
+03C2: remove_sphere $11
+0169: remove_blip $10
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIP3
+
+:MISSIONC3
+03C1: add_sphere $1 $2 $3 radius 10.00 store_to $11
+018F: add_blip_for_coord $1 $2 $3 store_to $10
+
+:WAIT3
+0001: wait 0 
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CAR3 
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $1 $2 $3 radius 5.0 5.0 5.0 sphere 1  
+004D: goto_if_false @WAIT3 
+
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+0005: $1 = 1000.74
+0005: $2 = -338.94
+0005: $3 = 9.83 
+
+:BLIP4
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @BLIP4 
+0169: remove_blip 5@
+0002: goto @MISSIONC4
+
+:CAR4
+0001: wait 0 
+03C2: remove_sphere $11
+0169: remove_blip $10
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIP4
+
+:MISSIONC4
+03C1: add_sphere $1 $2 $3 radius 10.00 store_to $11
+018F: add_blip_for_coord $1 $2 $3 store_to $10
+
+:WAIT4
+0001: wait 0 
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CAR4
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $1 $2 $3 radius 5.0 5.0 5.0 sphere 1  
+004D: goto_if_false @WAIT4 
+
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+0005: $1 = 926.94
+0005: $2 = -361.94
+0005: $3 = 10.30
+
+:BLIPS
+0001: wait 0
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @BLIPS 
+0169: remove_blip 5@
+0002: goto @MISSIONCS
+
+:CARS
+0001: wait 0 
+03C2: remove_sphere $11
+0169: remove_blip $10
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIPS
+
+:MISSIONCS
+03C1: add_sphere $1 $2 $3 radius 10.00 store_to $11
+018F: add_blip_for_coord $1 $2 $3 store_to $10
+
+:WAITS
+0001: wait 0 
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CARS
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $1 $2 $3 radius 5.0 5.0 5.0 sphere 1  
+004D: goto_if_false @WAITS
+
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+
+0005: $1 = 1420.25
+0005: $2 = -162.69
+0005: $3 = 51.00
+
+:BLIPP
+0001: wait 0
+0114:   is_wanted_level_greater $PLAYER_CHAR than 0 
+004C: goto_if_true @PRINT
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @BLIPP 
+0169: remove_blip 5@
+0002: goto @MISSIONCP
+
+:PRINT
+03C2: remove_sphere $11
+0169: remove_blip $10
+
+:PRINTS
+0001: wait 0
+00BC: print_now 'Lose the cops' time 5000 flag 1
+0114:   is_wanted_level_greater $PLAYER_CHAR than 0 
+004C: goto_if_true @PRINT
+0002: goto @CARP
+
+:CARP
+0001: wait 0 
+03C2: remove_sphere $11
+0169: remove_blip $10
+018B: add_blip_for_car 4@ store_to 5@
+016A: change_blip_colour 5@ to 2
+0002: goto @BLIPP
+
+:MISSIONCP
+03C1: add_sphere $1 $2 $3 radius 10.00 store_to $11
+018F: add_blip_for_coord $1 $2 $3 store_to $10
+
+:SALP
+0001: wait 0 
+0114:   is_wanted_level_greater $PLAYER_CHAR than 0 
+004C: goto_if_true @BLIPP
+00E1:   is_player_in_car $PLAYER_CHAR car 4@
+004D: goto_if_false @CARP
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @END_FAILED
+011C:   is_player_dead $PLAYER_CHAR
+004C: goto_if_true @END_FAILED
+00FA:   locate_char_any_means_car_2d $PLAYER_CHAR coord $1 $2 $3 radius 5.0 5.0 5.0 sphere 1  
+004D: goto_if_false @SALP
+
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+:END_PASSED
+0001: wait 0
+0112: alter_wanted_level $PLAYER_CHAR to 0
+0004: $MISSION_REWARD = 1500
+01E8: print_with_number_big 'M_PASS' number $MISSION_REWARD time 2000 style 1 
+010E: add_score $PLAYER_CHAR value $MISSION_REWARD // money
+0399: play_mission_passed_tune 1
+0002: goto @END
+
+:END_FAILED
+0001: wait 0
+00BA: print_big 'M_FAIL' time 1000 style 1  
+01E8: print_with_number_big 'F_FAIL6' number $_280 time 5000 style 8  
+0004: $ONMISSION = 0
+0169: remove_blip 5@ 
+03C2: remove_sphere $11 
+0169: remove_blip $10 
+
+:END
+0004: $ONMISSION = 0
+03E3: set_ped_density_multiplier 1.0
+01F0: set_car_density_multiplier 1.0
+004E: terminate_this_script
