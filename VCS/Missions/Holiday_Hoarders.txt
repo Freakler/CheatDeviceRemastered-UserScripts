@@ -1,9 +1,9 @@
 #Game: Vice City Stories
 #Author: nielsB
 #Version: 1.0
-#Category: Fun
+#Category: Missions
 #Date: 2022-12-12
-#Description: Spawns ramps airpuerto.
+#Description: holiday mission Vcs.
 
 0160: request_model -58
 0160: request_model -48
