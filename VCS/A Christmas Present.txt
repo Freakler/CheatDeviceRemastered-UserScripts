@@ -1,0 +1,171 @@
+#Game: Vice City Stories
+#Author: ~r~Mic~w~ ~g~Suit~w~
+#Version: 1.0
+#Category: Miscellaneous
+#Date: 2022-12-24
+#Description: A ~r~Christmas~w~ present for you! ~r~Happy~w~ ~g~Christmas!
+
+:SETUP_TRAIN
+005B: set_time_of_day 00 00  // Set time to 00:00
+0109: force_weather_now 1 // Force Weather to Cloudy (to look nicer)
+0267: print_help '~r~Merry~w~ ~g~Christmas!~w~ ~n~Here is a ~y~Present~w~ for you! ~n~Press ~r~Up~w~ + ~g~Circle~w~ to end the script!'
+
+0004: 1@ = 216 // Linerunner ID
+0004: 11@ = 174 // Baggage Handler ID
+0005: 30@ = 3.9 // Offset
+0005: 32@ = -0.725 // Another Offset
+
+// Get some offsets from player
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 8.0 0.0 0.0 store_to 2@ 3@ 4@
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset -100.0 -200.0 -250.0 store_to 16@ 17@ 18@
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 100.0 200.0 250.0 store_to 19@ 20@ 21@
+
+// Request all the models we need
+0160: request_model 1@
+0160: request_model 11@
+0139: generate_random_int_in_range 16 119 store_to 41@
+0160: request_model 41@
+0139: generate_random_int_in_range 16 119 store_to 42@
+0160: request_model 42@
+0139: generate_random_int_in_range 16 119 store_to 43@
+0160: request_model 43@
+0139: generate_random_int_in_range 16 119 store_to 44@
+0160: request_model 44@
+0139: generate_random_int_in_range 16 119 store_to 45@
+0160: request_model 45@
+0228: load_all_models_now
+
+:LOADING_MODELS
+0001: wait 0
+// Check if all models have sucessfully loaded, if not, loop until game loads.
+0057: print_now 'Loading Models...' time 1 flag 1
+0078: if and
+0161:   has_model_loaded 1@
+0161:   has_model_loaded 11@
+0161:   has_model_loaded 41@
+0161:   has_model_loaded 42@
+0161:   has_model_loaded 43@
+0161:   has_model_loaded 44@
+0161:   has_model_loaded 45@
+0021: goto_if_true @LOADED_MODELS
+0002: goto @LOADING_MODELS
+
+
+:LOADED_MODELS
+// Clear area
+022C: clear_area 2@ 3@ 4@ radius 100.0 clear_particles 1
+0246: clear_area_of_cars 16@ 17@ 18@ to 19@ 20@ 21@
+
+// Spawn all Cars
+// Change Line Runner's color to Red
+// Change Baggage Handlers' color to White
+0048: create_car 1@ at 2@ 3@ 4@ store_to 13@
+0150: change_car_colour 13@ primary_to 3 secondary_to 3
+
+// Baggage Handler 1
+002A: 3@ += 30@
+0048: create_car 11@ at 2@ 3@ 4@ store_to 14@
+003E: create_char 21 model 41@ at 2@ 3@ 4@ store_to 46@
+021C: warp_char_into_car 46@ car 14@
+0150: change_car_colour 14@ primary_to 1 secondary_to 1
+
+// Baggage Handler 2
+002A: 3@ += 30@
+0048: create_car 11@ at 2@ 3@ 4@ store_to 15@
+003E: create_char 21 model 42@ at 2@ 3@ 4@ store_to 47@
+021C: warp_char_into_car 47@ car 15@
+0150: change_car_colour 15@ primary_to 1 secondary_to 1
+
+// Baggage Handler 3
+002A: 3@ += 30@
+0048: create_car 11@ at 2@ 3@ 4@ store_to 16@
+003E: create_char 21 model 43@ at 2@ 3@ 4@ store_to 48@
+021C: warp_char_into_car 48@ car 16@
+0150: change_car_colour 16@ primary_to 1 secondary_to 1
+
+// Baggage Handler 4
+002A: 3@ += 30@
+0048: create_car 11@ at 2@ 3@ 4@ store_to 17@
+003E: create_char 21 model 44@ at 2@ 3@ 4@ store_to 49@
+021C: warp_char_into_car 49@ car 17@
+0150: change_car_colour 17@ primary_to 1 secondary_to 1
+
+// Baggage Handler 5
+002A: 3@ += 30@
+0048: create_car 11@ at 2@ 3@ 4@ store_to 18@
+003E: create_char 21 model 45@ at 2@ 3@ 4@ store_to 50@
+021C: warp_char_into_car 50@ car 18@
+0150: change_car_colour 18@ primary_to 1 secondary_to 1
+
+// Mark all models as no longer needed
+0162: mark_model_as_no_longer_needed 1@
+0162: mark_model_as_no_longer_needed 11@
+0162: mark_model_as_no_longer_needed 41@
+0162: mark_model_as_no_longer_needed 42@
+0162: mark_model_as_no_longer_needed 43@
+0162: mark_model_as_no_longer_needed 44@
+0162: mark_model_as_no_longer_needed 45@
+
+// Disable all Cars Damage
+0275: set_car_can_be_damaged 13@ to 0
+0275: set_car_can_be_damaged 14@ to 0
+0275: set_car_can_be_damaged 15@ to 0
+0275: set_car_can_be_damaged 16@ to 0
+0275: set_car_can_be_damaged 17@ to 0  
+0275: set_car_can_be_damaged 18@ to 0
+
+:CAR_FOLLOW_OTHER
+0001: wait 0
+// Is user pressing the up button? If so, check if pressing the circle button too.
+007F: is_button_pressed 0 button 8
+0021: goto_if_true @PRESSED_CIRCLE
+ 
+:BAILOUT_CONTINUE
+// Get offset from Line Runner (in front)
+// Set the coordinates of the next Handler to the offset
+// Change Heading and Rotation based on Line Runner's ones
+027F: get_offset_from_car_in_world_coords 13@ offset 0.0 10.0 -1.65 store_to 8@ 9@ 10@  // Follow the car in front
+
+// Baggage Handler 1
+004E: set_car_coordinates 14@ to 8@ 9@ 10@
+00D0: get_car_heading 13@ store_to 27@
+03B8: get_car_rotation 13@ store_to 33@ 34@ 35@
+00D1: set_car_heading 14@ to 27@
+03B9: set_car_rotation 14@ rot 33@ 34@ 35@
+
+// Baggage Handler 2
+027F: get_offset_from_car_in_world_coords 14@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+004E: set_car_coordinates 15@ to 8@ 9@ 10@
+00D1: set_car_heading 15@ to 27@
+03B9: set_car_rotation 15@ rot 33@ 34@ 35@
+
+// Baggage Handler 3
+027F: get_offset_from_car_in_world_coords 15@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+004E: set_car_coordinates 16@ to 8@ 9@ 10@
+00D1: set_car_heading 16@ to 27@
+03B9: set_car_rotation 16@ rot 33@ 34@ 35@
+
+// Baggage Handler 4
+027F: get_offset_from_car_in_world_coords 16@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+004E: set_car_coordinates 17@ to 8@ 9@ 10@
+00D1: set_car_heading 17@ to 27@
+03B9: set_car_rotation 17@ rot 33@ 34@ 35@
+
+// Baggage Handler 5
+027F: get_offset_from_car_in_world_coords 17@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+004E: set_car_coordinates 18@ to 8@ 9@ 10@
+00D1: set_car_heading 18@ to 27@
+03B9: set_car_rotation 18@ rot 33@ 34@ 35@
+
+0002: goto @CAR_FOLLOW_OTHER
+
+:PRESSED_CIRCLE
+// Is user pressing the circle button? If so, end the script.
+007F: is_button_pressed 0 button 17
+0021: goto_if_true @TERMINATE_SCRIPT
+0002: goto @BAILOUT_CONTINUE
+
+:TERMINATE_SCRIPT
+// End the script, display a message to let the user know that the script has ended
+0267: print_help 'Exiting the script...'
+0023: terminate_this_script

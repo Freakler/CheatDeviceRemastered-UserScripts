@@ -1,0 +1,171 @@
+#Game: Liberty City Stories
+#Author: ~r~Mic~w~ ~g~Suit~w~
+#Version: 1.0
+#Category: Miscellaneous
+#Date: 2022-12-24
+#Description: A ~r~Christmas~w~ present for you! ~r~Happy~w~ ~g~Christmas!
+
+:SETUP_TRAIN
+00C0: set_time_of_day 00 00  // Set time to 00:00
+01BB: force_weather_now 7 // Force Weather to Snow
+03EA: print_help '~r~Merry~w~ ~g~Christmas!~w~ ~n~Here is a ~y~Present~w~ for you! ~n~Press ~r~Up~w~ + ~g~Circle~w~ to end the script!'
+
+0004: 1@ = 134 // Linerunner ID
+0004: 11@ = 141 // Manana ID
+0005: 30@ = 5.0 // Offset
+0005: 32@ = -1.0 // Another Offset
+
+// Get some offsets from player
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 8.0 0.0 0.0 store_to 2@ 3@ 4@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset -100.0 -200.0 -250.0 store_to 16@ 17@ 18@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 100.0 200.0 250.0 store_to 19@ 20@ 21@
+
+// Request all the models we need
+024C: request_model 1@
+024C: request_model 11@
+020E: generate_random_int_in_range 9 68 store_to 41@
+024C: request_model 41@
+020E: generate_random_int_in_range 9 68 store_to 42@
+024C: request_model 42@
+020E: generate_random_int_in_range 9 68 store_to 43@
+024C: request_model 43@
+020E: generate_random_int_in_range 9 68 store_to 44@
+024C: request_model 44@
+020E: generate_random_int_in_range 9 68 store_to 45@
+024C: request_model 45@
+0390: load_all_models_now
+
+:LOADING_MODELS
+0001: wait 0
+// Check if all models have sucessfully loaded, if not, loop until game loads.
+00BC: print_now 'Loading Models...' time 1 flag 1
+00DB: if and
+024D:   has_model_loaded 1@
+024D:   has_model_loaded 11@
+024D:   has_model_loaded 41@
+024D:   has_model_loaded 42@
+024D:   has_model_loaded 43@
+024D:   has_model_loaded 44@
+024D:   has_model_loaded 45@
+004C: goto_if_true @LOADED_MODELS
+0002: goto @LOADING_MODELS
+
+
+:LOADED_MODELS
+// Clear area
+039A: clear_area 2@ 3@ 4@ radius 100.0 clear_particles 1
+03BF: clear_area_of_cars 16@ 17@ 18@ to 19@ 20@ 21@
+
+// Spawn all Cars
+// Change Line Runner's color to Red
+// Change Mananas' color to White
+00A5: create_car 1@ at 2@ 3@ 4@ store_to 13@
+022E: change_car_colour 13@ primary_to 3 secondary_to 3
+
+// Manana 1
+005B: 3@ += 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 14@
+009A: create_char 22 model 41@ at 2@ 3@ 4@ store_to 46@
+036F: warp_char_into_car 46@ car 14@
+022E: change_car_colour 14@ primary_to 1 secondary_to 1
+
+// Manana 2
+005B: 3@ += 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 15@
+009A: create_char 22 model 42@ at 2@ 3@ 4@ store_to 47@
+036F: warp_char_into_car 47@ car 15@
+022E: change_car_colour 15@ primary_to 1 secondary_to 1
+
+// Manana 3
+005B: 3@ += 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 16@
+009A: create_char 5 model 43@ at 2@ 3@ 4@ store_to 48@
+036F: warp_char_into_car 48@ car 16@
+022E: change_car_colour 16@ primary_to 1 secondary_to 1
+
+// Manana 4
+005B: 3@ += 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 17@
+009A: create_char 5 model 44@ at 2@ 3@ 4@ store_to 49@
+036F: warp_char_into_car 49@ car 17@
+022E: change_car_colour 17@ primary_to 1 secondary_to 1
+
+// Manana 5
+005B: 3@ += 30@
+00A5: create_car 11@ at 2@ 3@ 4@ store_to 18@
+009A: create_char 5 model 45@ at 2@ 3@ 4@ store_to 50@
+036F: warp_char_into_car 50@ car 18@
+022E: change_car_colour 18@ primary_to 1 secondary_to 1
+
+// Mark all models as no longer needed
+024E: mark_model_as_no_longer_needed 1@
+024E: mark_model_as_no_longer_needed 11@
+024E: mark_model_as_no_longer_needed 41@
+024E: mark_model_as_no_longer_needed 42@
+024E: mark_model_as_no_longer_needed 43@
+024E: mark_model_as_no_longer_needed 44@
+024E: mark_model_as_no_longer_needed 45@
+
+// Disable all Cars Damage
+03FA: set_car_can_be_damaged 13@ to 0
+03FA: set_car_can_be_damaged 14@ to 0
+03FA: set_car_can_be_damaged 15@ to 0
+03FA: set_car_can_be_damaged 16@ to 0
+03FA: set_car_can_be_damaged 17@ to 0  
+03FA: set_car_can_be_damaged 18@ to 0
+
+:CAR_FOLLOW_OTHER
+0001: wait 0
+// Is user pressing the up button? If so, check if pressing the circle button too.
+00E6: is_button_pressed 0 button 8
+004C: goto_if_true @PRESSED_CIRCLE
+ 
+:BAILOUT_CONTINUE
+// Get offset from Line Runner (in front)
+// Set the coordinates of the next Manana to the offset
+// Change Heading and Rotation based on Line Runner's ones
+040C: get_offset_from_car_in_world_coords 13@ offset 0.0 10.0 -1.65 store_to 8@ 9@ 10@  // Follow the car in front
+
+// Manana 1
+00AB: set_car_coordinates 14@ to 8@ 9@ 10@
+0179: get_car_heading 13@ store_to 27@
+060E: get_car_rotation 13@ store_to 33@ 34@ 35@
+017A: set_car_heading 14@ to 27@
+060F: set_car_rotation 14@ rot 33@ 34@ 35@
+
+// Manana 2
+040C: get_offset_from_car_in_world_coords 14@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 15@ to 8@ 9@ 10@
+017A: set_car_heading 15@ to 27@
+060F: set_car_rotation 15@ rot 33@ 34@ 35@
+
+// Manana 3
+040C: get_offset_from_car_in_world_coords 15@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 16@ to 8@ 9@ 10@
+017A: set_car_heading 16@ to 27@
+060F: set_car_rotation 16@ rot 33@ 34@ 35@
+
+// Manana 4
+040C: get_offset_from_car_in_world_coords 16@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 17@ to 8@ 9@ 10@
+017A: set_car_heading 17@ to 27@
+060F: set_car_rotation 17@ rot 33@ 34@ 35@
+
+// Manana 5
+040C: get_offset_from_car_in_world_coords 17@ offset 0.0 30@ 32@ store_to 8@ 9@ 10@
+00AB: set_car_coordinates 18@ to 8@ 9@ 10@
+017A: set_car_heading 18@ to 27@
+060F: set_car_rotation 18@ rot 33@ 34@ 35@
+
+0002: goto @CAR_FOLLOW_OTHER
+
+:PRESSED_CIRCLE
+// Is user pressing the circle button? If so, end the script.
+00E6: is_button_pressed 0 button 17
+004C: goto_if_true @TERMINATE_SCRIPT
+0002: goto @BAILOUT_CONTINUE
+
+:TERMINATE_SCRIPT
+// End the script, display a message to let the user know that the script has ended
+03EA: print_help 'Exiting the script...'
+004E: terminate_this_script
