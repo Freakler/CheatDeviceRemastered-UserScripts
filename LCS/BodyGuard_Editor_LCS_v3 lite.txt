@@ -1,0 +1,155 @@
+#Game: Liberty City Stories
+#Author: NielsB
+#Version: 1.6
+#Category: missions
+#Date: 2022-12-23
+#Description: Create BodyGuard
+
+024C: request_model 259
+024C: request_model 260
+024C: request_model 261
+024C: request_model 262
+024C: request_model 263
+024C: request_model 264
+024C: request_model 265
+024C: request_model 266
+024C: request_model 267
+024C: request_model 268
+024C: request_model 269
+024C: request_model 270
+024C: request_model 271
+024C: request_model 272
+024C: request_model 273
+024C: request_model 274
+024C: request_model 275
+024C: request_model 276
+024C: request_model 277
+024C: request_model 278
+024C: request_model 279
+024C: request_model 280
+024C: request_model 281
+024C: request_model 282
+024C: request_model 283
+024C: request_model 284
+024C: request_model 285
+024C: request_model 286
+024C: request_model 287
+024C: request_model 288
+024C: request_model 289
+024C: request_model 290
+024C: request_model 291
+024C: request_model 292
+0390: load_all_models_now 
+
+0006: 1@ = 0
+0006: 0@ = 0
+
+0178: set_char_heading $PLAYER_ACTOR to 180.00
+0001: wait 90
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 2.0 3.0 -0.85 store_to $1 $2 $3 
+0378: set_camera_behind_player 
+//01B9: set_player_control $PLAYER_CHAR to 0 //Can set on or off
+
+:ADD
+0354: remove_char_elegantly $10 
+0169: remove_blip $11
+0001: wait 90
+0001: wait 90
+:ADD2
+0001: wait 90
+024C: request_model 0@
+0390: load_all_models_now 
+009A: create_char 1 model 0@ at $1 $2 $3 store_to $10 
+018C: add_blip_for_char $10 store_to $11
+016A: change_blip_colour $11 to 7 
+
+:ACTION0
+0001: wait 0
+00E6:   is_button_pressed 0 button 8
+004C: goto_if_true @WEPUP
+00E6:   is_button_pressed 0 button 11
+004C: goto_if_true @NEXT
+00E6:   is_button_pressed 0 button 9
+004C: goto_if_true @ENDE
+00E6:   is_button_pressed 0 button 10
+004C: goto_if_true @JOIN
+00BC: print_now '~g~Press Right For Next char ~r~Press Down To Close ~b~ Press Up For Weapons ~t~Left=join no weapon' time 50 flag 1
+01EB: print_with_number_soon '~b~Ped ID ~1~' number 0@ time 1 ms flag 1
+0002: goto @ACTION0
+
+:NEXT
+000A: 0@ += 1
+0038: 0@ == 8
+004C: goto_if_true @FAILSAVE
+0038: 0@ == 69
+004C: goto_if_true @FAILSAVE2
+0038: 0@ == 105
+004C: goto_if_true @FAILSAVE3
+0002: goto @ADD
+
+:FAILSAVE
+0007: 0@ = 9
+0002: goto @ADD
+
+:FAILSAVE2
+0007: 0@ = 79
+0002: goto @ADD
+
+:FAILSAVE3
+0007: 0@ = 0
+0002: goto @ADD
+
+:WEPUP
+0001: wait 0
+01B7: give_weapon_to_char $10 weapon 1@ ammo 9999  //bodyguards AMMO
+:CHOOSE
+0001: wait 0
+00BC: print_now '~b~Press Up To Change Weapons ~g~Press Right To Join ~r~Press Down To Remove' time 50 flag 1
+00E6:   is_button_pressed 0 button 8
+004C: goto_if_true @WEPUP1
+00E6:   is_button_pressed 0 button 9
+004C: goto_if_true @ENDE
+00E6:   is_button_pressed 0 button 11
+004C: goto_if_true @JOIN
+01EB: print_with_number_soon '~p~Weapon ID ~1~' number 1@ time 1 ms flag 1
+0002: goto @CHOOSE
+
+:WEPUP1
+0001: wait 100
+000A: 1@ += 1
+0038: 1@ == 37
+004C: goto_if_true @FAILSAVE4
+0002: goto @WEPUP
+
+:FAILSAVE4
+0007: 1@ = 0
+0002: goto @CHOOSE
+
+:JOIN
+0001: wait 0
+01E4: tie_char $10 to_player $PLAYER_CHAR
+04FA: set_char_as_player_friend $10 player $PLAYER_CHAR on 1 //says what it does
+0541: set_char_in_players_group_can_fight $10 can_fight 1  //says what it does
+011F: set_char $10 search_threat 128                    //target special chars group
+0296: set_char_heed_threats $10 flag 1                  //says what it does
+0228: set_char_health $10 to 350                    //Changes healt
+02E7: set_char_accuracy $10 to 75                 //says what it does
+031E: set_char $10 running 1                    //says what it does
+//044B: set_char_suffers_critical_hits $10 enable 0 //says what it does
+//02B0: set_char_proofs $10 BP 1 FP 1 EP 1 CP 1 MP 1 //fireproof Bulletproof Exposionproof  
+0169: remove_blip $11
+0002: goto @ADD2
+
+//dissmissed char
+:ENDE
+0001: wait 0
+0248: set_char $10 ped_stats_to 0   //unstable
+0228: set_char_health $10 to 350 
+0296: set_char_heed_threats $10 flag 1
+01C7: mark_char_as_no_longer_needed $10
+0169: remove_blip $11
+//01B9: set_player_control $PLAYER_CHAR to 1
+0001: wait 2000
+
+:TERMIN
+004E: terminate_this_script

@@ -1,0 +1,24 @@
+#Game: Liberty City Stories
+#Author: NielsB
+#Version: 0.5
+#Category: Fun
+#Date: 2022-12-25
+#Description: Places a ramp infront player 
+
+0006: 10@ = 447
+
+//540 isEXPLObarrel
+
+024C: request_model 10@
+0390: load_all_models_now 
+
+
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0 3.0 -2.80 store_to 1@ 2@ 3@ 
+0177: get_char_heading $PLAYER_ACTOR store_to 0@
+0378: set_camera_behind_player
+
+010C: create_object 10@ at 1@ 2@ 3@  store_to 5@  
+//01C1: set_object_coordinates 5@ to 1@ 2@ 3@ 
+0458: set_object_rotation 5@ to -60.00 0 0@ 
+
+004E: terminate_this_script
