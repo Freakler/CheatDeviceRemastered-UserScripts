@@ -1,0 +1,321 @@
+#Game: ~Vice City Stories
+#Author: ~r~Mic~w~ ~g~Suit~w~
+#Version: 1.0
+#Category: Missions
+#Date: 2022-12-24
+#Description: A Mission made for ~r~Chri~w~ ~g~stmas~w~! Help Lance and please, don't ~r~cheat~w~ ;)
+
+0004: $3100 = 2500 // Mission Reward
+0004: $3101 = 136 // Lance ID
+
+000F:   $ONMISSION > 0 // If Player is on a mission, end the script
+0021: goto_if_true @END_MISSION
+
+:BEFORE_MISSION
+0109: force_weather_now 1
+
+:SPAWN_BS // Spawn Blip and sphere
+0005: 1@ = -103.46
+0005: 2@ = -1603.96
+0005: 3@ = 10.28
+0248: add_sphere 1@ 2@ 3@ radius 3.0 store_to $2001
+00C5: add_sprite_blip_for_contact_point 1@ 2@ 3@ sprite 37 store_to $2000
+
+:CHECK_SPHERE // Check if player touched sphere
+0001: wait 0
+008A:    locate_char_on_foot_3d $PLAYER_CHAR coord 1@ 2@ 3@ radius 3.0 3.0 3.0 sphere 1
+0022: goto_if_false @CHECK_SPHERE
+
+:REM_BS // Remove Blip and Sphere
+00BB: remove_blip $2000
+0249: remove_sphere $2001
+0004: $ONMISSION = 1
+
+
+:START_CUTSCENE_MISSION // Start Christmas Mission Cutscene
+0107: set_player_control $PLAYER_CHAR to 0
+0352: stop_char $PLAYER_CHAR
+00EE: char $PLAYER_CHAR walk_to -101.69 -1600.71
+03A1: set_wants_to_draw_hud 0
+0401: disable_access_to_pause_menu 1
+0055: print_big 'Snowy Vice City' time 100 style 2  // Name
+02B4: set_interpolation_parameters 0 time 10000 
+0005: $4 = -130.00
+0005: $5 = -1621.32
+0005: $6 = 19.64
+00B9: set_fixed_camera_position $4 $5 $6 rotation 0 0 0
+00BA: point_camera_at_point 1@ 2@ 3@ switchstyle 2
+0036: $7 = 1@ 
+000A: $7 -= 10.0
+0001: wait 1
+00BA: point_camera_at_point $7 2@ 3@ switchstyle 1
+0001: wait 2000
+00C8: set_fading_colour 0 0 1 
+00C9: do_fade 1000 fade 0
+0001: wait 1000
+
+:SRT_CUT_MIS3 // Change to Cutscene thing before load complete
+0005: 4@ = -96.52
+0005: 5@ = -1585.32
+0005: 6@ = 10.50
+0005: 7@ = 236.0
+
+0005: 8@ = -93.79
+0005: 9@ = -1586.97
+0005: 10@ = 10.50
+0005: 11@ = 62.0
+
+0005: 12@ = -93.90
+0005: 13@ = -1579.67
+0005: 14@ = 11.79
+
+0005: 15@ = -96.66
+0005: 16@ = -1591.21
+0005: 17@ = 10.02
+
+0160: request_model $3101
+0160: request_model 238 // 238 - Mule ID
+0228: load_all_models_now
+
+003E: create_char 22 model 0 at 4@ 5@ 6@ store_to $100
+00CF: set_char_heading $100 to 7@
+
+003E: create_char 22 model $3101 at 8@ 9@ 10@ store_to $101
+00CF: set_char_heading $101 to 11@
+
+00B9: set_fixed_camera_position 12@ 13@ 14@ rotation 0 0 0  
+00BA: point_camera_at_point 15@ 16@ 17@ switchstyle 2
+0001: wait 2000
+00C9: do_fade 1000 fade 1
+0001: wait 1000
+
+:SRT_CUT_MIS41 // Show First Cutscene
+0001: wait 0
+007F:   is_button_pressed 0 button 16 // a bit bloated, but who cares right?
+0021: goto_if_true @STR_CUT_MIS42
+0001: wait 750
+0057: print_now '~h~Lance~w~: Hey Vance! Since it is ~g~Christmas~w~, I want you to do something.' time 4000 flag 1
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @STR_CUT_MIS42  
+0001: wait 4000
+0057: print_now '~h~Vic~w~: Lance, what shit did you made this time?' time 3500 flag 1
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @STR_CUT_MIS42  
+0001: wait 3500
+0057: print_now '~h~Lance~w~: Come on Vic, I was just moving ~b~snow~w~ inside a ~r~red~w~ and white Mule across Vice City, but the police ~r~seized~w~ the vehicle.' time 6000 flag 1  
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @STR_CUT_MIS42
+0001: wait 6000
+0057: print_now '~h~Lance~w~: Can you bring it back to me, please? The Mule is in the ~y~Little Havana Police Department~h~.' time 5000 flag 1  
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @STR_CUT_MIS42
+0001: wait 5000
+
+:STR_CUT_MIS42
+0059: clear_prints
+00C9: do_fade 1000 fade 0
+0001: wait 1000
+
+:SRT_CUT_MIS5 // Setup everything after the cutscene
+0005: 18@ = -91.49
+0005: 19@ = -1582.11
+0005: 20@ = 10.50
+0005: 21@ = 328.0
+
+0005: 22@ = -892.75
+0005: 23@ = -702.50
+0005: 24@ = 11.19
+0005: 25@ = 59.0
+
+003F: delete_char $100
+003F: delete_char $101
+
+0048: create_car 238 at 22@ 23@ 24@ store_to $3000
+0150: change_car_colour $3000 primary_to 3 secondary_to 3 // Set Mule Colors (red)
+00D1: set_car_heading $3000 to 25@
+
+0162: mark_model_as_no_longer_needed 238
+
+00C0: add_blip_for_car $3000 store_to $3001
+00BC: change_blip_colour $3001 to 4
+00A7: give_car_alarm $3000
+00EE: char $PLAYER_CHAR walk_to 18@ 19@
+
+0044: set_char_coordinates $PLAYER_CHAR to 18@ 19@ 20@
+00CF: set_char_heading $PLAYER_CHAR to 21@
+00B6: restore_camera
+0001: wait 2000
+
+:XMAS_MIS1 // After the Cutscene
+0107: set_player_control $PLAYER_CHAR to 1
+03A1: set_wants_to_draw_hud 1
+0401: disable_access_to_pause_menu 0
+0221: set_camera_behind_player
+0057: print_now 'Rescue ~g~Lances Christmas Mule~w~ with the ~b~snow~w~.' time 3000 flag 1
+00C9: do_fade 1000 fade 1
+
+:XMAS_MIS23 // In Shoreside Vale
+0001: wait 0
+0108: force_weather 1
+03B9: set_car_rotation $3000 rot 0.0 0.0 235.0
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @MISSION_FAILED
+00A0:   is_car_dead $3000
+0021: goto_if_true @MISSION_FAILED
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @MISSION_FAILED
+007C:   is_char_in_car $PLAYER_CHAR car $3000
+0021: goto_if_true @XMAS_MIS3
+0002: goto @XMAS_MIS23
+
+:XMAS_MIS3 // Remove Car Blip
+00BB: remove_blip $3001
+
+:CUT_MIS21 // After you enter the vehicle
+0005: 26@ = -887.57
+0005: 27@ = -708.73
+0005: 28@ = 11.33
+
+0005: 29@ = -896.71
+0005: 30@ = -697.62
+0005: 31@ = 12.09
+
+0005: 32@ = -86.30
+0005: 33@ = -1574.66
+0005: 34@ = 10.46
+
+0107: set_player_control $PLAYER_CHAR to 0
+03A1: set_wants_to_draw_hud 0
+0401: disable_access_to_pause_menu 1
+00B9: set_fixed_camera_position 26@ 27@ 28@ rotation 0 0 0  
+00BA: point_camera_at_point 29@ 30@ 31@ switchstyle 2
+
+0248: add_sphere 32@ 33@ 34@ radius 3.0 store_to $1833
+00C3: add_blip_for_coord 32@ 33@ 34@ store_to $1525
+00BC: change_blip_colour $1525 to 4
+
+0057: print_now 'You ~y~alerted~w~ the cops! You cannot escape them! Bring this Mule back to ~y~Lances House~w~!' time 3000 flag 1  // ~w~You need a car to be in this race!
+0001: wait 3000
+
+:XMAS_MIS4 // After short cutscene
+0098: alter_wanted_level $PLAYER_CHAR to 3
+0107: set_player_control $PLAYER_CHAR to 1
+03A1: set_wants_to_draw_hud 1
+0401: disable_access_to_pause_menu 0
+00B6: restore_camera
+
+:XMAS_MIS5 // Loop until you reach Lance's House
+0001: wait 0
+0108: force_weather 1
+0098: alter_wanted_level $PLAYER_CHAR to 3
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @MISSION_FAILED
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @MISSION_FAILED
+00A0:   is_car_dead $3000
+0021: goto_if_true @MISSION_FAILED
+0104:   locate_car_3d $3000 point 32@ 33@ 34@ radius 3.0 3.0 3.0 sphere 1
+0022: goto_if_false @XMAS_MIS5
+
+:CUT_MIS22 // Setup Final Cutscene
+0098: alter_wanted_level $PLAYER_CHAR to 0
+00BB: remove_blip $1525
+0249: remove_sphere $1833
+00E8: set_char_obj_leave_car $PLAYER_CHAR car $3000
+0107: set_player_control $PLAYER_CHAR to 0
+03A1: set_wants_to_draw_hud 0
+0401: disable_access_to_pause_menu 1
+0001: wait 2000
+00C9: do_fade 1000 fade 0
+0001: wait 1000
+
+:CUT_MIS23 // Last Cutscene
+0005: 38@ = -110.64
+0005: 39@ = -1616.03
+0005: 40@ = 10.13
+
+0005: 41@ = -106.63
+0005: 42@ = -1609.16
+
+0005: 43@ = -105.47
+0005: 44@ = -1607.48
+0005: 45@ = 10.22
+
+0005: 46@ = -110.50
+0005: 47@ = -1602.13
+0005: 48@ = 10.19
+
+0044: set_char_coordinates $PLAYER_CHAR to 38@ 39@ 40@
+0001: wait 700
+00CF: set_char_heading $PLAYER_CHAR to 329.0
+
+003E: create_char 22 model $3101 at 43@ 44@ 45@ store_to $102
+00CF: set_char_heading $102 to 147.0
+00B9: set_fixed_camera_position 46@ 47@ 48@ rotation 0 0 0
+00B3: point_camera_at_player $PLAYER_CHAR mode 15 switchstyle 2
+00EE: char $PLAYER_CHAR walk_to 41@ 42@
+0162: mark_model_as_no_longer_needed $3101
+00C9: do_fade 1000 fade 1
+0001: wait 1200
+007F:   is_button_pressed 0 button 16 // a bit bloated, but who cares right?
+0021: goto_if_true @XMAS_MIS6
+0001: wait 1200
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @XMAS_MIS6
+0001: wait 1200
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @XMAS_MIS6
+0001: wait 1200
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @XMAS_MIS6
+0001: wait 1200
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @XMAS_MIS6
+0057: print_now '~h~Lance~w~: Thank you so much bro!' time 3000 flag 1  
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @XMAS_MIS6
+0001: wait 3000
+0057: print_now '~h~Vic~w~: Man you got me in a really bad situation and all you can say is thanks?' time 5500 flag 1  
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @XMAS_MIS6
+0001: wait 5500
+0057: print_now '~h~Lance~w~: Hey man I am sorry! I did not mean to cause so much trouble, see you later!' time 6000 flag 1  
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @XMAS_MIS6
+0001: wait 6000
+
+:XMAS_MIS6 // Setup Player after last cutscene
+00C9: do_fade 1000 fade 0
+0001: wait 1000
+0352: stop_char $PLAYER_CHAR
+0044: set_char_coordinates $PLAYER_CHAR to -107.22 -1610.07 10.18
+00B6: restore_camera
+0221: set_camera_behind_player
+003F: delete_char $102
+0049: delete_car $3000
+00CF: set_char_heading $PLAYER_CHAR to 153.0
+0107: set_player_control $PLAYER_CHAR to 1
+03A1: set_wants_to_draw_hud 1
+0001: wait 500
+00C9: do_fade 1000 fade 1
+
+:XMAS_MIS7 // Mission Passed
+0401: disable_access_to_pause_menu 0
+011D: print_with_number_big 'M_PASS' number 2500 time 2000 style 1
+0094: add_score $PLAYER_CHAR value 2500 // money
+022B: play_mission_passed_tune 1
+0004: $ONMISSION = 0
+0002: goto @END_MISSION
+
+:MISSION_FAILED // Acivated in case Player dies or vehicle is destroyed
+0055: print_big 'M_FAIL' time 1000 style 1  // ~Y~MISSION FAILED!
+00BB: remove_blip $3001
+00BB: remove_blip $1525
+0249: remove_sphere $1833
+0049: delete_car $3000
+0098: alter_wanted_level $PLAYER_CHAR to 0
+0004: $ONMISSION = 0
+0002: goto @END_MISSION
+
+:END_MISSION // End Script
+0023: terminate_this_script
