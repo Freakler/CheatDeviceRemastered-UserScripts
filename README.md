@@ -2,7 +2,7 @@
 
 A collection of UserScripts made for [CheatDeviceRemastered](http://cheatdeviceremastered.com/ "Official Website").
 
-These Scripts can be added to CDR by creating .txt files in ms0:/CDR/SCRIPTS/LCS (GTA LCS) and /VCS (GTA VCS) directories on the **Memory Card**.
+These Scripts can be added to CDR by creating .txt files in ms0:/PSP/PLUGINS/cheatdevice_remastered/SCRIPTS/LCS (GTA LCS) and /VCS (GTA VCS) directories on the **Memory Card**.
 
 To download them from GitHub, simply clone the repository or download the ZIP file.
 
