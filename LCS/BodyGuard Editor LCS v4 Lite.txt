@@ -3,7 +3,7 @@
 #Version: 1.6
 #Category: missions
 #Date: 2023-01-04
-#Description: Create BodyGuard
+#Description: Create BodyGuard with specials
 
 024C: request_model 259
 024C: request_model 260
