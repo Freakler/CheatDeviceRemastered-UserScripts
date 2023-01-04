@@ -1,0 +1,67 @@
+#Game: Liberty City Stories
+#Author: NielsB
+#Version: 2
+#Category: missions
+#Date: 2023-01-04
+#Description: Respawns Car And Makes It Super Strong.
+
+:RESET
+03EB: clear_help 
+00BE: clear_prints 
+03EA: print_help 'Press circle to make your car super indestructible and lock doors dont use bikes DOWN=reset'
+
+:ACTION0
+0001: wait 0
+00E6:   is_button_pressed 0 button 17
+004C: goto_if_true @NEXT
+00E6:   is_button_pressed 0 button 9
+004C: goto_if_true @ENDE
+0002: goto @ACTION0
+
+:ERROR
+03EA: print_help 'ERROR CAR NOT FOUND RETRY'
+0001: wait 2500
+0002: goto @RESET
+
+:ERRORBIKE
+03EA: print_help 'BIKES ARE NOT SUPPORTED :} LOOL'
+0001: wait 2500
+0002: goto @RESET
+
+:NEXT
+044F:   is_player_on_foot $PLAYER_CHAR
+004C: goto_if_true @ERROR
+0483:   is_player_on_any_bike $PLAYER_CHAR 
+004C: goto_if_true @ERRORBIKE
+03C6: store_car_player_is_in_no_save $PLAYER_CHAR store_to 20@ 
+0446: get_car_model 20@ store_to 5@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0 0 0 store_to 2@ 3@ 4@
+024C: request_model 5@
+0390: load_all_models_now
+ 050B: set_car_model_components 5@ to 11@ 11@
+012F: put_player $PLAYER_CHAR at 2@ 3@ 4@ and_remove_from_car
+00A6: delete_car 10@
+00A5: create_car 5@ at 2@ 3@ 4@ store_to 10@ 
+0428: set_car_traction 10@ to 0
+01F1: set_car_heavy 10@ to 1 
+02B1: set_car_proofs 10@ BP 1 FP 1 EP 1 CP 1 MP 1 
+0544: set_can_burst_car_tyres 10@ to 0
+03FA: set_car_can_be_damaged 10@ to 0
+03F2: set_upsidedown_car_not_damaged 10@ to 1
+ 03B0: set_car_strong 10@ to 1 
+012F: put_player $PLAYER_CHAR at 2@ 3@ 4@ and_remove_from_car 
+03A3: set_char_cant_be_dragged_out $PLAYER_CHAR to 1
+020F: lock_car_doors 10@ mode 2 
+0001: wait 20
+00A6: delete_car 20@ 
+036F: warp_char_into_car $PLAYER_ACTOR car 10@
+01C8: mark_car_as_no_longer_needed 10@ 
+03EA: print_help 'UNLOCK DOORS = DOWN'
+0002: goto @ACTION0
+
+:ENDE 
+03EB: clear_help 
+00BE: clear_prints 
+020F: lock_car_doors 10@ mode 1
+01C8: mark_car_as_no_longer_needed 10@ 
+004E: terminate_this_script
