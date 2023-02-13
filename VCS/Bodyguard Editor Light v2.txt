@@ -1,0 +1,217 @@
+#Game: Vice City Stories
+#Author: NielsB
+#Version: 1.0
+#Category: Fun
+#Date: 2023-01-05
+#Description: Light Bodyguard editor.
+
+0160: request_model 331
+0160: request_model 332
+0160: request_model 333
+0160: request_model 334
+0160: request_model 335
+0160: request_model 336
+0160: request_model 337
+0160: request_model 338
+0160: request_model 339
+0160: request_model 340
+0160: request_model 341
+0160: request_model 342
+0160: request_model 343
+0160: request_model 344
+0160: request_model 345
+0160: request_model 346
+0160: request_model 347
+0160: request_model 348
+0160: request_model 349
+0160: request_model 350
+0160: request_model 351
+0160: request_model 352
+0160: request_model 353
+0160: request_model 354
+0160: request_model 355
+0160: request_model 356
+0160: request_model 357
+0160: request_model 358
+0160: request_model 359
+0160: request_model 360
+0160: request_model 361
+0160: request_model 362
+0160: request_model 363
+0160: request_model 364
+0228: load_all_models_now
+
+:RESET
+0004: 0@ = 0
+0004: 9@ = 0
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0 3.0 -1.00 store_to 1@ 2@ 3@ 
+:START
+0001: wait 0
+
+00BB: remove_blip 5@
+020D: remove_char_elegantly 4@
+:START2
+0160: request_model 0@
+0228: load_all_models_now 
+0001: wait 10
+003E: create_char 21 model 0@ at 1@ 2@ 3@ store_to 4@ 
+0162: mark_model_as_no_longer_needed 0@
+00C1: add_blip_for_char 4@ store_to 5@
+00C4: change_blip_display 5@ to 3
+00BC: change_blip_colour 5@ to 1
+
+0267: print_help '~h~Press ~X~ ~w~To Change Ped Model.~n~~h~Press ~O~ ~w~To Exit.~n~~h~Press L button ~w~for Weapon Settings.'
+
+:PED
+0001: wait 0
+007F:   is_button_pressed 0 button 17
+0022: goto_if_false @OPTION1
+0002: goto @DELETE
+:OPTION1
+007F:   is_button_pressed 0 button 16
+0022: goto_if_false @OPTION4
+0002: goto @NEXTC
+:OPTION4
+007F:   is_button_pressed 0 button 4
+0022: goto_if_false @OPTION2
+0002: goto @WEAPON
+:OPTION2
+0002: goto @PED 
+
+:NEXTC
+0001: wait 10
+0007: 0@ += 1
+001B: 0@ == 1
+0022: goto_if_false @GOFU
+0002: goto @NUM8 
+:GOFU
+001B: 0@ == 15
+0022: goto_if_false @GOFUR
+0002: goto @NUM15 
+:GOFUR
+001B: 0@ == 167
+0022: goto_if_false @GOFURTHER
+0002: goto @RESET 
+:GOFURTHER
+0002: goto @START
+
+:NUM8
+0001: wait 10
+0004: 0@ = 8
+0002: goto @START
+
+:NUM15
+0001: wait 10
+0004: 0@ = 16
+0002: goto @START
+
+:WEAPON
+0001: wait 10
+0268: clear_help 
+0001: wait 10
+0267: print_help '~h~Press D-Pad Up ~w~To Change Weapons~n~~h~Press R button ~w~for The ped To Join.~n~~h~Press ~O~ ~w~To Exit.'
+0106: give_weapon_to_char 4@ weapon 9@ ammo 100000 
+010B: set_current_char_weapon 4@ to 9@
+
+:WEAPON1
+0001: wait 10
+007F:   is_button_pressed 0 button 17
+0022: goto_if_false @OPTION5
+0002: goto @DELETE
+:OPTION5
+007F:   is_button_pressed 0 button 8
+0022: goto_if_false @OPTION6
+0002: goto @NEXTWEP
+:OPTION6
+007F:   is_button_pressed 0 button 6
+0022: goto_if_false @OPTION7
+0002: goto @JOIN
+:OPTION7
+0002: goto @WEAPON1
+
+:NEXTWEP
+0001: wait 10
+0007: 9@ += 1
+001B: 9@ == 15
+0022: goto_if_false @OKE2
+0002: goto @NUM155 
+:OKE2
+001B: 9@ == 40
+0022: goto_if_false @OKE
+0002: goto @NUM40 
+:OKE
+0002: goto @WEAPON
+
+:NUM40
+0001: wait 10
+0004: 9@ = 0
+0002: goto @WEAPON
+
+:NUM155
+0001: wait 10
+0004: 9@ = 16
+0002: goto @WEAPON
+
+:JOIN
+0001: wait 400
+0268: clear_help 
+0267: print_help '~t~Setting Ped Friendly'
+0001: wait 500
+03D5: set_char_max_health 4@ to 450
+014B: set_char_health 4@ to 450 
+01EC: set_char 4@ running 1 
+0119: tie_char 4@ to_char $PLAYER_CHAR 
+0310: set_char_as_player_friend 4@ player $PLAYER_CHAR on 1 
+0331: set_char_in_players_group_can_fight 4@ can_fight 1 
+01C9: set_char_accuracy 4@ to 75
+00A1: set_char 4@ search_threat 2
+00A1: set_char 4@ search_threat 4
+00A1: set_char 4@ search_threat 8
+00A1: set_char 4@ search_threat 64
+0344: set_char_ignore_threats_behind_objects 4@ on 0
+0285: set_char 4@ use_pednode_seek 1
+01A4: set_char_heed_threats 4@ flag 1
+0442: unknown_char_set_command_2691 4@ flag 1
+00BB: remove_blip 5@ 
+02F9: set_char_drowns_in_water 4@ to 0  
+0002: goto @START2
+
+:DELETE
+0268: clear_help 
+020D: remove_char_elegantly 4@ 
+00BB: remove_blip 5@ 
+0162: mark_model_as_no_longer_needed 331
+0162: mark_model_as_no_longer_needed 332
+0162: mark_model_as_no_longer_needed 333
+0162: mark_model_as_no_longer_needed 334
+0162: mark_model_as_no_longer_needed 335
+0162: mark_model_as_no_longer_needed 336
+0162: mark_model_as_no_longer_needed 337
+0162: mark_model_as_no_longer_needed 338
+0162: mark_model_as_no_longer_needed 339
+0162: mark_model_as_no_longer_needed 340
+0162: mark_model_as_no_longer_needed 341
+0162: mark_model_as_no_longer_needed 342
+0162: mark_model_as_no_longer_needed 343
+0162: mark_model_as_no_longer_needed 344
+0162: mark_model_as_no_longer_needed 345
+0162: mark_model_as_no_longer_needed 346
+0162: mark_model_as_no_longer_needed 347
+0162: mark_model_as_no_longer_needed 348
+0162: mark_model_as_no_longer_needed 349
+0162: mark_model_as_no_longer_needed 350
+0162: mark_model_as_no_longer_needed 351
+0162: mark_model_as_no_longer_needed 352
+0162: mark_model_as_no_longer_needed 353
+0162: mark_model_as_no_longer_needed 354
+0162: mark_model_as_no_longer_needed 355
+0162: mark_model_as_no_longer_needed 356
+0162: mark_model_as_no_longer_needed 357
+0162: mark_model_as_no_longer_needed 358
+0162: mark_model_as_no_longer_needed 359
+0162: mark_model_as_no_longer_needed 360
+0162: mark_model_as_no_longer_needed 361
+0162: mark_model_as_no_longer_needed 362
+0162: mark_model_as_no_longer_needed 363
+0162: mark_model_as_no_longer_needed 364
+0023: terminate_this_script
