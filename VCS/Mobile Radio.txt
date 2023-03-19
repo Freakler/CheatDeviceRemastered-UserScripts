@@ -189,7 +189,7 @@
 0005: $1 = 0.01 // Text Size
 0005: $2 = 0.01
 007F:   is_buttton_pressed 0 button 8 // Up
-0021: goto_if_true @WH
+0021: goto_if_true @RADIO_WINDOW
 0002: goto @MAIN
 
 :SHOW_RADIO
@@ -198,11 +198,11 @@
 0005: $1 = 0.4 // Text Size
 0005: $2 = 0.75
 007F:   is_buttton_pressed 0 button 8 // Up
-0021: goto_if_true @WH
+0021: goto_if_true @RADIO_WINDOW
 0002: goto @MAIN
 
 
-:WH
+:RADIO_WINDOW
 0001: wait 0
 0204: set_text_scale $1 $1
 0203: display_text 386.0 260.0 gxt $999
@@ -220,7 +220,7 @@
 0204: set_text_scale $2 $2
 0203: display_text 464.0 133.0 gxt 'AMM_RIG'
 007F:   is_buttton_pressed 0 button 8 // Up
-0021: goto_if_true @WH
+0021: goto_if_true @RADIO_WINDOW
 
 0002: goto @MAIN
 
