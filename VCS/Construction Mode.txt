@@ -1,0 +1,406 @@
+#Game: Vice City Stories
+#Author: MicSuit
+#Version: 1.0
+#Category: Misc
+#Date: 2023-03-20
+#Description: The Well Known ~h~Construction Mode~w~ Cheat for ~y~Cheat Device Remastered~w~!
+
+0004: 0@ = 654 // Object Model
+
+0005: 1@ = 0.0 // x
+0005: 2@ = 0.0 // y
+0005: 3@ = 0.0 // z
+
+0005: 4@ = 0.0 // rot x
+0005: 5@ = 0.0 // rot y
+0005: 6@ = 0.0 // rot z
+
+0004: 7@ = 1 // collision bool
+
+// 8@ = Object
+
+0004: 9@ = 1 // Has pressed X bool
+0004: 22@ = 1 // Has pressed Square bool
+0004: 25@ = 1 // Has pressed Triangle bool 
+
+0006: 10@ = 'Object Model: ~h~~1~~w~ ~n~Object has Collision: ~h~~1~'
+
+0006: 11@ = 'Object Coordinates:~n~X: ~h~~1~~w~~n~Y: ~h~~1~'
+
+0006: 12@ = 'Object Rotation:~n~X: ~h~~1~~w~~n~Y: ~h~~1~'
+
+0006: 33@ = 'Z: ~h~~1~~w~'
+
+0004: 13@ = 0 // x int
+0004: 14@ = 0 // y int
+0004: 15@ = 0 // z int
+
+0004: 17@ = 0 // rot x int
+0004: 16@ = 0 // rot y int
+0004: 18@ = 0 // rot z int
+
+0006: 19@ = 'Loading Model ~1~...'
+
+0006: 20@ = '~r~WARNING:~w~ Model ~1~ could not be loaded!'
+
+0004: 21@ = 0 // Timer to load
+
+0004: 23@ = 1 // Number subtract model number
+
+0004: 24@ = 1 // Construction mode On or Off
+
+0006: 26@ = 'CONSTRUCTION MODE: ~h~ON'
+0006: 27@ = 'CONSTRUCTION MODE: ~h~OFF'
+
+0006: 28@ = 'Z: ~h~~1~~w~'
+
+0006: 29@ = 'Rotate Object: ~h~DIRECTIONAL BUTTONS~w~~n~Change Model: ~h~L/R~w~~n~'
+0006: 30@ = 'Enable/Disable Collision: ~h~SQUARE~w~'
+0006: 31@ = 'Enable/Disable Cons Mode: ~h~SELECT~w~'
+
+0006: 32@ = 'Terminate Script: ~h~DOWN~w~'
+
+:LOAD_MODEL_1
+0160: request_model 0@
+0228: load_all_models_now
+
+:LOAD_MODEL_2
+0001: wait 0
+// Check if the model has sucessfully loaded, if not, loop until game loads it.
+011F: print_with_number_now 19@ number 0@ time 1 flag 1
+0161:   has_model_loaded 0@
+0021: goto_if_true @LOADED_MODEL
+0002: goto @LOAD_MODEL_2
+
+:LOADED_MODEL
+0092: create_object 0@ at 0.0 0.0 0.0 store_to 8@
+
+:SHOW_BG
+044E: unknown_empire_display_command_7317 0 1 // Show to screen
+0453: unknown_empire_display_command_7217 0 0 0 0 250 // Border settings
+0452: unknown_empire_display_command_3866 0 25 25 25 150 // Background settings
+0451: unknown_empire_display_command_6b43 0 155 155 // Size settings
+0450: unknown_empire_display_command_91e4 0 10 10 // Position on screen 
+
+:LOOP_OBJ
+0001: wait 0
+
+007F:   is_button_pressed 0 button 16
+0021: goto_if_true @CHECK_PLA_BUT
+0004: 9@ = 0
+
+:LOOP_OBJ2
+007F:   is_button_pressed 0 button 8 // UP
+0021: goto_if_true @OBJ_ROTATE_UP
+
+:LOOP_OBJ3
+007F:   is_button_pressed 0 button 9 // DOWN
+0021: goto_if_true @OBJ_ROTATE_DOWN
+
+:LOOP_OBJ4
+007F:   is_button_pressed 0 button 10 // LEFT
+0021: goto_if_true @OBJ_ROTATE_LEFT
+
+:LOOP_OBJ5
+007F:   is_button_pressed 0 button 11 // RIGHT
+0021: goto_if_true @OBJ_ROTATE_RIGHT
+
+:LOOP_OBJ6
+007F:   is_button_pressed 0 button 4 // L-TRIGGER
+0021: goto_if_true @CHANGE_MODEL_MINUS
+
+:LOOP_OBJ7
+007F:   is_button_pressed 0 button 6 // R-TRIGGER
+0021: goto_if_true @CHANGE_MODEL_PLUS
+
+:LOOP_OBJ9
+007F:   is_button_pressed 0 button 14 // SQUARE
+0021: goto_if_true @CHANGE_COLLISION
+0004: 22@ = 0
+
+:LOOP_OBJ10
+007F:   is_button_pressed 0 button 13 // SELECT
+0021: goto_if_true @CHANGE_CONS_MODE
+0004: 25@ = 0
+
+
+:LOOP_OBJ8
+001D:  24@ == 0
+0021: goto_if_true @CONS_OFF
+
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0.0 8.0 0.0 store_to 1@ 2@ 3@ //coord 8m in front of player at ground
+010D: set_object_coordinates 8@ to 1@ 2@ 3@
+
+0038: 13@ = float 1@ to_integer
+0038: 14@ = float 2@ to_integer
+0038: 15@ = float 3@ to_integer
+
+0038: 16@ = float 4@ to_integer
+0038: 17@ = float 5@ to_integer
+0038: 18@ = float 6@ to_integer
+
+0225: set_object_collision 8@ enable 7@
+
+00CE: get_char_heading $PLAYER_CHAR store_to 5@
+
+02AC: set_object_rotation 8@ to 4@ 6@ 5@
+
+0204: set_text_scale 0.55 0.55
+02B2: display_text_with_2_numbers 15.0 15.0 gxt 10@ numbers 0@ 7@
+
+0204: set_text_scale 0.55 0.55
+02B2: display_text_with_2_numbers 15.0 50.0 gxt 11@ numbers 13@ 14@
+
+0204: set_text_scale 0.55 0.55
+02B1: display_text_with_number 15.0 89.0 gxt 28@ number 15@
+
+0204: set_text_scale 0.55 0.55
+02B2: display_text_with_2_numbers 15.0 110.0 gxt 12@ numbers 17@ 16@
+
+0204: set_text_scale 0.55 0.55
+02B1: display_text_with_number 15.0 149.0 gxt 33@ number 18@
+
+0204: set_text_scale 0.55 0.55
+0203: display_text 313.0 257.0 gxt 26@
+
+0204: set_text_scale 0.39 0.39
+0266: set_text_right_justify 1
+0203: display_text 313.0 215.0 gxt 29@
+
+0204: set_text_scale 0.39 0.39
+0266: set_text_right_justify 1
+0203: display_text 313.0 234.0 gxt 30@
+
+0204: set_text_scale 0.39 0.39
+0266: set_text_right_justify 1
+0203: display_text 313.0 244.0 gxt 31@
+
+0002: goto @LOOP_OBJ
+
+:CHANGE_CONS_MODE
+001D:   25@ == 0
+0021: goto_if_true @CHN_CONS_MOD
+0002: goto @LOOP_OBJ8
+
+:CHN_CONS_MOD
+0004: 25@ = 1
+001D:   24@ == 0
+0021: goto_if_true @SETCON1
+001D:   24@ == 1
+0021: goto_if_true @SETCON0
+
+:SETCON1
+0004: 24@ = 1
+0004: 0@ = 654
+0002: goto @LOAD_MODEL_1
+
+:SETCON0
+0004: 24@ = 0
+0093: delete_object 8@
+044E: unknown_empire_display_command_7317 0 0 // Show to screen
+0002: goto @LOOP_OBJ8
+
+:CHANGE_COLLISION
+001D:   22@ == 0
+0021: goto_if_true @CHECK_COL1
+0002: goto @LOOP_OBJ8
+
+:CHECK_COL1
+0107: set_player_control $PLAYER_CHAR to 0
+0004: 22@ = 1
+001D:   7@ == 0
+0021: goto_if_true @SETCOL1
+001D:   7@ == 1
+0021: goto_if_true @SETCOL0
+
+:SETCOL1
+0004: 7@ = 1
+0001: wait 50
+0107: set_player_control $PLAYER_CHAR to 1
+0002: goto @LOOP_OBJ8
+
+:SETCOL0
+0004: 7@ = 0
+0001: wait 50
+0107: set_player_control $PLAYER_CHAR to 1
+0002: goto @LOOP_OBJ8
+
+
+:CHECK_PLA_BUT
+001D:   9@ == 0
+0021: goto_if_true @PLACE_OBJECT
+0002: goto @LOOP_OBJ2
+
+:PLACE_OBJECT
+0004: 9@ = 1 // X Bool
+0092: create_object 0@ at 1@ 2@ 3@ store_to 8@ 
+0002: goto @LOOP_OBJ2
+
+:OBJ_ROTATE_UP
+000A: 4@ -= 2.0
+0018:   4@ >= -360.0
+0022: goto_if_false @ZERO_ROT_X
+0002: goto @LOOP_OBJ3
+
+:OBJ_ROTATE_DOWN
+0008: 4@ += 2.0
+0018:   4@ >= 360.0
+0021: goto_if_true @ZERO_ROT_X
+0002: goto @LOOP_OBJ4
+
+:ZERO_ROT_X
+0005: 4@ = 0.0
+0002: goto @LOOP_OBJ4
+
+
+:OBJ_ROTATE_LEFT
+000A: 6@ -= 2.0
+0018:   6@ >= -360.0
+0022: goto_if_false @ZERO_ROT_Z
+0002: goto @LOOP_OBJ5
+
+:OBJ_ROTATE_RIGHT
+0008: 6@ += 2.0
+0018:   6@ >= 360.0
+0021: goto_if_true @ZERO_ROT_Z
+0002: goto @LOOP_OBJ6
+
+:ZERO_ROT_Z
+0005: 6@ = 0.0
+0002: goto @LOOP_OBJ6
+
+
+:CHANGE_MODEL_PLUS
+0001: wait 10
+0004: 21@ = 0
+000F:   0@ > 7534
+0021: goto_if_true @LOOP_OBJ10
+007F:   is_button_pressed 0 button 17 // CIRCLE
+0021: goto_if_true @PLUS_10
+0004: 23@ = 1
+
+:CHANGE_MODEL_PLUS_2
+0007: 0@ += 23@
+000F: 0@ > 7534
+0021: goto_if_true @SET_LIMIT_MODEL
+0002: goto @CHANGE_MODEL
+
+:SET_LIMIT_MODEL
+0004: 0@ = 7534
+0002: goto @CHANGE_MODEL
+
+:CHANGE_MODEL_MINUS
+0001: wait 10
+0004: 21@ = 0
+0010:   331 > 0@ // (float) num > var
+0021: goto_if_true @CHANGE_MODEL
+0078: if and
+000F: 0@ > 339
+007F:   is_button_pressed 0 button 17 // CIRCLE
+0021: goto_if_true @MINUS_10
+0004: 23@ = 1
+
+:CHANGE_MODEL_MINUS_2
+0009: 0@ -= 23@
+
+:CHANGE_MODEL
+044E: unknown_empire_display_command_7317 0 0 // Show to screen
+0107: set_player_control $PLAYER_CHAR to 0
+0093: delete_object 8@
+0160: request_model 0@
+0228: load_all_models_now
+
+:CHANGE_MODEL_2
+0001: wait 0
+0007: 21@ += 1
+// Check if the model has sucessfully loaded, if not, loop until game loads it.
+011F: print_with_number_now 19@ number 0@ time 1 flag 1
+000F:   21@ > 10
+0021: goto_if_true @MODEL_NOT_LOADED
+0161:   has_model_loaded 0@
+0021: goto_if_true @CHANGE_MODEL_3
+007F:   is_button_pressed 0 button 6 // R-TRIGGER
+0021: goto_if_true @CHANGE_MODEL_PLUS
+007F:   is_button_pressed 0 button 4 // L-TRIGGER
+0021: goto_if_true @CHANGE_MODEL_MINUS
+007F:   is_button_pressed 0 button 13 // SQUARE
+0021: goto_if_true @CHANGE_CONS_MODE
+0002: goto @CHANGE_MODEL_2
+
+:CHANGE_MODEL_3
+0004: 21@ = 0
+0107: set_player_control $PLAYER_CHAR to 1
+0092: create_object 0@ at 0.0 0.0 0.0 store_to 8@
+0162: mark_model_as_no_longer_needed 0@
+044E: unknown_empire_display_command_7317 0 1 // Show to screen 
+0002: goto @LOOP_OBJ8
+
+:MODEL_NOT_LOADED
+0107: set_player_control $PLAYER_CHAR to 1
+
+:MODEL_NT_LOADED1
+0001: wait 0
+011F: print_with_number_now 20@ number 0@ time 1 flag 1
+007F:   is_button_pressed 0 button 4 // L-TRIGGER
+0021: goto_if_true @CHANGE_MODEL_MINUS
+007F:   is_button_pressed 0 button 6 // R-TRIGGER
+0021: goto_if_true @CHANGE_MODEL_PLUS
+007F:   is_button_pressed 0 button 13 // SQUARE
+0021: goto_if_true @CHANGE_CONS_MODE
+0004: 25@ = 0
+0002: goto @MODEL_NT_LOADED1
+
+
+:PLUS_10
+0004: 23@ = 10
+0002: goto @CHANGE_MODEL_PLUS_2
+
+:MINUS_10
+0004: 23@ = 10
+0002: goto @CHANGE_MODEL_MINUS_2
+
+
+:CONS_OFF
+0001: wait 0
+
+007F: is_button_pressed 0 button 9 // Down
+0021: goto_if_true @BAILOUT_MAIN
+
+:BAILOUT_CONTINUE
+
+0204: set_text_scale 0.55 0.55
+0203: display_text 308.0 257.0 gxt 27@
+
+0204: set_text_scale 0.39 0.39
+0266: set_text_right_justify 1
+0203: display_text 313.0 234.0 gxt 31@
+
+0204: set_text_scale 0.39 0.39
+0266: set_text_right_justify 1
+0203: display_text 313.0 244.0 gxt 32@
+
+007F:   is_button_pressed 0 button 13 // SQUARE
+0021: goto_if_true @CHANGE_CONS_MODE
+0004: 25@ = 0
+
+0002: goto @CONS_OFF
+
+:BAILOUT_MAIN
+010E: get_game_timer $1531
+0035: $1448 = $1531
+0017:   $1450 >= $1448 //do nothing for the first 1000
+0021: goto_if_true @BAILOUT_CONTINUE 
+0035: $1450 = $1531
+0007: $1450 += 1000
+0017:   $1449 >= $1448 //button still or pressed again between 1000 and 3500
+0021: goto_if_true @BAILOUT_EXIT 
+0267: print_help 'Use~h~ the down button ~w~again to end the script.'  //like 'CAN_CON'
+0035: $1449 = $1531 
+0007: $1449 += 3500
+0002: goto @BAILOUT_CONTINUE
+
+:BAILOUT_EXIT
+0268: clear_help
+
+:TERMINATE_MODE
+0023: terminate_this_script
