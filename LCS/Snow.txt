@@ -1,0 +1,9 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: Weather
+#Date: 2023-09-21
+#Description: Let it Snow
+
+01BB: force_weather_now 7 
+004E: terminate_this_script
