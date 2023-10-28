@@ -1,0 +1,168 @@
+#Game: Vice City Stories
+#Author: NielsB
+#Version: 1.0
+#Category: ~h~fun
+#Date: 29-01-2023
+#Description:create a bomb
+
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0 3.00 0 store_to 4@ 5@ 6@
+0323: print_help_forever '~h~Press ~O~ ~w~To Create Explosion ~n~~h~Press The Directional buttons ~w~To Change The Location ~n~~h~Press the L trigger ~w~to change the explosion type  ~n~~h~Press ~X~ ~w~To Close'
+0001: wait 0
+0479: add_sphere_0172 4@ 5@ 6@ radius 1.0 store_to 1@
+0004: 7@ = 0
+
+:SPHERETEXT
+001B:   7@ == 0
+0022: goto_if_false @expl1
+0057: print_now 'Explosion type is Medium Bomb' time 2000 flag 1
+0002: goto @SPHERE
+:expl1
+001B:   7@ == 1
+0022: goto_if_false @expl2
+0057: print_now 'Explosion type is Fire Bomb' time 2000 flag 1
+0002: goto @SPHERE
+:expl2
+001B:   7@ == 2
+0022: goto_if_false @expl3
+0057: print_now 'Explosion type is Grenade' time 2000 flag 1
+0002: goto @SPHERE
+:expl3
+001B:   7@ == 3
+0022: goto_if_false @expl4
+0057: print_now 'Explosion type is Small Explosion' time 2000 flag 1
+0002: goto @SPHERE
+:expl4
+001B:   7@ == 3
+0022: goto_if_false @expl5
+0057: print_now 'Explosion type is Small Explosion' time 2000 flag 1
+0002: goto @SPHERE
+:expl5
+001B:   7@ == 4
+0022: goto_if_false @expl6
+0057: print_now 'Explosion type is Really Small Explosion' time 2000 flag 1
+0002: goto @SPHERE
+:expl6
+001B:   7@ == 5
+0022: goto_if_false @expl7
+0057: print_now 'Explosion type is Really Small Explosion 2' time 2000 flag 1
+0002: goto @SPHERE
+:expl7
+001B:   7@ == 6
+0022: goto_if_false @expl8
+0057: print_now 'Explosion type is Medium Explosion 2' time 2000 flag 1
+0002: goto @SPHERE
+:expl8
+001B:   7@ == 7
+0022: goto_if_false @expl9
+0057: print_now 'Explosion type is Big Explosion ' time 2000 flag 1
+0002: goto @SPHERE
+:expl9
+001B:   7@ == 8
+0022: goto_if_false @expl10
+0057: print_now 'Explosion type is Big Explosion 2' time 2000 flag 1
+0002: goto @SPHERE
+:expl10
+001B:   7@ == 9
+0022: goto_if_false @expl11
+0057: print_now 'Explosion type is Medium Explosion 2' time 2000 flag 1
+0002: goto @SPHERE
+:expl11
+001B:   7@ == 10
+0022: goto_if_false @expl12
+0057: print_now 'Explosion type is Big Explosion 3' time 2000 flag 1
+0002: goto @SPHERE
+:expl12
+001B:   7@ == 11
+0022: goto_if_false @expl13
+0057: print_now 'Explosion type is Big Explosion 4' time 2000 flag 1
+0002: goto @SPHERE
+:expl13
+
+:SPHERE
+0001: wait 0
+007F:   is_button_pressed 0 button 17
+0022: goto_if_false @OPTION4
+0002: goto @LEFTRIGHT
+:OPTION4
+007F:   is_button_pressed 0 button 16
+0022: goto_if_false @OPTION2
+0002: goto @EXIT
+:OPTION2
+007F:   is_button_pressed 0 button 10
+0022: goto_if_false @OPTION3
+0002: goto @positionX+
+:OPTION3
+007F:   is_button_pressed 0 button 11
+0022: goto_if_false @OPTION5
+0002: goto @positionY+
+:OPTION5
+007F:   is_button_pressed 0 button 8
+0022: goto_if_false @OPTION6
+0002: goto @positionX-
+:OPTION6
+007F:   is_button_pressed 0 button 9
+0022: goto_if_false @OPTION7
+0002: goto @positionY-
+:OPTION7
+007F:   is_button_pressed 0 button 4
+0022: goto_if_false @OPTION8
+0002: goto @Explosiontype
+:OPTION8
+0002: goto @SPHERE
+
+:LEFTRIGHT
+0001: wait 0
+013C: add_explosion 4@ 5@ 6@ type 7@
+0002: goto @SPHERE
+
+:ADD
+0001: wait 0
+
+0002: goto @SPHERE
+
+:positionX+
+0001: wait 0
+0008: 4@ += 0.7
+047A: remove_sphere_0172 1@
+0001: wait 0
+0479: add_sphere_0172 4@ 5@ 6@ radius 1.0 store_to 1@
+0002: goto @SPHERE
+
+:positionY+
+0001: wait 0
+0008: 5@ += 0.7
+047A: remove_sphere_0172 1@
+0001: wait 0
+0479: add_sphere_0172 4@ 5@ 6@ radius 1.0 store_to 1@
+0002: goto @SPHERE
+
+:positionX-
+0001: wait 0
+000A: 4@ -= 0.7
+047A: remove_sphere_0172 1@
+0001: wait 0
+0479: add_sphere_0172 4@ 5@ 6@ radius 1.0 store_to 1@
+0002: goto @SPHERE
+
+:positionY-
+0001: wait 0
+000A: 5@ -= 0.7
+047A: remove_sphere_0172 1@
+0001: wait 0
+0479: add_sphere_0172 4@ 5@ 6@ radius 1.0 store_to 1@
+0002: goto @SPHERE
+
+:Explosiontype
+0001: wait 100
+0007: 7@ += 1
+001B:   7@ == 12
+0022: goto_if_false @okk
+0004: 7@ = 0
+:okk
+0002: goto @SPHERETEXT
+
+:EXIT
+0059: clear_prints
+0268: clear_help
+047A: remove_sphere_0172 1@
+0023: terminate_this_script

@@ -1,0 +1,264 @@
+#Game: Vice City Stories
+#Author: nielsB
+#Version: 1.0
+#Category: Missions
+#Date: 28-10-2023
+#Description: Mission 1
+
+0160: request_model 248
+0160: request_model 216
+0160: request_model 177
+0160: request_model 138
+0160: request_model 150
+0160: request_model 133
+0160: request_model 73
+0160: request_model 79
+0160: request_model 138
+0160: request_model 182
+0228: load_all_models_now
+
+0005: 1@ = 258.20
+0005: 2@ = -189.67
+0005: 3@ = 11.00
+00C5: add_sprite_blip_for_contact_point 1@ 2@ 3@ sprite 38 store_to 5@
+
+:WAIT
+0001: wait 0
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @FAILED
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+0081:   locate_char_on_foot_2d $PLAYER_CHAR coord 1@ 2@ radius 5.0 5.0 sphere 1
+0022: goto_if_false @WAIT 
+
+0004: $ONMISSION = 1
+0107: set_player_control $PLAYER_CHAR to 0
+00C8: set_fading_colour 0 0 0
+00C9: do_fade 1000 fade 0
+
+0001: wait 2000
+0044: set_char_coordinates $PLAYER_CHAR to 219.62 -193.28 9.60
+00CF: set_char_heading $PLAYER_CHAR to 148.00
+
+003E: create_char 4 model 138 at 218.44 -194.70 9.57 store_to 6@ //ml
+00CF: set_char_heading 6@ to 328.00
+013E: turn_char_to_face_char 6@ char $PLAYER_CHAR
+0001: wait 1500
+00C9: do_fade 1000 fade 1
+01AE: switch_widescreen 1
+00B9: set_fixed_camera_position 220.41 -195.70 10.50 rotation 0 0 0
+00B5: point_camera_at_char $PLAYER_CHAR mode 15 switchstyle 1
+
+
+0048: create_car 248 at 226.54 -118.55 7.5 store_to 70@
+0342: create_random_char_as_driver 70@ store_to 60@
+00D1: set_car_heading 70@ to 155.00
+0050: set_car_cruise_speed 70@ to 5.0
+01BF: boat_goto_coords 70@ coords 148.40 -257.5 7.4
+0112: mark_char_as_no_longer_needed 6@0
+0113: mark_car_as_no_longer_needed 70@
+0162: mark_model_as_no_longer_needed 248
+
+0057: print_now 'Vic: Marie Louise, are you ready for a simple job? We need to steal a car from a rival gang so that we can infiltrate later.' time 8000 flag 1
+0001: wait 8000
+
+0057: print_now 'Marie Louise: Yes, darling, I`m ready, and I`ve also bought myself a 9mm. Let`s go.' time 8000 flag 1
+0001: wait 8000
+
+
+01CF: restore_camera_jumpcut
+01AE: switch_widescreen 0
+0107: set_player_control $PLAYER_CHAR to 1
+014B: set_char_health 6@ to 150
+01EC: set_char 6@ running 1
+0119: tie_char 6@ to_char $PLAYER_CHAR
+0310: set_char_as_player_friend 6@ player $PLAYER_CHAR on 1
+0331: set_char_in_players_group_can_fight 6@ can_fight 1
+01C9: set_char_accuracy 6@ to 45
+0106: give_weapon_to_char 6@ weapon 19 ammo 100000
+010B: set_current_char_weapon 6@ to 19
+
+0056: print 'Interrupt the deal and steal the ~b~car!' time 2500 flag 1
+
+0048: create_car 182 at -175.69 -1056.11 13.00 store_to 7@
+00D1: set_car_heading 7@ to 66.00
+0048: create_car 177 at -182.52 -1051.79 11.65 store_to 12@
+00D1: set_car_heading 12@ to 245.00
+0325: freeze_car_position 12@ set_to 0
+
+003E: create_char 4 model 79 at -182.60 -1056.37 13.74 store_to 8@
+00CF: set_char_heading 8@ to 245.00
+0106: give_weapon_to_char 8@ weapon 19 ammo 100000
+010B: set_current_char_weapon 8@ to 19
+
+
+003E: create_char 4 model 73 at -180.62 -1057.41 13.66 store_to 9@
+00CF: set_char_heading 9@ to 66.00
+0106: give_weapon_to_char 9@ weapon 19 ammo 100000
+010B: set_current_char_weapon 9@ to 19
+
+
+003E: create_char 4 model 133 at -179.59 -1059.50 13.76 store_to 10@
+00CF: set_char_heading 10@ to 26.00
+0106: give_weapon_to_char 10@ weapon 23 ammo 100000
+010B: set_current_char_weapon 10@ to 23
+
+01A4: set_char_heed_threats 6@ flag 1
+003E: create_char 4 model 150 at -183.36 -1059.92 14.04 store_to 11@
+00CF: set_char_heading 11@ to 299.00
+0106: give_weapon_to_char 11@ weapon 21 ammo 100000
+010B: set_current_char_weapon 11@ to 21
+020E: set_char_stay_in_same_place 8@ to 1
+020E: set_char_stay_in_same_place 9@ to 1
+020E: set_char_stay_in_same_place 10@ to 1
+020E: set_char_stay_in_same_place 11@ to 1
+00A1: set_char 8@ search_threat 1
+00A1: set_char 9@ search_threat 1
+00A1: set_char 10@ search_threat 1
+00A1: set_char 11@ search_threat 1
+01A4: set_char_heed_threats 8@ flag 1
+01A4: set_char_heed_threats 9@ flag 1
+01A4: set_char_heed_threats 10@ flag 1
+01A4: set_char_heed_threats 11@ flag 1
+
+0119: tie_char 8@ to_char 9@
+0119: tie_char 10@ to_char 11@
+0119: tie_char 11@ to_char 8@
+0119: tie_char 10@ to_char 9@
+
+:BLIP2
+00BB: remove_blip 14@
+0249: remove_sphere 15@
+00C0: add_blip_for_car 12@ store_to 13@
+00BC: change_blip_colour 13@ to 2
+0002: goto @BLIP
+
+:BLIPT
+0001: wait 0
+0057: print_now '~r~Marie Louise ~w~is not in the ~b~car.' time 100 flag 1
+00BB: remove_blip 25@
+00C1: add_blip_for_char 6@ store_to 25@
+
+:BLIP
+0001: wait 0
+009F:   is_char_dead $PLAYER_CHAR
+0021: goto_if_true @FAILED
+009F:   is_char_dead 6@
+0021: goto_if_true @FAILED
+00A5:   has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @FAILED
+004F:   is_car_still_alive 12@
+0022: goto_if_false @FAILED
+007C:   is_char_in_car $PLAYER_CHAR car 12@
+0022: goto_if_false @BLIP
+007C:   is_char_in_car 6@ car 12@
+0022: goto_if_false @BLIPT
+
+00BB: remove_blip 25@
+00BB: remove_blip 13@
+0005: 1@ = 79.34
+0005: 2@ = -761.29
+0005: 3@ = 9.95
+
+00C3: add_blip_for_coord 1@ 2@ 3@ store_to 14@
+0248: add_sphere 1@ 2@ 3@ radius 5.0 store_to 15@
+
+:SPHERE
+0001: wait 0
+007C:   is_char_in_car $PLAYER_CHAR car 12@
+0022: goto_if_false @BLIP2
+0104:   locate_car_3d 12@ point 1@ 2@ 3@ radius 3.0 3.0 3.0 sphere 1
+0022: goto_if_false @SPHERE
+
+
+0325: freeze_car_position 12@ set_to 1
+00C8: set_fading_colour 0 0 0
+00C9: do_fade 1000 fade 0
+0001: wait 1000
+004E: set_car_coordinates 12@ to 79.34 -761.29 9.2
+00D1: set_car_heading 12@ to 83.00
+
+00C9: do_fade 1000 fade 1
+0325: freeze_car_position 12@ set_to 0
+
+003E: create_char 4 model 73 at -180.62 -1057.41 13.66 store_to 18@
+0048: create_car 216 at 114.90 -778.21 9.3 store_to 17@
+00D1: set_car_heading 17@ to 63.00
+
+021C: warp_char_into_car 18@ car 17@
+02E9: set_car_forward_speed 17@ to 45.0
+0126: set_car_heavy 17@ to 1
+004A: car_goto_coordinates 17@ coords 79.34 -761.29 9.0
+//0107: set_player_control $PLAYER_CHAR to 0
+0001: wait 2500
+
+00B9: set_fixed_camera_position 75.51 -773.77 12.0 rotation 0 0 0
+00B5: point_camera_at_char 18@ mode 15 switchstyle 1
+0001: wait 1000
+00F1: char 18@ exit_car
+0158: set_char_obj_run_to_coord 18@ run_to 85.75 -769.60
+0001: wait 10
+0216: warp_char_from_car_to_coord $PLAYER_CHAR coord 106.82 -745.98 10.46
+
+0443: request_anims 29
+0220: set_char $PLAYER_CHAR anim 29 wait_state_time -1 ms
+014B: set_char_health 6@ to 0
+0057: print_now 'Unknown Man: Do we have the encrenqueiro?' time 3000 flag 1
+0001: wait 3000
+0057: print_now 'Unknown Woman: Yes, but I think there was someone else in the car.' time 4000 flag 1
+0001: wait 4000
+0057: print_now 'Unknown Man: Let`s get out of here before the emergency services arrive. ¡VAMOS!' time 4000 flag 1
+0001: wait 4000
+014C: set_car_health 12@ to 100
+00B9: set_fixed_camera_position 109.19 -748.01 12.0 rotation 0 0 0
+00B5: point_camera_at_char $PLAYER_CHAR mode 15 switchstyle 1
+
+
+0055: print_big 'To be continued...' time 4000 style 1
+0001: wait 4000
+
+:PASS
+0001: wait 0
+0055: print_big 'M_PASSN' time 4000 style 1
+022B: play_mission_passed_tune 1
+01CF: restore_camera_jumpcut
+01AE: switch_widescreen 0
+0107: set_player_control $PLAYER_CHAR to 1
+0001: wait 4000
+014B: set_char_health $PLAYER_CHAR to 0
+
+0002: goto @CONT
+
+:FAILED
+0001: wait 0
+0055: print_big 'M_FAIL' time 4000 style 1
+:CONT
+00BB: remove_blip 5@
+00BB: remove_blip 13@
+00BB: remove_blip 14@
+0249: remove_sphere 15@
+0112: mark_char_as_no_longer_needed 5@
+0112: mark_char_as_no_longer_needed 8@
+0112: mark_char_as_no_longer_needed 9@
+0112: mark_char_as_no_longer_needed 10@
+0112: mark_char_as_no_longer_needed 18@
+0112: mark_char_as_no_longer_needed 11@
+0112: mark_char_as_no_longer_needed 6@
+0162: mark_model_as_no_longer_needed 182
+0162: mark_model_as_no_longer_needed 138
+0162: mark_model_as_no_longer_needed 79
+0162: mark_model_as_no_longer_needed 73
+0162: mark_model_as_no_longer_needed 133
+0162: mark_model_as_no_longer_needed 150
+0162: mark_model_as_no_longer_needed 138
+0162: mark_model_as_no_longer_needed 216
+0162: mark_model_as_no_longer_needed 177
+0113: mark_car_as_no_longer_needed 12@
+0113: mark_car_as_no_longer_needed 7@
+0113: mark_car_as_no_longer_needed 17@
+0162: mark_model_as_no_longer_needed 216
+
+
+0001: wait 0
+0004: $ONMISSION = 0
+0023: terminate_this_script
