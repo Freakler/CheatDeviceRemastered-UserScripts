@@ -1,0 +1,1610 @@
+#Game: Vice City Stories
+#Author: danssmnt
+#Version: v1.02
+#Category: Missions
+#Date: 2024-09-04
+#Description: Phil's concert is today, but Marty's "friends" wanna ruin it, stop them!
+
+// Hello, danssmnt here, I just wanted to say that making the gigantic script was pretty bad and took a long time
+// Took me almost 2 months to write this, but finally finished it, and the final result is good enough (at least for me)
+
+// Anyway, if you're interested in analysing the code, just know that it's not the best.
+
+// This mission script has some problems:
+
+//  - You can't skip cutscenes (that's more of a feature to add instead of a bug)
+
+//  - If you switch radios while on the Helicopter, the concert audio will stop. If you try to set the Radio Off after, the concert audio will play from where it was left off
+//    so it'll play delayed relative to Phil Collins Animation, so don't switch radios while on Helicopter please :)
+
+//  - The game gets a little laggy on slower devices (Probably not fixable)
+
+//  - Failing mission while on Helicopter seems unfinished
+
+//  - Probably more bugs...
+//    If you find any bugs, please report them in CDR official discord under the #user-scripts channel!
+
+// Check if Mission UserScript is still being executed
+001B:   $3056 == 1
+0021: goto_if_true @MISSION_ALREADY_STARTED
+
+:SETUP_SCRIPT
+// Mission's Name
+0006: $1000 = 'Marty Kills The Party!'
+
+// Pager String
+0006: $1001 = 'Bro, some crazy shit will happen, come quickly to my house!'
+
+// Vic Reaction to the Pager Dialog
+0006: $1030 = 'What?'
+0006: $1031 = 'You`re kidding right?'
+
+// Cutscene dialog
+0006: $1002 = 'What shit did you do this time LANCE?'
+0006: $1003 = 'IT AIN`T MY FAULT MAN!'
+0006: $1004 = 'Remember when you killed Marty?'
+0006: $1021 = 'Unfortunately yes. What is it?'
+0006: $1005 = 'Guess what! They will avenge him by killing Phil Collins!'
+0006: $1028 = 'Motherfucker.' 
+0006: $1006 = 'C`mon! Let`s pop like cola!'
+0006: $1013 = 'So, what`s the plan?'
+0006: $1014 = 'Let`s go!'
+0006: $1022 = 'I`m the black killa from Manila! The Manila Blilla!' 
+0006: $1023 = 'You`re a blidiot. Now shut up.' 
+
+0006: $1017 = 'We`re kicking their asses!' 
+0006: $1018 = 'Look out Vic, there`s more of them!'
+
+// Car Dialog
+0006: $1007 = 'Just chill man. Be cool.'
+0006: $1008 = 'Chill? Man, I`m getting too deep into this shit.'
+0006: $1009 = 'Give me a break Vic. It`s not even my fault this time!'
+0006: $1010 = 'Let`s get after them.'
+
+// Player Instructions
+0006: $1011 = 'Go to the ~y~Hyman Memorial Stadium~w~ before 19:00.'
+0006: $1012 = 'Go to the ~y~concert stage~w~ before 20:00.'
+0006: $1015 = 'Marty`s ~r~goons~w~ will appear soon, protect the concert!'
+0006: $1029 = '~r~They~w~ won`t give up easily, kill them!'
+0006: $1032 = 'DIA2_H3' // 'Hold~h~ ~k~ ~SNSLO~ ~w~to make fine adjustments to your aim.'  
+
+// Other strings
+0006: $1016 = 'Helicopter'
+
+0006: $1019 = '~r~You can`t start this mission while you haven`t completed 100% of the game! Sorry!~w~'
+0006: $1020 = '~r~You can`t start this mission while on another mission!~w~'
+0006: $1025 = '~r~You have already started this mission!~w~'
+0006: $1026 = 'Thank you for playing my mission! Hope you liked it! Made by ~h~danssmnt~w~'
+
+0006: $1027 = 'Congratulations, there`s only 2% chance of triggering this ~h~easter egg~w~! Here`s 50000$!'
+
+0004: $3000 = 5000 // Mission Reward
+
+// Event Flag
+// $3001 = 0    -> Setup Mission 
+// $3001 = 1    -> Before Mission
+// $3001 = 2    -> Start Cutscene
+// $3001 = 3    -> Cutscene
+// $3001 = 4    -> Until stadium
+// $3001 = 5    -> Stadium Enter
+// $3001 = 6    -> Until Phil Concert
+// $3001 = 7    -> Phil Concert Anim
+// $3001 = 8    -> After Phil Concert
+// $3001 = 9    -> Mission End
+0004: $3001 = 0
+
+// Time for the pager to show to the player (in ms)
+0004: $3002 = 13350
+
+// Sphere 1 Location (Lance's House)
+0005: $3003 = -103.46
+0005: $3004 = -1603.96
+0005: $3005 = 10.28
+
+// $3006 = sphere
+// $3007 = sphere blip
+
+// Camera 1 Position (Lance's House)
+0005: $3008 = -120.34
+0005: $3009 = -1613.53
+0005: $3010 = 17.99
+
+0005: $3011 = -125.30
+0005: $3012 = -1616.32
+0005: $3013 = 19.88
+
+// Time for char in legend
+0004: $3014 = 100
+
+// Audio slot
+0004: $3015 = 0
+
+// Damage Meter
+0004: $3016 = 100
+
+// Inferno and later Sanchez
+// $3017
+
+// Lance's Health 
+0004: $3018 = 100
+
+// Armadillo
+// $3019
+
+// Lance inside Armadillo
+// $3020
+
+// Left part of stadium stage random point
+0005: $3021 = 0.0
+0005: $3022 = 0.0
+0005: $3023 = 0.0
+
+// Right part of stadium stage random point
+0005: $3024 = 0.0
+0005: $3025 = 0.0
+0005: $3026 = 0.0
+
+// Enemy Counter
+0004: $3029 = 0
+
+// Enemy chars
+// $3030 $3031 $3032 $3033 $3034 $3035 $3036 $3037 $3038 $3039
+
+// Enemy blips
+// $3040 $3041 $3042 $3043 $3044 $3045 $3046 $3047 $3048 $3049 
+
+// Enemy Dead Counter
+0004: $3050 = 0
+
+// Current Phil Collins audio time (Phil Collins will spawn if greater than 325000)
+0004: $3051 = 0
+
+// Has Phil Collins already spawned?
+0004: $3052 = 0
+
+// Player Has Lost Mission
+0004: $3053 = 0
+
+// Lance Char
+// $3054
+
+// Game Progress (for game completed check)
+0004: $3055 = 0
+
+// Game Progress (for game completed check)
+0004: $3055 = 0
+
+// Mission Active
+// 0004: $3056 = 0
+
+// Easter Egg (why not)
+0004: $3057 = 0 
+
+:CHECK_CAN_START_MISSION
+001B:   $ONMISSION == 1
+0021: goto_if_true @ON_A_MISSION
+
+0362: get_progress_percentage $3055
+0018:   $3055 >= 100.0 
+0022: goto_if_false @NO_GAME_COMPLETED
+
+0002: goto @MISSION_LOOP
+
+:NO_GAME_COMPLETED
+0267: print_help $1019
+0023: terminate_this_script
+
+:ON_A_MISSION
+0267: print_help $1020
+0023: terminate_this_script
+
+:MISSION_ALREADY_STARTED
+0267: print_help $1025
+0023: terminate_this_script
+
+:MISSION_LOOP
+// Set Mission Active
+0004: $3056 = 1
+
+// Easter Egg (1/50 chance)
+0139: generate_random_int_in_range 0 50 store_to $3057
+001B:   $3057 == 1
+0022: goto_if_false @MISSION_LOOP0
+037A: args 0 out 0 locals_base_index 0 call_func @EASTER_EGG
+
+:MISSION_LOOP0
+0001: wait 0
+// Setup Mission
+001B:   $3001 == 0
+0022: goto_if_false @MISSION_LOOP1 
+037A: args 1 out 0 locals_base_index 0 call_func @SETUP_MISSION $1001
+0002: goto @MISSION_LOOP0
+
+:MISSION_LOOP1
+0001: wait 0
+// Wait for player to reach sphere
+001B:   $3001 == 1
+0022: goto_if_false @MISSION_LOOP2
+037A: args 0 out 0 locals_base_index 0 call_func @CHECK_START_MISSION
+0002: goto @MISSION_LOOP1
+
+:MISSION_LOOP2
+0001: wait 0
+// Setup and start cutscene
+001B:   $3001 == 2
+0022: goto_if_false @MISSION_LOOP3
+037A: args 0 out 0 locals_base_index 0 call_func @START_CUTSCENE
+0002: goto @MISSION_LOOP2
+
+:MISSION_LOOP3
+0001: wait 0
+// Cutscene
+001B:   $3001 == 3
+0022: goto_if_false @MISSION_LOOP4
+037A: args 0 out 0 locals_base_index 0 call_func @MAIN_CUTSCENE
+0002: goto @MISSION_LOOP3
+
+:MISSION_LOOP4
+0001: wait 0
+// Travel to stadium
+001B:   $3001 == 4
+0022: goto_if_false @MISSION_LOOP5
+037A: args 0 out 0 locals_base_index 0 call_func @UNTIL_STADIUM_LOOP
+
+// If player lost, end the mission
+001B:   $3053 == 1
+0021: goto_if_true @END_MISSION
+0002: goto @MISSION_LOOP4
+
+:MISSION_LOOP5
+0001: wait 0
+// Teleporting to stadium
+001B:   $3001 == 5
+0022: goto_if_false @MISSION_LOOP6
+037A: args 0 out 0 locals_base_index 0 call_func @TELEPORT_TO_STADIUM
+0002: goto @MISSION_LOOP5 
+
+:MISSION_LOOP6
+0001: wait 0
+// Until player gets to stage
+001B:   $3001 == 6
+0022: goto_if_false @MISSION_LOOP7
+037A: args 0 out 0 locals_base_index 0 call_func @UNTIL_CONCERT
+
+// If player lost, end the mission
+001B:   $3053 == 1
+0021: goto_if_true @END_MISSION_1
+0002: goto @MISSION_LOOP6
+
+:MISSION_LOOP7
+0001: wait 0
+// Concert
+001B:   $3001 == 7
+0022: goto_if_false @MISSION_LOOP8
+037A: args 0 out 0 locals_base_index 0 call_func @CONCERT_MAIN
+0002: goto @MISSION_LOOP7
+
+:MISSION_LOOP8
+0001: wait 0
+// End the concert
+001B:   $3001 == 8
+0022: goto_if_false @MISSION_LOOP9
+037A: args 0 out 0 locals_base_index 0 call_func @CONCERT_END
+0002: goto @MISSION_LOOP8
+
+:MISSION_LOOP9
+0001: wait 0
+// Mission End (the name is misleading i know)
+001B:   $3001 == 9
+0022: goto_if_false @MISSION_LOOP10
+037A: args 0 out 0 locals_base_index 0 call_func @MISSION_WIN
+0002: goto @MISSION_LOOP9
+
+:MISSION_LOOP10
+0002: goto @END_MISSION
+
+:END_MISSION_1
+00C9: do_fade 500 fade 0
+0001: wait 500
+0044: set_char_coordinates $PLAYER_CHAR to -1103.65 1331.04 20.07
+00CF: set_char_heading $PLAYER_CHAR to 268.0
+0107: set_player_control $PLAYER_CHAR to 1 
+00B6: restore_camera
+0250: set_camera_in_front_of_player
+0001: wait 200
+00C9: do_fade 500 fade 1
+0002: goto @END_MISSION
+
+
+:SETUP_MISSION
+0472: add_pager_message 0@ 100 1 0
+// Do nothing while the pager is shown
+0001: wait 3000
+
+// LANCAHH -> '~w~What?'
+// $1030 -> 'What now?' 
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANCAHH'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1030 0
+0059: clear_prints
+
+0001: wait 7000
+
+// LANCAHJ -> '~w~You're kidding right?'
+// $1031 -> 'You`re kidding right?' 
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANCAHJ'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1031 0
+0059: clear_prints
+
+0001: wait 1000
+
+// Spawn Spheres for mission start
+037A: args 3 out 2 locals_base_index 0 call_func @SPAWN_MISSION $3003 $3004 $3005 $3006 $3007
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:INC_EVENT_FLAG
+// Increment Flag
+0007: $3001 += 1
+0026: return
+
+:SPAWN_MISSION
+0248: add_sphere 0@ 1@ 2@ radius 3.0 store_to 3@
+// Sprite 37 -> Lance's Sprite (L)
+00C5: add_sprite_blip_for_contact_point 0@ 1@ 2@ sprite 37 store_to 4@
+0026: return
+
+:CHECK_START_MISSION
+// Check if player has touched the sphere (to start mission)
+008A:    locate_char_on_foot_3d $PLAYER_CHAR coord $3003 $3004 $3005 radius 3.0 3.0 3.0 sphere 1
+0021: goto_if_true @PLAYER_COLLIDED_SPHERE
+0026: return
+
+:PLAYER_COLLIDED_SPHERE
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:START_CUTSCENE
+// Set OM Flag to 1 (so that the player can't save while in mission for example)
+0004: $ONMISSION = 1
+
+0249: remove_sphere $3006
+00BB: remove_blip $3007
+
+// Anim to walk to house
+00EE: char $PLAYER_CHAR walk_to -101.55 -1600.79
+03A1: set_wants_to_draw_hud 0
+
+// 'Marty Kills the Party!' (Mission title)
+0055: print_big $1000 time 6500 style 2
+00B9: set_fixed_camera_position $3011 $3012 $3013 rotation 0 0 0
+00BA: point_camera_at_point $3008 $3009 $3010 switchstyle 2
+
+0005: $3008 = -120.76
+0005: $3009 = -1615.03
+0005: $3010 = 17.74
+
+0005: $3011 = -123.48
+0005: $3012 = -1617.00
+0005: $3013 = 18.80
+
+0001: wait 1
+02B4: set_interpolation_parameters 0 time 2500
+00B9: set_fixed_camera_position $3011 $3012 $3013 rotation 0 0 0
+00BA: point_camera_at_point $3008 $3009 $3010 switchstyle 1
+0001: wait 1000
+00C8: set_fading_colour 0 0 0
+00C9: do_fade 750 fade 0
+0001: wait 750
+0107: set_player_control $PLAYER_CHAR to 0
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:MAIN_CUTSCENE
+// Clear the mission title
+025E: clear_this_big_print $1000
+
+// Replace Lance's House with interior (for cutscenes)
+0482: unknown_enable_building_swap_for_model hash 1614034602 1 enable 1
+0443: request_anims 120 
+0443: request_anims 512
+0443: request_anims 365
+0443: request_anims 71
+0001: wait 100
+
+// Lance Model  
+0160: request_model 136
+
+// Infernus Model
+0160: request_model 270 
+0228: load_all_models_now
+0001: wait 200
+
+// Spawn Lance
+003E: create_char 22 model 136 at -83.01 -1593.58 13.24 store_to $3054 
+00CF: set_char_heading $3054 to 80.0
+
+// Put him lying in sofa
+0414:   unknown_char_animation_command_18f3 $3054 value1 71 value2 365
+
+// "Player" 
+003E: create_char 22 model 0 at -85.08 -1594.69 13.24 store_to $5563 
+04B9: unknown_char_command_4384 $5563 values 0 0 0 
+00CF: set_char_heading $5563 to -70.63 
+0153: char_look_at_char_always $5563 char $3054
+00B9: set_fixed_camera_position -84.83 -1596.17 14.76 rotation 0 0 0 
+00BA: point_camera_at_point -84.62 -1595.26 14.6 switchstyle 2
+0001: wait 2000  
+04B4:   unknown_char_animation_6727 $5563 values 120 512 100.0
+
+
+00C9: do_fade 500 fade 1
+0001: wait 500
+
+// Audio Played
+// Legend shown
+
+// LANB2GE -> '~w~Lance! You asshole!'
+// $1002 -> 'What shit did you do this time LANCE?' 
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANB2GE'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1002 0
+
+// LANC3AA -> '~w~Stop yelling at me. It's not my fault.'
+// $1003 -> 'IT AINT MY FAULT MAN!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'LANC3AA'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1003 0
+
+// BRYB4FA -> '~w~Aw man, I didn't mean for us to kill him.'
+// $1004 -> 'Remember when you killed Marty?'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'BRYB4FA'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1004 0
+
+// BRYB4FA -> '~w~Unfortunately yes. What is it?'
+// $1021 -> 'Unfortunately yes. What is it?'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'DIAC3AB'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1021 0
+
+// LANCBAB -> '~w~Man, we're wasting our time, bitch is dead already.'
+// $1005 -> 'Guess what! Theyll avenge him by killing Phil Collins!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'LANCBAB'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015 
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1005 0
+
+// VICEXBN -> '~w~Motherfucker.'
+// $1028 -> 'Motherfucker.'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'VICEXBN'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015 
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1028 0
+
+// DIAC1AG -> '~w~C'mon. Let's pop like cola.'
+// $1006 -> 'Cmon, lets pop like cola!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'DIAC1AG'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1006 0
+0001: wait 1000
+
+:AFTER_CUTSCENE
+0059: clear_prints
+00C9: do_fade 500 fade 0
+0001: wait 1000
+
+// Replace interior with Lance's house
+0482: unknown_enable_building_swap_for_model hash 1614034602 0 enable 1
+00B9: set_fixed_camera_position -90.22 -1590.86 10.72 rotation 0 0 0 
+00BA: point_camera_at_point -90.13 -1588.46 10.77 switchstyle 2
+003F: delete_char $3054
+003F: delete_char $5563
+022C: clear_area -91.62 -1581.91 10.50 radius 10.0 clear_particles 1
+0048: create_car 270 at -88.53 -1583.27 10.19 store_to $3017
+00D1: set_car_heading $3017 to 328.0
+
+003E: create_char 22 model 136 at -90.30 -1588.62 10.50 store_to $3054
+00CF: set_char_heading $3054 to 328.0
+01AF: set_char_only_damaged_by_player $3054 to 1
+014B: set_char_health $3054 to 100 // Health = 100
+0278: set_char_money $3054 to 0 // Money = 0$ 
+0106: give_weapon_to_char $3054 weapon 27 ammo 99999 // Give the weapon to Lance
+0310: set_char_as_player_friend $3054 player $PLAYER_CHAR on 1
+0347: set_char_never_targetted $3054 to 1
+
+00E9: set_char_obj_enter_car_as_passenger $3054 car $3017
+0044: set_char_coordinates $PLAYER_CHAR to -93.32 -1586.40 10.50
+00CF: set_char_heading $PLAYER_CHAR to 333.0
+01EC: set_char $PLAYER_CHAR running 0
+0001: wait 1000
+005B: set_time_of_day 15 00
+00C9: do_fade 500 fade 1 
+00EE: char $PLAYER_CHAR walk_to -89.90 -1582.52
+0001: wait 3200
+00EA: set_char_obj_enter_car_as_driver $PLAYER_CHAR car $3017
+0001: wait 4500
+0119: tie_char $3054 to_char $PLAYER_CHAR
+00B6: restore_camera
+03A1: set_wants_to_draw_hud 1
+0107: set_player_control $PLAYER_CHAR to 1
+0057: print_now $1011 time 3500 flag 1
+0248: add_sphere -1109.26 1331.00 20.11 radius 2.0 store_to $3006
+00C3: add_blip_for_coord -1109.26 1331.00 20.11 store_to $3007
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:PRINT_LEGEND
+0059: clear_prints
+0056: print 0@ time 10000 flag 1
+0259: play_mission_audio $3015 enable 1
+
+:PRINT_LEGEND_1
+0001: wait 1
+001B:   $3001 == 7
+0022: goto_if_false @PRINT_LEGEND_2
+04FB: unknown_audio_get_command_7219 $3051
+0015:   $3051 >= 3250000 
+0022: goto_if_false @PRINT_LEGEND_2
+001B:   1@ == 1
+0022: goto_if_false @PRINT_LEGEND_2
+037A: args 0 out 0 locals_base_index 0 call_func @SPAWN_PHIL_COLLINS
+
+:PRINT_LEGEND_2
+025A:   has_mission_audio_finished slot $3015
+0022: goto_if_false @PRINT_LEGEND_1
+
+:PRINT_LEGEND_3
+0001: wait 500
+0284: clear_mission_audio slot $3015
+
+// This command is required for "cleaning" the slot it seems
+0412: unknown_mission_audio_slot_command_751f $3015
+0026: return
+
+:GET_AUDIO_SLOT
+0410: get_free_mission_audio_slot 0@
+0026: return
+
+:WAIT_UNTIL_AUDIO_LOAD
+0001: wait 0
+0258:   has_mission_audio_loaded slot 0@
+0022: goto_if_false @WAIT_UNTIL_AUDIO_LOAD
+0026: return
+
+:UNTIL_STADIUM_LOOP
+0001: wait 5000
+
+// LANB2FF -> '~w~Just chill, man. Be cool.'
+// $1007 -> 'Just chill, man. Be cool.'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'LANB2FF'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 1 out 0 locals_base_index 0 call_func @DIALOG_CAR $1007 
+
+// JERA3AD -> '~w~Don't worry? Man, I'm getting too deep into this shit.'
+// $1008 -> 'Chill? Man, I`m getting too deep into this shit.'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'JERA3AD'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 1 out 0 locals_base_index 0 call_func @DIALOG_CAR $1008
+
+// LANB2BE -> '~w~Man, give me a break. There's no winning with you.'
+// $1009 -> 'Give me a break Vic. Its not my fault!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'LANB2BE'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 1 out 0 locals_base_index 0 call_func @DIALOG_CAR $1009
+
+// LANC8BL -> '~w~Let's get after them.'
+// $1010 -> 'Lets get after them.'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
+0257: load_mission_audio slot $3015 name 'LANC8BL'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 1 out 0 locals_base_index 0 call_func @DIALOG_CAR $1010
+0059: clear_prints
+
+
+:UNTIL_STADIUM_LOOP1
+0001: wait 0
+// Check if mission lost
+037A: args 0 out 0 locals_base_index 0 call_func @CHECK_PLAYER_CAR
+
+// If Flag has been incremented, return
+001B:   $3001 == 5
+0021: goto_if_true @RETURN_OPCODE
+
+// If Player Lost, return (is it really necessary?)
+001B:   $3053 == 1
+0021: goto_if_true @RETURN_OPCODE
+0002: goto @UNTIL_STADIUM_LOOP1
+
+:CHECK_PLAYER_CAR
+// Check if player has reached sphere
+008A:    locate_char_on_foot_3d $PLAYER_CHAR coord -1109.26 1331.00 20.11 radius 2.0 2.0 2.0 sphere 1
+0021: goto_if_true @SETUP_STADIUM
+
+// If it's past 19:00, fail mission
+005C: get_minutes_to_time_of_day 19 00 store_to 4@
+000F:   4@ > 300 
+0021: goto_if_true @END_MISSION_FAILED
+
+// If player isn't alive, fail mission
+0045:   is_char_still_alive $PLAYER_CHAR
+0022: goto_if_false @END_MISSION_FAILED
+
+// If Lance isn't alive, fail mission
+0045:   is_char_still_alive $3054
+0022: goto_if_false @END_MISSION_FAILED
+0026: return
+
+:DIALOG_CAR
+0059: clear_prints
+0056: print 0@ time 10000 flag 1
+0259: play_mission_audio $3015 enable 1
+
+:DIALOG_CAR_1
+0001: wait 0
+037A: args 0 out 0 locals_base_index 0 call_func @CHECK_PLAYER_CAR
+001B:   $3053 == 1
+0021: goto_if_true @RETURN_OPCODE
+001B:   $3001 == 5
+0021: goto_if_true @RETURN_OPCODE
+025A:   has_mission_audio_finished slot $3015
+0022: goto_if_false @DIALOG_CAR_1
+
+:DIALOG_CAR_2
+0001: wait 500
+0284: clear_mission_audio slot $3015
+0412: unknown_mission_audio_slot_command_751f $3015
+0026: return
+
+:SETUP_STADIUM
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:END_MISSION_FAILED
+0249: remove_sphere $3006
+00BB: remove_blip $3007
+// M_FAIL -> 'MISSION FAILED!'
+0055: print_big 'M_FAIL' time 1 style 1
+003F: delete_char $3054
+// Player Lost Bool
+0004: $3053 = 1
+0026: return
+
+:TELEPORT_TO_STADIUM
+0001: wait 0
+0249: remove_sphere $3006
+00BB: remove_blip $3007
+// You need to fade before teleporting to stadium, idk why
+00C9: do_fade 500 fade 0
+
+:TELEPORT_TO_STADIUM1
+00CA:   get_fading_status
+0022: goto_if_false @TELEPORT_TO_STADIUM2
+0001: wait 0
+0002: goto @TELEPORT_TO_STADIUM1
+
+:TELEPORT_TO_STADIUM2
+
+// Delete the infernus
+0049: delete_car $3017
+
+// Sanchez Model
+0160: request_model 205 
+0228: load_all_models_now
+
+005B: set_time_of_day 18 30
+
+0109: force_weather_now 10
+
+0044: set_char_coordinates $PLAYER_CHAR to -1151.8 1319.12 -235.74
+0044: set_char_coordinates $3054 to -1152.8 1319.12 -235.74
+01EC: set_char $3054 running 1
+00CF: set_char_heading $PLAYER_CHAR to 175.0
+
+// Sanchez
+0048: create_car 205 at -1159.73 1310.55 -234.74 store_to $3017
+00D1: set_car_heading $3017 to 175.0
+0248: add_sphere -1562.18 1245.85 -234.54 radius 4.0 store_to $3006
+00C3: add_blip_for_coord -1562.18 1245.85 -234.54 store_to $3007
+00C9: do_fade 1000 fade 1
+
+// Set Radar mode to interior
+0492: set_radar_display_mode 1
+
+0221: set_camera_behind_player
+0107: set_player_control $PLAYER_CHAR to 1
+0057: print_now $1012 time 3500 flag 1
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:UNTIL_CONCERT
+001B:   $3053 == 1
+0021: goto_if_true @RETURN_OPCODE
+001B:   $3001 == 7
+0021: goto_if_true @RETURN_OPCODE
+0089:   locate_char_any_means_3d $PLAYER_CHAR coord -1562.18 1245.85 -234.54 radius 4.0 4.0 4.0 sphere 1
+0021: goto_if_true @SETUP_CONCERT
+005C: get_minutes_to_time_of_day 20 00 store_to 4@ 
+000F:   4@ > 400
+0021: goto_if_true @END_MISSION_FAILED
+0045:   is_char_still_alive $PLAYER_CHAR
+0022: goto_if_false @END_MISSION_FAILED
+0045:   is_char_still_alive $3054
+0022: goto_if_false @END_MISSION_FAILED
+0026: return
+
+:SETUP_CONCERT
+0249: remove_sphere $3006
+00BB: remove_blip $3007
+0107: set_player_control $PLAYER_CHAR to 0
+02B3: set_all_occupants_of_car_leave_car $3017
+0001: wait 500
+00C9: do_fade 500 fade 0
+0001: wait 500
+
+// Setup concert
+03A1: set_wants_to_draw_hud 0
+005B: set_time_of_day 0 0
+04DE: freeze_time 1
+
+// Guys at the stage
+0160: request_model 131
+0160: request_model 134
+0160: request_model 40
+
+// Animations
+0443: request_anims 116
+0443: request_anims 496
+0443: request_anims 501
+0443: request_anims 502
+
+0228: load_all_models_now 
+0001: wait 2000
+
+// Load audio (23 -> Phil Concert audio) 
+0540: unknown_audio_command_2762 values 23 0 
+
+// Play Audio at point (300 -> volume) 
+0417: unknown_audio_command_7532 point -1561.9 1334.79 -231.2 values 300 23
+
+00B9: set_fixed_camera_position -1553.93 1326.74 -228.28 rotation 0 0 0 
+00BA: point_camera_at_point -1554.86 1327.1 -228.26 switchstyle 2 
+0001: wait 1000 
+02B4: set_interpolation_parameters 0 time 8000 
+00B9: set_fixed_camera_position -1556.26 1327.63 -228.24 rotation 0 0 0 
+00BA: point_camera_at_point -1557.2 1327.99 -228.22 switchstyle 1
+
+003E: create_char 22 model 131 at -1567.81 1335.03 -231.26 store_to $5411 
+00CF: set_char_heading $5411 to 0
+0347: set_char_never_targetted $5411 to 1 
+01B1: set_char_proofs $5411 BP 1 FP 1 EP 1 CP 1 MP 1 
+0414:   unknown_char_animation_command_18f3 $5411 value1 116 value2 496
+ 
+003E: create_char 22 model 134 at -1574.39 1341.72 -230.29 store_to $5412 
+00CF: set_char_heading $5412 to 0
+0347: set_char_never_targetted $5412 to 1 
+01B1: set_char_proofs $5412 BP 1 FP 1 EP 1 CP 1 MP 1 
+0414:   unknown_char_animation_command_18f3 $5412 value1 116 value2 501
+ 
+003E: create_char 22 model 40 at -1576.06 1327.45 -230.08 store_to $5413 
+04AE: change_char_colour_set $5413 set_id 0 
+00CF: set_char_heading $5413 to 10.0
+0347: set_char_never_targetted $5413 to 1 
+01B1: set_char_proofs $5413 BP 1 FP 1 EP 1 CP 1 MP 1  
+0414:   unknown_char_animation_command_18f3 $5413 value1 116 value2 502
+ 
+00C9: do_fade 500 fade 1
+// Wait until audio has reached 500000 (not ms)
+037A: args 1 out 0 locals_base_index 0 call_func @WAIT_UNTIL_AUDIO_MS 500000
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:CONCERT_MAIN
+00C9: do_fade 500 fade 0
+0160: request_model 188 // Armadillo
+0160: request_model 34 // M249
+0160: request_model 7500 // Phil Head Mic
+0228: load_all_models_now
+0001: wait 500
+
+// A more recognizable term would be untie_char
+011A: clear_leader $3054
+
+// Create Armadillo
+0048: create_car 188 at -1574.12 1265.58 -234.58 store_to $3019
+0044: set_char_coordinates $3054 to -1559.00 1253.99 -235.85 
+0044: set_char_coordinates $PLAYER_CHAR to -1561.00 1253.99 -234.75
+00CF: set_char_heading $PLAYER_CHAR to 0.0
+00B9: set_fixed_camera_position -1559.95 1250.98 -235.07 rotation 0 0 0
+00BA: point_camera_at_point -1559.71 1256.33 -234.44 switchstyle 2
+0001: wait 1000
+00CF: set_char_heading $3054 to 0.0
+00C9: do_fade 500 fade 1
+0001: wait 1500
+0153: char_look_at_char_always $PLAYER_CHAR char $3054
+0153: char_look_at_char_always $3054 char $PLAYER_CHAR
+
+// LANB6BA -> '~w~So, what's the plan?'
+// $1013 -> 'So, what`s the plan?'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANB6BA'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1013 0
+
+0001: wait 1000
+0154: stop_char_looking $PLAYER_CHAR
+0154: stop_char_looking $3054
+
+// Create an invisible char behind the armadillo so that vic and lance can "look" to armadillo
+003E: create_char 22 model 0 at -1584.02 1278.80 -234.75 store_to $5560
+04EE: make_char_invisible $5560
+0153: char_look_at_char_always $PLAYER_CHAR char $5560
+0153: char_look_at_char_always $3054 char $5560
+
+0001: wait 500
+00B4: point_camera_at_car $3019 mode 15 switchstyle 1
+0001: wait 1500
+0059: clear_prints
+0001: wait 4000
+// 00F5: set_char_obj_sprint_to_coord $3054 sprint_to -1574.12 1265.58
+0158: set_char_obj_run_to_coord $3054 run_to -1574.12 1265.58
+
+// LANC8AF -> '~w~Let's go.'
+// $1014 -> 'Let`s go!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANC8AF'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1014 0
+
+0001: wait 1000
+00C9: do_fade 500 fade 0
+0001: wait 1000
+
+// Thx to darkdraggy -> 03D8: set_heli_rotor_blades_full_speed $3019
+03D8: unknown_heli_command_7314 vehicle $3019
+
+003F: delete_char $3054
+003F: delete_char $5560
+0049: delete_car $3017
+
+// Eliminate police
+024F: set_wanted_multiplier 0.0
+
+// Put Lance inside aramdillo
+00A4: create_char_inside_car $3019 pedtype 1 model 136 store_to $3020
+0232: set_char_cant_be_dragged_out $3020 to 1 
+0339: set_char_can_be_shot_in_vehicle $3020 to 0
+00D1: set_car_heading $3019 to 273.0
+042F: set_car_max_health $3019 to 3500 
+014C: set_car_health $3019 to 3500
+
+// Attach Vic to the side of Armadillo, set it aim mode with M249
+02B6: attach_ped_to_car $PLAYER_CHAR car $3019 offset 1.6 1.0 0 position 3 angle_limit 70.0 weapon 34 
+04D0: unknown_attached_player_set_angle_command_1969 $PLAYER_CHAR angle 55.0 
+04CF: unknown_attached_player_set_angle_command_b516 $PLAYER_CHAR angle 10.0
+
+00B6: restore_camera
+0221: set_camera_behind_player
+
+03A1: set_wants_to_draw_hud 1
+0107: set_player_control $PLAYER_CHAR to 1
+
+// Radio OFF (unfortunally, you can't force the player to set only this radio, so they can switch and stop listening to Phil Concert)
+028E: set_radio_channel 9 0
+
+// Drive Heli to coords
+02DA: heli_goto_coords $3019 coords -1538.80 1274.39 -224.27 speed 30
+00C9: do_fade 500 fade 1
+
+// $1015 -> 'Martys ~r~goons~w~ will appear soon, protect the concert!'
+0057: print_now $1015 time 3000 flag 1
+
+// Set Color of on-screen counter (Light Blue)
+03CF: set_onscreen_counter_colour 30 255 255 255 
+03D0: set_onscreen_counter_background_colour 0 88 88 255
+
+// $1016 -> 'HUEY' -> 'Armadillo' 
+024D: display_onscreen_counter_with_string $3016 type 1 gxt $1016
+
+0160: request_model 133 // Hitman
+0160: request_model 28 // M4
+0228: load_all_models_now
+
+// Wait 2000 ms (while looping)
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 2000 0
+02F2: set_heli_orientation $3019 to 178.0
+02FF: set_heli_stabiliser $3019 to 1
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 4000 0
+
+0267: print_help $1032
+
+// Spawn enemies on left (1)
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3030 $3040
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 5000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3031 $3041
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 4000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3032 $3042
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 7000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3033 $3043
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3034 $3044
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 3000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3035 $3045
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3036 $3046
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 8000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3037 $3047
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3038 $3048
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3039 $3049
+
+// 0 ms -> Wait until player has killed all enemies
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 0 1
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 500 0
+
+// Has player lost?
+001B:   $3053 == 1
+0021: goto_if_true @CONCERT_MAIN_3
+
+// LANC8BJ -> '~w~We're kicking their asses!'
+// $1017 -> 'We`re kicking their asses!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANC8BJ'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1017 0
+
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 500 0
+0059: clear_prints
+02DA: heli_goto_coords $3019 coords -1539.86 1388.04 -224.27 speed 30
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 5000 0
+
+// Spawn enemies on right (0)
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3030 $3040
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 5000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3031 $3041
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 4000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3032 $3042
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 7000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3033 $3043
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3034 $3044
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 3000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3035 $3045
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3036 $3046
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 8000 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3037 $3047
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3038 $3048
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3039 $3049
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 0 1
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 3000 0
+
+001B:   $3053 == 1
+0021: goto_if_true @CONCERT_MAIN_3
+
+// Set Phil Collins concert audio not to mute while fading (just like the original)
+02A0: set_music_does_fade 0
+00C9: do_fade 250 fade 0
+0001: wait 250
+0107: set_player_control $PLAYER_CHAR to 0
+03A1: set_wants_to_draw_hud 0
+00B9: set_fixed_camera_position -1565.86 1335.23 -230.08 rotation 0 0 0 
+00BA: point_camera_at_point -1566.81 1334.95 -229.97 switchstyle 2
+0001: wait 250
+00C9: do_fade 250 fade 1
+0001: wait 250
+0414:   unknown_char_animation_command_18f3 $5411 value1 116 value2 498
+
+// Wait until Phil Collins Audio reaches 4750000
+037A: args 1 out 0 locals_base_index 0 call_func @WAIT_UNTIL_AUDIO_MS 4750000
+
+// Set Camera Pos to 3 first args, Point Camera at the next 3 args, wait until audio reaches 4900000 and point camera switchstyle is 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1556.05 1343.34 -230.22 -1556.95 1342.91 -230.17 4900000 2
+                                                                                                                                
+00B9: set_fixed_camera_position -1576.97 1331.27 -228.19 rotation 0 0 0 
+00BA: point_camera_at_point -1577.83 1330.76 -228.29 switchstyle 2 
+0001: wait 0 
+02B4: set_interpolation_parameters 0 time 18000 
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1575.69 1332.0 -228.14 -1576.22 1331.15 -228.21 5400000 2
+
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1572.37 1327.72 -229.05 -1573.35 1327.93 -229.08 5780000 2
+
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1573.99 1329.71 -228.91 -1574.76 1330.34 -229.01 6600000 2
+
+0414:   unknown_char_animation_command_18f3 $5411 value1 116 value2 498
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1565.62 1335.17 -230.64 -1566.52 1334.93 -230.28 6750000 2
+
+0414:   unknown_char_animation_command_18f3 $5411 value1 116 value2 499
+00B9: set_fixed_camera_position -1571.47 1330.86 -229.84 rotation 0 0 0 
+00BA: point_camera_at_point -1572.45 1330.74 -229.84 switchstyle 2
+0001: wait 0
+02B4: set_interpolation_parameters 0 time 13000 
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1568.5 1329.88 -230.31 -1570.74 1330.28 -230.31 7100000 1
+
+02B4: set_interpolation_parameters 0 time 21000
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1568.02 1336.79 -230.0 -1569.0 1336.88 -230.0 7500000 1
+
+0001: wait 500
+00C9: do_fade 250 fade 0
+0001: wait 250
+0107: set_player_control $PLAYER_CHAR to 1
+03A1: set_wants_to_draw_hud 1
+00B6: restore_camera
+0221: set_camera_behind_player
+0001: wait 250
+00C9: do_fade 250 fade 1
+0001: wait 500
+02DA: heli_goto_coords $3019 coords -1538.80 1274.39 -224.27 speed 30
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3030 $3040
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3031 $3041
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3032 $3042
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3033 $3043
+0001: wait 250
+
+// LANB1BH -> '~w~Look out Vic. There's more of them!'
+// $1018 -> 'Look out Vic, there`s more of them!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANB1BH'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1018 0
+0057: print_now $1029 time 3000 flag 1
+
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 1000 0
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 0 1
+
+001B:   $3053 == 1
+0021: goto_if_true @CONCERT_MAIN_3
+
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3030 $3040
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3031 $3041
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3032 $3042
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3033 $3043
+
+001B:   $3053 == 1
+0021: goto_if_true @CONCERT_MAIN_3
+
+0001: wait 500
+02DA: heli_goto_coords $3019 coords -1539.86 1388.04 -224.27 speed 40
+0001: wait 250
+
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 7500 1
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3034 $3044
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3035 $3045
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3036 $3046
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 0 $3037 $3047
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 0 1
+
+001B:   $3053 == 1
+0021: goto_if_true @CONCERT_MAIN_3
+
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 500 0
+02DA: heli_goto_coords $3019 coords -1538.80 1274.39 -224.27 speed 30
+
+// LANC8CB -> '~w~I'm the black killa from Manila! The Manila Blilla!'
+// $1022 -> 'I`m the black killa from Manila! The Manila Blilla!'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANC8CB'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1022 0
+
+// LANC8CC -> '~w~You're a blidiot. Now shut up.'
+// $1023 -> 'You`re a blidiot. Now shut up.'
+037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015                   
+0257: load_mission_audio slot $3015 name 'LANC8CC'
+037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
+037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1023 0
+0059: clear_prints
+
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3034 $3044
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3035 $3045
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3036 $3046
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3037 $3047
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3038 $3048
+037A: args 1 out 2 locals_base_index 0 call_func @SPAWN_ENEMY 1 $3039 $3049
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 0 1
+
+001B:   $3053 == 1
+0021: goto_if_true @CONCERT_MAIN_3
+
+037A: args 2 out 0 locals_base_index 0 call_func @WAIT_CONCERT_LOOP 2000 0
+00C9: do_fade 250 fade 0
+
+// Phil Sticks (it was a bit of a pain to find the correct model)
+0160: request_model 7483
+0228: load_all_models_now
+0001: wait 250
+0107: set_player_control $PLAYER_CHAR to 0
+03A1: set_wants_to_draw_hud 0
+00B9: set_fixed_camera_position -1566.03 1335.05 -230.06 rotation 0 0 0 
+00BA: point_camera_at_point -1566.95 1335.41 -229.96 switchstyle 2
+0001: wait 250
+00C9: do_fade 250 fade 1
+0001: wait 250
+0414:   unknown_char_animation_command_18f3 $5411 value1 116 value2 498 
+037A: args 1 out 0 locals_base_index 0 call_func @WAIT_UNTIL_AUDIO_MS 8800000
+
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.57 1337.52 -228.82 -1574.77 1338.5 -228.85 9300000 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1562.52 1344.05 -226.55 -1563.37 1343.56 -226.77 9500000 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1575.84 1336.31 -228.55 -1575.91 1337.3 -228.44 9600000 2
+
+02B4: set_interpolation_parameters 0 time 14000
+  
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1573.15 1331.82 -228.4 -1573.53 1332.74 -228.43 10100000 1
+
+// Create 2 sticks, put them each in Phil's hands
+0092: create_object 7483 at 0 0 0 store_to $5825 
+0225: set_object_collision $5825 enable 0 
+03F6: set_object_rotation_dont_update_frame $5825 to 60.0 0 0 
+04C0: attach_object_to_char $5825 car $5409 unk_int 25 offset -0.07 0.03 0
+ 
+0092: create_object 7483 at 0 0 0 store_to $5826 
+0225: set_object_collision $5826 enable 0 
+03F6: set_object_rotation_dont_update_frame $5826 to 60.0 180.0 0 
+04C0: attach_object_to_char $5826 car $5409 unk_int 35 offset -0.07 0.03 0
+
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1572.17 1334.42 -228.15 -1573.1 1334.7 -228.38 10507920 2
+
+0414:   unknown_char_animation_command_18f3 $5411 value1 116 value2 499
+0414:   unknown_char_animation_command_18f3 $5412 value1 116 value2 500 
+0414:   unknown_char_animation_command_18f3 $5413 value1 116 value2 503
+037A: args 1 out 0 locals_base_index 0 call_func @WAIT_UNTIL_AUDIO_MS 10683600
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1566.53 1334.3 -229.63 -1567.47 1334.63 -229.72 10924300 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.74 1334.27 -227.49 -1574.01 1334.63 -228.08 11109900 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1573.3 1326.84 -228.98 -1574.24 1327.18 -228.89 11237500 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.52 1333.58 -228.37 -1574.01 1334.44 -228.42 11592750 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1566.53 1334.3 -229.63 -1567.47 1334.63 -229.72 11847950 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1573.27 1340.2 -229.03 -1573.89 1340.98 -228.91 11977000 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.52 1333.58 -228.37 -1574.01 1334.44 -228.42 12175650 2
+
+// 00B9: set_fixed_camera_position -1574.74 1334.27 -227.49 rotation 0 0 0 
+// 00BA: point_camera_at_point -1574.01 1334.63 -228.08 switchstyle 2 
+// 037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1572.66 1333.43 -228.15 -1573.17 1334.27 -228.3 12629500 2
+// 037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1567.17 1334.56 -229.82 -1567.17 1334.56 -229.82 12913700 1
+// 037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1569.79 1346.39 -229.65 -1570.07 1345.43 -229.63 13150000 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.74 1334.27 -227.49 -1574.01 1334.63 -228.08 13268950 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1573.3 1326.84 -228.98 -1574.24 1327.18 -228.89 13454550 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.52 1333.58 -228.37 -1574.01 1334.44 -228.42 13696658 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1568.9 1325.65 -230.41 -1569.3 1326.56 -230.31 14000000 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1572.17 1334.42 -228.15 -1573.1 1334.7 -228.38 14930000 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1566.53 1334.3 -229.63 -1567.47 1334.63 -229.72 15116250 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.96 1325.94 -228.65 -1575.26 1326.9 -228.68 15258350 2
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1562.52 1344.05 -226.55 -1563.37 1343.56 -226.77 15557050 2
+
+0414:   unknown_char_animation_command_18f3 $5411 value1 116 value2 496
+0414:   unknown_char_animation_command_18f3 $5412 value1 116 value2 501
+0414:   unknown_char_animation_command_18f3 $5413 value1 116 value2 502 
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1572.17 1334.42 -228.15 -1573.1 1334.7 -228.38 15910850 2
+
+// Delete sticks
+0093: delete_object $5825
+0093: delete_object $5826
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1568.9 1325.65 -230.41 -1569.3 1326.56 -230.31 16160000 2
+
+00B9: set_fixed_camera_position -1574.3 1334.87 -228.06 rotation 0 0 0 
+00BA: point_camera_at_point -1573.47 1335.43 -228.13 switchstyle 2 
+0001: wait 0 
+02B4: set_interpolation_parameters 0 time 8000 
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.3 1334.87 -228.06 -1573.3 1334.89 -228.13 16443024 1
+
+02A0: set_music_does_fade 1 
+02B4: set_interpolation_parameters 0 time 3000 
+037A: args 8 out 0 locals_base_index 0 call_func @PHIL_COLLINS_CONCERT -1574.3 1334.87 -228.06 -1573.57 1334.19 -228.13 16650000 1
+0001: wait 1000
+
+:CONCERT_MAIN_3
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:WAIT_CONCERT_LOOP
+010E: get_game_timer 2@
+0029: 2@ += 0@
+
+:WAIT_CONCERT_LOOP1
+0001: wait 0
+
+// Get current audio played at point (Phil Collins) time
+04FB: unknown_audio_get_command_7219 $3051
+
+// If greater than 3250000, spawn (once) Phil
+0015:   $3051 >= 3250000 
+0022: goto_if_false @WAIT_CONCERT_LOOP2
+037A: args 0 out 0 locals_base_index 0 call_func @SPAWN_PHIL_COLLINS
+
+:WAIT_CONCERT_LOOP2
+037A: args 0 out 0 locals_base_index 3 call_func @GET_HELI_HEALTH
+037A: args 0 out 0 locals_base_index 3 call_func @CHECK_CONCERT_TEAM
+
+// Player Lost, return
+001B:   $3053 == 1
+0021: goto_if_true @RETURN_OPCODE
+
+// 0 ms -> ignore time stuff
+001B:   0@ == 0
+0021: goto_if_true @WAIT_CONCERT_LOOP3
+
+// Get current in-game time
+010E: get_game_timer 3@
+
+// If a certain time has passed, return
+0017:   3@ >= 2@
+0021: goto_if_true @RETURN_OPCODE
+
+// Don't check enemies
+001B:   1@ == 0
+0021: goto_if_true @WAIT_CONCERT_LOOP1
+
+:WAIT_CONCERT_LOOP3
+037A: args 0 out 0 locals_base_index 0 call_func @CHECK_ENEMIES
+
+// If all enemies are dead, return
+001B:   $3050 == 10
+0021: goto_if_true @RETURN_OPCODE
+0002: goto @WAIT_CONCERT_LOOP1
+
+:RETURN_OPCODE
+0026: return
+
+:CHECK_ENEMIES
+0004: $3050 = 0
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3030 $3040
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3031 $3041
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3032 $3042
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3033 $3043
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3034 $3044
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3035 $3045
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3036 $3046
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3037 $3047
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3038 $3048
+037A: args 2 out 0 locals_base_index 3 call_func @CHECK_ENEMY $3039 $3049
+0026: return
+
+
+:CHECK_ENEMY
+009F:   is_char_dead 0@
+0021: goto_if_true @REM_BLIP
+
+// While enemy hasn't reached either left or right side, they can't kill the player
+0046:   is_char_in_area_2d 0@ from -1556.93 1416.60 to -1570.14 1403.85 sphere 0
+0022: goto_if_false @CHECK_ENEMY2
+037A: args 1 out 0 locals_base_index 2 call_func @KILL_PLAYER_ENEMY 0@
+0026: return
+
+:CHECK_ENEMY2
+0046:   is_char_in_area_2d 0@ from -1556.99 1253.62 to -1567.76 1263.47 sphere 0
+0022: goto_if_false @RETURN_OPCODE
+037A: args 1 out 0 locals_base_index 2 call_func @KILL_PLAYER_ENEMY 0@
+0026: return
+
+:ADD_ENEMY_COUNTER
+0007: $3050 += 1
+0026: return
+
+:REM_BLIP
+00BB: remove_blip 1@
+0002: goto @ADD_ENEMY_COUNTER
+0026: return
+
+:KILL_PLAYER_ENEMY
+00E4: set_char_obj_kill_char_on_foot 0@ char $PLAYER_CHAR
+0026: return
+
+:CHECK_CONCERT_TEAM
+009F:   is_char_dead $5411
+0021: goto_if_true @PLAYER_LOST
+009F:   is_char_dead $5412
+0021: goto_if_true @PLAYER_LOST
+009F:   is_char_dead $5413
+0021: goto_if_true @PLAYER_LOST
+0026: return
+
+
+:SPAWN_ENEMY
+// 0@ -> Spawn Location (0 -> Right, 1 -> Left)
+001B:   0@ == 1
+0021: goto_if_true @COORDS_LEFT
+
+// Get a random coordinate from range (right)
+037A: args 6 out 3 locals_base_index 6 call_func @GET_RAND_COORD_RANGE -1558.42 1476.06 -234.75 -1565.42 1467.12 -234.75 $3021 $3022 $3023
+0002: goto @SPAWN_ENEMY_2
+
+:COORDS_LEFT
+// Get a random coordinate from range (left)
+037A: args 6 out 3 locals_base_index 6 call_func @GET_RAND_COORD_RANGE -1565.12 1197.67 -234.75 -1558.26 1189.99 -234.75 $3021 $3022 $3023
+
+:SPAWN_ENEMY_2
+003E: create_char 22 model 133 at $3021 $3022 $3023 store_to 1@
+
+// You can increase this if you want the mission to be harder lmao
+01C9: set_char_accuracy 1@ to 10
+
+00C1: add_blip_for_char 1@ store_to 2@
+0106: give_weapon_to_char 1@ weapon 28 ammo 99999
+014B: set_char_health 1@ to 100
+0278: set_char_money 1@ to 0
+
+// Set destination 
+001B: 0@ == 1
+0021: goto_if_true @COORDS_DEST_LEFT
+037A: args 6 out 3 locals_base_index 6 call_func @GET_RAND_COORD_RANGE -1556.93 1416.60 -234.75 -1570.14 1403.85 -234.75 $3024 $3025 $3026
+0002: goto @SPAWN_ENEMY_3
+
+:COORDS_DEST_LEFT
+037A: args 6 out 3 locals_base_index 6 call_func @GET_RAND_COORD_RANGE -1556.99 1253.62 -234.75 -1567.76 1263.47 -234.75 $3024 $3025 $3026
+
+:SPAWN_ENEMY_3
+00F5: set_char_obj_sprint_to_coord 1@ sprint_to $3024 $3025
+0026: return
+
+:GET_RAND_COORD_RANGE
+// Generate in range floats for each axis (x, y, z)
+// This results in a random pos
+0138: generate_random_float_in_range 0@ 3@ store_to 6@
+0138: generate_random_float_in_range 1@ 4@ store_to 7@
+0138: generate_random_float_in_range 2@ 5@ store_to 8@
+0026: return
+
+:GET_HELI_HEALTH
+// Normalizing Helicpoter Health from 0 to 100
+// Get current health
+014E: get_car_health $3019 store_to 0@
+
+// If Helicopter Health has reached 0, player lost
+0015:   0@ >= 1
+0022: goto_if_false @PLAYER_LOST
+
+// Get max health
+0430: get_car_max_health $3019 store_to 1@
+
+// Divide curr health with max (to get a ratio)
+0030: 0@ /= 1@ 
+
+// Multiply by 100 to get a value between 0 and 100
+000C: 0@ *= 100.0 
+
+// convert to integer
+0038: $3016 = float 0@ to_integer
+0026: return
+
+:PLAYER_LOST
+// Set player lost bool to 1
+0004: $3053 = 1
+0026: return
+
+:SPAWN_PHIL_COLLINS
+// If Phil collins still wasn't spawned, spawn him
+001B:   $3052 == 0
+0022: goto_if_false @RETURN_OPCODE
+
+// Phil Collins Concert Model
+0160: request_model 146
+
+// Phil Head Mic Model (again, hard to find the model num)
+0160: request_model 7500 
+0228: load_all_models_now
+0001: wait 1
+
+// Create Phil
+003E: create_char 22 model 146 at -1583.36 1330.35 -230.22 store_to $5409
+ 
+00CF: set_char_heading $5409 to 0 
+0347: set_char_never_targetted $5409 to 1 
+01B1: set_char_proofs $5409 BP 1 FP 1 EP 1 CP 1 MP 1
+0443: request_anims 415
+0443: request_anims 416
+
+// Set animation stuff
+0001: wait 1
+04B4:   unknown_char_animation_6727 $5409 values 90 415 2000.0
+0523: unknown_char_anim_command_5618 $5409 values 90 416
+0001: wait 100
+
+// Set collision related stuff (???)    
+0503: unknown_char_set_command_4828 $5409 flag 1
+04B5: unknown_char_set_command_47e1 $5409 flag 0
+
+// Create and attach Head Mic to Phil
+01AA: create_object_no_offset 7500 at 0 0 0 store_to $5827 
+03F6: set_object_rotation_dont_update_frame $5827 to 90.0 0 0 
+04C0: attach_object_to_char $5827 car $5409 unk_int 5 offset 0 0 0
+0004: $3052 = 1
+0026: return
+
+:WAIT_UNTIL_AUDIO_MS
+0001: wait 0
+// Get current phil audio time
+04FB: unknown_audio_get_command_7219 1@
+0015:   1@ >= 3245000
+0022: goto_if_false @WAIT_UNTIL_AUDIO_MS2
+037A: args 0 out 0 locals_base_index 0 call_func @SPAWN_PHIL_COLLINS
+
+:WAIT_UNTIL_AUDIO_MS2
+// If time has passed, stop
+0017:   1@ >= 0@ 
+0021: goto_if_true @RETURN_OPCODE
+0002: goto @WAIT_UNTIL_AUDIO_MS
+
+:PHIL_COLLINS_CONCERT
+// 1st, 2nd, 3rd args -> Camera pos
+// 4th, 5th, 6th args -> Point for camera to look
+// 7th arg -> Audio time to wait until
+// 8th arg -> camera switchstyle (1 -> slow, 2 -> instant)
+
+// Check if it has already passed the time (to fix some camera jittery on the start of phil concert)
+04FB: unknown_audio_get_command_7219 8@
+0017:   8@ >= 6@
+0021: goto_if_true @RETURN_OPCODE
+
+00B9: set_fixed_camera_position 0@ 1@ 2@ rotation 0 0 0 
+00BA: point_camera_at_point 3@ 4@ 5@ switchstyle 7@
+037A: args 1 out 0 locals_base_index 0 call_func @WAIT_UNTIL_AUDIO_MS 6@
+0026: return
+
+:CONCERT_END
+// Player Lost? Don't fade then
+001B:   $3053 == 1
+0021: goto_if_true @CONCERT_END2
+00C9: do_fade 1000 fade 0
+0001: wait 1000
+
+:CONCERT_END2
+// Remove all stuff from concert
+00BB: remove_blip $3040
+00BB: remove_blip $3041
+00BB: remove_blip $3042
+00BB: remove_blip $3043
+00BB: remove_blip $3044
+00BB: remove_blip $3045
+00BB: remove_blip $3046
+00BB: remove_blip $3047
+00BB: remove_blip $3048
+00BB: remove_blip $3049
+003F: delete_char $3030
+003F: delete_char $3031
+003F: delete_char $3032
+003F: delete_char $3033
+003F: delete_char $3034
+003F: delete_char $3035
+003F: delete_char $3036
+003F: delete_char $3037
+003F: delete_char $3038
+003F: delete_char $3039
+003F: delete_char $5409 
+003F: delete_char $5410 
+003F: delete_char $5411 
+003F: delete_char $5412 
+003F: delete_char $5413
+003F: delete_char $3054
+02B7: detach_char_from_car $PLAYER_CHAR
+0049: delete_car $3019
+0093: delete_object $5825
+0093: delete_object $5826
+0093: delete_object $5827 
+0444: remove_anims 502
+0444: remove_anims 501
+0444: remove_anims 496
+0444: remove_anims 116
+0444: remove_anims 415
+0444: remove_anims 416
+0162: mark_model_as_no_longer_needed 136
+0162: mark_model_as_no_longer_needed 270
+0162: mark_model_as_no_longer_needed 205
+0162: mark_model_as_no_longer_needed 131
+0162: mark_model_as_no_longer_needed 134
+0162: mark_model_as_no_longer_needed 40
+0162: mark_model_as_no_longer_needed 7500
+0162: mark_model_as_no_longer_needed 7483
+0162: mark_model_as_no_longer_needed 133
+0162: mark_model_as_no_longer_needed 28
+0162: mark_model_as_no_longer_needed 146
+
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:MISSION_WIN
+// Incase the player has actually lost
+001B:   $3053 == 1
+0021: goto_if_true @MISSION_LOSE
+0001: wait 1000
+03A1: set_wants_to_draw_hud 1
+00AE: clear_onscreen_counter $3016
+00C9: do_fade 1000 fade 1
+0044: set_char_coordinates $PLAYER_CHAR to -1103.65 1331.04 19.07
+00CF: set_char_heading $PLAYER_CHAR to 268.0
+0107: set_player_control $PLAYER_CHAR to 1 
+00B6: restore_camera
+0250: set_camera_in_front_of_player
+0001: wait 1000
+
+:MISSION_PASSED
+// Tan, tan, tan, tan, TAN! (lmao)
+022B: play_mission_passed_tune 1
+
+// M_PASS -> 'MISSION PASSED!'
+//                 $~1~
+
+011D: print_with_number_big 'M_PASS' number $3000 time 1000 style 1
+0267: print_help $1026
+
+// Give money to player
+0094: add_score $PLAYER_CHAR value $3000
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:MISSION_LOSE
+// Remove all blips
+00BB: remove_blip $3040
+00BB: remove_blip $3041
+00BB: remove_blip $3042
+00BB: remove_blip $3043
+00BB: remove_blip $3044
+00BB: remove_blip $3045
+00BB: remove_blip $3046
+00BB: remove_blip $3047
+00BB: remove_blip $3048
+00BB: remove_blip $3049
+
+// Remove all chars
+003F: delete_char $3030
+003F: delete_char $3031
+003F: delete_char $3032
+003F: delete_char $3033
+003F: delete_char $3034
+003F: delete_char $3035
+003F: delete_char $3036
+003F: delete_char $3037
+003F: delete_char $3038
+003F: delete_char $3039
+
+02B7: detach_char_from_car $PLAYER_CHAR
+0049: delete_car $3019
+00AE: clear_onscreen_counter $3016
+014B: set_char_health $PLAYER_CHAR to 0
+
+// M_FAIL -> 'MISSION FAILED!'
+0055: print_big 'M_FAIL' time 1000 style 1
+037A: args 0 out 0 locals_base_index 0 call_func @INC_EVENT_FLAG
+0026: return
+
+:END_MISSION
+0001: wait 500
+
+// Set Radar mode to normal (exterior)
+0492: set_radar_display_mode 0
+010A: release_weather
+
+// This makes time go crazy until it reaches the current time, not a big deal tho lol 
+04DE: freeze_time 0
+
+03A1: set_wants_to_draw_hud 1
+
+// Stop Phil Collins audio (otherwise it'll keep looping)
+0418: unknown_audio_command_8451 point -1561.9 1334.79 -231.2
+
+// Player isn't on a mission anymore
+0004: $ONMISSION = 0
+0004: $3056 = 0
+
+// Reset Wanted Multiplier
+024F: set_wanted_multiplier 1.0
+
+// End :)
+0023: terminate_this_script
+
+:EASTER_EGG
+0043: get_char_coordinates $PLAYER_CHAR store_to 0@ 1@ 2@
+
+// Play sound 1 (which is this: https://youtu.be/iD2En5rFYN4?si=4j2Pesf8QgnqTcwP&t=54)
+00D9: add_one_off_sound 0@ 1@ 2@ sound 1
+// $1027 -> 'Congratulations, there`s only 2% chance of triggering this ~h~easter egg~w~! Here`s 50000$!'
+0267: print_help $1027
+0094: add_score $PLAYER_CHAR value 50000
+0001: wait 6500
+0268: clear_help
+0001: wait 500
+0026: return
