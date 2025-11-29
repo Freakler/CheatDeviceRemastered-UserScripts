@@ -1,0 +1,122 @@
+#Game: Liberty City Stories
+#Author: ~y~danssmnt~w~
+#Version: v1.0
+#Category: Map
+#Date: 2025-11-29
+#Description: A very simplistic blip sprite explorer and spawner.
+
+// VARIABLES ///////////////////////////////////////////////////
+
+// Sprite ID
+0004: $_4000 = 0
+
+// $_4001 -> Spawned Blip
+
+// $_4002 $_4003 $_4004 -> XYZ Player Coordinates
+
+// End Script Event
+0004: $_4005 = 0
+
+// Button Hold Timer
+0004: $_4006 = 0
+
+// VARIABLES ///////////////////////////////////////////////////
+
+062D: print_help_always_allow 'Blip Sprite Explorer v1.0 by ~y~danssmnt~w~. Press ~h~ ~k~ ~AMLEF~ ~w~ or ~h~ ~k~ ~AMRIG~ ~w~ to change sprite ID. Press ~h~ ~k~ ~VEEE~ ~w~ to spawn sprite. Press ~h~ ~k~ ~TGSUB~ ~w~ to exit explorer.'
+
+0002: goto @MAINLOOP
+
+:INC_SPRITE_ID
+// Sprite ID max. = 61 (from here all sprites are a white blob which crashes the game)
+0018:   $_4000 > 60
+004C: goto_if_true @HOLDING_BUTTON_LOOP
+
+0008: $_4000 += 1
+0002: goto @HOLDING_BUTTON_LOOP
+
+:DEC_SPRITE_ID
+// Sprite ID min. = 0
+0018:   $_4000 > 0
+004D: goto_if_false @HOLDING_BUTTON_LOOP
+
+000C: $_4000 -= 1
+0002: goto @HOLDING_BUTTON_LOOP
+
+// If player is still pressing the button, loop until he stops
+:HOLDING_BUTTON_LOOP
+0001: wait 0
+
+05AE: args 0 out 0 locals_base_index 0 call_func @UI_MANAGER
+
+0008: $_4006 += 1
+
+// Player has pressed for 5 loops, end holding
+0018:   $_4006 > 5
+004C: goto_if_true @HOLDING_BUTTON_END
+
+00E6:   is_button_pressed 0 button 11
+004C: goto_if_true @HOLDING_BUTTON_LOOP
+
+00E6:   is_button_pressed 0 button 10
+004C: goto_if_true @HOLDING_BUTTON_LOOP
+
+:HOLDING_BUTTON_END
+0004: $_4006 = 0
+0051: return
+
+:SPAWN_SPRITE
+// Remove Old Sprite
+0169: remove_blip $_4001
+
+0054: get_player_coordinates $PLAYER_CHAR store_to $_4002 $_4003 $_4004
+02AD: add_sprite_blip_for_coord $_4002 $_4003 $_4004 sprite $_4000 store_to $_4001
+016D: change_blip_scale $_4001 to 3
+0051: return
+
+// UI Loop
+:UI_MANAGER
+01E9: print_with_number 'Sprite ID: ~1~' number $_4000 time 1 flag 0
+0051: return
+
+// Controls Loop
+:CONTROLS_MANAGER
+00E6:   is_button_pressed 0 button 11
+004C: goto_if_true @INC_SPRITE_ID
+
+00E6:   is_button_pressed 0 button 10
+004C: goto_if_true @DEC_SPRITE_ID
+
+00E6:   is_button_pressed 0 button 15
+004C: goto_if_true @SPAWN_SPRITE
+
+00E6:   is_button_pressed 0 button 8
+004C: goto_if_true @CALL_EVENT_END_SCRIPT
+0051: return
+
+// Main Script Loop
+:MAINLOOP
+0001: wait 0
+05AE: args 0 out 0 locals_base_index 0 call_func @UI_MANAGER
+05AE: args 0 out 0 locals_base_index 0 call_func @CONTROLS_MANAGER
+
+0038:   $_4005 == 1
+004C: goto_if_true @END_SCRIPT
+
+0002: goto @MAINLOOP
+
+
+:CALL_EVENT_END_SCRIPT
+0008: $_4005 += 1
+0051: return
+
+// Cleanup and terminate script
+:END_SCRIPT
+0169: remove_blip $_4001
+0004: $_4000 = 0
+0004: $_4002 = 0
+0004: $_4003 = 0
+0004: $_4004 = 0
+0004: $_4005 = 0
+0004: $_4006 = 0
+062D: print_help_always_allow 'Exiting Blip Sprite Explorer...'
+004E: terminate_this_script
