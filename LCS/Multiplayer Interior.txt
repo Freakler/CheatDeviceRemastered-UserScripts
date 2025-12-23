@@ -1,0 +1,32 @@
+#Game: Liberty City Stories
+#Author: Freakler
+#Version: 1.0
+#Category: World
+#Date: 2024-02-18
+#Description: Explore the unused Multiplayer Interiors
+
+
+// 3979 "IZ_mpFlat_01"
+// 3989 "IZ_mpFlat_02"
+// 3990 "IZ_mpFlat_03"
+// 3991 "jm_mpFlat_04"
+// 3992 "IZ_mpFlat_05"
+// 3993 "ca_mpFlat_06"
+// 3994 "ca_mpFlat_07"
+// 3995 "ca_mpFlat_08"
+// 3981 "IZ_mp_salHosp"
+
+
+0004: 0@ = 3979
+024C: request_model 0@
+0390: load_all_models_now
+0001: wait 0 
+
+0175: get_player_heading $PLAYER_CHAR store_to 4@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 5@ 8.0 -1.2 store_to 5@ 6@ 7@ //coord 8m in front of player at ~ground
+
+010C: create_object 0@ at 5@ 6@ 7@ store_to $5342 
+000B: 4@ += 180.0 
+017C: set_object_heading $5342 to 4@
+
+004E: terminate_this_script 
