@@ -1,9 +1,9 @@
 #Game: Liberty City Stories
 #Author: NielsB
-#Version: 1.6
-#Category: missions
-#Date: 2023-01-04
-#Description: Create BodyGuard with specials
+#Version: 1.7
+#Category: Fun
+#Date: 2025-12-23
+#Description: Create a bodyGuard menu (specials)
 
 024C: request_model 259
 024C: request_model 260
@@ -66,21 +66,21 @@
 
 0178: set_char_heading $PLAYER_ACTOR to 180.00
 0001: wait 90
-04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 2.0 3.0 -0.85 store_to $1 $2 $3 
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 2.0 3.0 -0.85 store_to 1@ 2@ 3@
 0378: set_camera_behind_player 
 //01B9: set_player_control $PLAYER_CHAR to 0 //Can set on or off
 
 :ADD
-0354: remove_char_elegantly $10 
-0169: remove_blip $11
+0354: remove_char_elegantly 4@
+0169: remove_blip 5@
 0001: wait 20
 :ADD2
 0001: wait 50
 024C: request_model 0@
 0390: load_all_models_now 
-009A: create_char 1 model 0@ at $1 $2 $3 store_to $10 
-018C: add_blip_for_char $10 store_to $11
-016A: change_blip_colour $11 to 7 
+009A: create_char 1 model 0@ at 1@ 2@ 3@ store_to 4@
+018C: add_blip_for_char 4@ store_to 5@
+016A: change_blip_colour 5@ to 7
 
 :ACTION0
 0001: wait 0
@@ -92,7 +92,8 @@
 004C: goto_if_true @ENDE
 00E6:   is_button_pressed 0 button 10
 004C: goto_if_true @JOIN
-00BC: print_now '~g~Press Right For Next char ~r~Press Down To Close ~b~ Press Up For Weapons ~t~Left=join no weapon' time 50 flag 1
+00BC: print_now '~g~Press Right: Cycle to next character ~r~Press Down: Close & dismiss current bodyguard ~b~ Press Up: Weapons menu ~t~Left: Quick join no weapons mode' time 50 flag 1
+
 01EB: print_with_number_soon '~b~Ped ID ~1~' number 0@ time 1 ms flag 1
 0002: goto @ACTION0
 
@@ -126,16 +127,19 @@
 
 :WEPUP
 0001: wait 0
-01B7: give_weapon_to_char $10 weapon 1@ ammo 9999  //bodyguards AMMO
+01B7: give_weapon_to_char 4@ weapon 1@ ammo 9999  //bodyguards AMMO
+
 :CHOOSE
 0001: wait 0
-//00BC: print_now '~b~Press Up To Change Weapons ~g~Press Right To Join ~r~Press Down To Remove' time 50 flag 1
+00BC: print_now '~b~Press Up: Change current weapon ~g~Press Right: Recruit bodyguard ~r~Press Down: Dismiss & close current bodyguard ~t~Left:special traits' time 50 flag 1
 00E6:   is_button_pressed 0 button 8
 004C: goto_if_true @WEPUP1
 00E6:   is_button_pressed 0 button 9
 004C: goto_if_true @ENDE
 00E6:   is_button_pressed 0 button 11
 004C: goto_if_true @JOIN
+00E6:   is_button_pressed 0 button 10
+004C: goto_if_true @TRAIT
 01EB: print_with_number_soon '~p~Weapon ID ~1~' number 1@ time 1 ms flag 1
 0002: goto @CHOOSE
 
@@ -150,31 +154,82 @@
 0007: 1@ = 0
 0002: goto @CHOOSE
 
+:TRAIT
+0001: wait 1
+03EA: print_help '~g~Character is now ~y~Fireproof ~b~Bulletproof ~r~Explosionproof'
+02B0: set_char_proofs 4@ BP 1 FP 1 EP 1 CP 0 MP 0 //fireproof Bulletproof Exposionproof
+0002: goto @CHOOSE
+
 :JOIN
 0001: wait 0
-01E4: tie_char $10 to_player $PLAYER_CHAR
-04FA: set_char_as_player_friend $10 player $PLAYER_CHAR on 1 //says what it does
-0541: set_char_in_players_group_can_fight $10 can_fight 1  //says what it does
-011F: set_char $10 search_threat 128                    //target special chars group
-0296: set_char_heed_threats $10 flag 1                  //says what it does
-0228: set_char_health $10 to 350                    //Changes healt
-02E7: set_char_accuracy $10 to 75                 //says what it does
-031E: set_char $10 running 1                    //says what it does
-//044B: set_char_suffers_critical_hits $10 enable 0 //says what it does
-//02B0: set_char_proofs $10 BP 1 FP 1 EP 1 CP 1 MP 1 //fireproof Bulletproof Exposionproof  
-0169: remove_blip $11
+01E4: tie_char 4@ to_player $PLAYER_CHAR
+04FA: set_char_as_player_friend 4@ player $PLAYER_CHAR on 1 //says what it does
+0541: set_char_in_players_group_can_fight 4@ can_fight 1  //says what it does
+011F: set_char 4@ search_threat 128                    //target special chars group
+0296: set_char_heed_threats 4@ flag 1                  //says what it does
+0228: set_char_health 4@ to 350                    //Changes healt
+02E7: set_char_accuracy 4@ to 75                 //says what it does
+031E: set_char 4@ running 1                    //says what it does
+//044B: set_char_suffers_critical_hits 4@ enable 0 //says what it does
+0169: remove_blip 5@
 0002: goto @ADD2
 
 //dissmissed char
 :ENDE
 0001: wait 0
-0248: set_char $10 ped_stats_to 0   //unstable
-0228: set_char_health $10 to 350 
-0296: set_char_heed_threats $10 flag 1
-01C7: mark_char_as_no_longer_needed $10
-0169: remove_blip $11
+0248: set_char 4@ ped_stats_to 0   //unstable
+0228: set_char_health 4@ to 350
+0296: set_char_heed_threats 4@ flag 1
+01C7: mark_char_as_no_longer_needed 4@
+0169: remove_blip 5@
 //01B9: set_player_control $PLAYER_CHAR to 1
 0001: wait 2000
 
 :TERMIN
+024E: mark_model_as_no_longer_needed 259
+024E: mark_model_as_no_longer_needed 260
+024E: mark_model_as_no_longer_needed 261
+024E: mark_model_as_no_longer_needed 262
+024E: mark_model_as_no_longer_needed 263
+024E: mark_model_as_no_longer_needed 264
+024E: mark_model_as_no_longer_needed 265
+024E: mark_model_as_no_longer_needed 266
+024E: mark_model_as_no_longer_needed 267
+024E: mark_model_as_no_longer_needed 268
+024E: mark_model_as_no_longer_needed 269
+024E: mark_model_as_no_longer_needed 270
+024E: mark_model_as_no_longer_needed 271
+024E: mark_model_as_no_longer_needed 272
+024E: mark_model_as_no_longer_needed 273
+024E: mark_model_as_no_longer_needed 274
+024E: mark_model_as_no_longer_needed 275
+024E: mark_model_as_no_longer_needed 276
+024E: mark_model_as_no_longer_needed 277
+024E: mark_model_as_no_longer_needed 278
+024E: mark_model_as_no_longer_needed 279
+024E: mark_model_as_no_longer_needed 280
+024E: mark_model_as_no_longer_needed 281
+024E: mark_model_as_no_longer_needed 292
+024E: mark_model_as_no_longer_needed 283
+024E: mark_model_as_no_longer_needed 284
+024E: mark_model_as_no_longer_needed 285
+024E: mark_model_as_no_longer_needed 286
+024E: mark_model_as_no_longer_needed 287
+024E: mark_model_as_no_longer_needed 288
+024E: mark_model_as_no_longer_needed 289
+024E: mark_model_as_no_longer_needed 290
+024E: mark_model_as_no_longer_needed 291
+024E: mark_model_as_no_longer_needed 292
+0001: wait 10
+029B: unload_special_character 1
+029B: unload_special_character 2
+029B: unload_special_character 3
+029B: unload_special_character 4
+029B: unload_special_character 5
+029B: unload_special_character 6
+029B: unload_special_character 7
+029B: unload_special_character 8
+029B: unload_special_character 9
+029B: unload_special_character 10
+0001: wait 10
 004E: terminate_this_script
