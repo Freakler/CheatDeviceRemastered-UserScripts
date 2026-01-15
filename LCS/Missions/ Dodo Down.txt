@@ -1,0 +1,165 @@
+#Game: Liberty City Stories
+#Author: NielsB
+#Version: 1
+#Category: missions
+#Date: 2026-10-15
+#Description: Dodo Down
+// credits to No body_32 for finding old unused opcode 04D7
+
+
+03C1: add_sphere 1292.26 -334.99 37.16 radius 3.00 store_to 70@
+018F: add_blip_for_coord 1292.26 -334.99 37.16 store_to 71@
+
+024F: grab_phone coords 1292.26 -334.99 store_to 72@
+040A: turn_phone_on 72@
+
+:DETECTPLAYER
+0001: wait 0
+00E9:   locate_player_on_foot_2d $PLAYER_CHAR coord 1292.26 -334.99 radius 2.5 2.5 sphere 0
+004D: goto_if_false @DETECTPLAYER
+
+
+
+02A8: switch_widescreen 1
+0164: set_fixed_camera_position 1295.4 -336.9 42.0 rotation 0 0 0
+015C: point_camera_at_player $PLAYER_CHAR mode 15 switchstyle 2
+01B9: set_player_control $PLAYER_CHAR to 0
+0216: char $PLAYER_ACTOR walk_to 1292.43 -334.90
+0001: wait 1000
+03C2: remove_sphere 70@
+0169: remove_blip 71@
+0253: turn_phone_off 72@
+00BC: print_now '~g~Tony, it is Mickey.~w~ The Colombian Cartel has a new way to shop for drugs...' time 2000 flag 1
+0001: wait 2000
+00BC: print_now '~y~Mickey:~w~ They have built a lightweight plane and are using civilians to do the drop-offs. The Boss is not happy about it...' time 3000 flag 1
+0001: wait 3000
+00BC: print_now '~y~Mickey:~w~ Sal wants you to deal with it. He left you a new toy. Destroy the plane before it lands!' time 4000 flag 1
+0001: wait 4500
+
+02A8: switch_widescreen 0
+01B9: set_player_control $PLAYER_CHAR to 1
+015F: restore_camera
+
+
+0006: 10@ = 1393.77
+0006: 11@ = -482.55
+0006: 12@ = 60.81
+0006: 20@ = 1501.0
+0006: 21@ = -186.9
+0006: 22@ = 54.89
+0006: 13@ = 6
+
+024C: request_model 164
+024C: request_model 213
+0390: load_all_models_now
+
+00A5: create_car 213 at 20@ 21@ 22@ store_to 23@
+018B: add_blip_for_car 23@ store_to 24@
+016A: change_blip_colour 24@ to 2
+00BB: print '~g~Get in the ~b~Hunter!' time 100000000 flag 1
+
+:GET
+0001: wait 1
+00AC:   is_car_still_alive 23@
+004D: goto_if_false @EXIT
+011B:   is_player_still_alive $PLAYER_CHAR
+004D: goto_if_false @EXITF
+00E1:   is_player_in_car $PLAYER_CHAR car 23@
+004D: goto_if_false @GET
+
+
+00BE: clear_prints
+
+00BB: print '~r~Destroy the Dodo by any means ~w~before it reaches its destination!' time 5000 flag 1
+
+0169: remove_blip 24@
+
+00A5: create_car 164 at 10@ 11@ 12@ store_to 4@
+018B: add_blip_for_car 4@ store_to 9@
+0565: create_random_char_as_driver 4@ store_to 30@
+0566: create_random_char_as_passenger 4@ seat 0 store_to 31@
+
+
+:CYCL
+04D7: PLANE_GOTO_COORDS 4@ coords 1115.00 -1105.00 60.00 value 100
+:wait
+0001: wait 1000
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @passed
+011B:   is_player_still_alive $PLAYER_CHAR
+004D: goto_if_false @EXITF
+01B2: locate_car_2d 4@ point 1115.00 -1105.00 radius 25.0 25.0 sphere 0
+004D: goto_if_false @wait
+
+04D7: PLANE_GOTO_COORDS 4@ coords 770.8 213.3 80.0 value 100
+:wait2
+0001: wait 1000
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @passed
+011B:   is_player_still_alive $PLAYER_CHAR
+004D: goto_if_false @EXITF
+01B2: locate_car_2d 4@ point 770.8 213.3 radius 25.0 25.0 sphere 0
+004D: goto_if_false @wait2
+
+04D7: PLANE_GOTO_COORDS 4@ coords -48.4 109.8 81.0 value 90
+:wait3
+0001: wait 1000
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @passed
+011B:   is_player_still_alive $PLAYER_CHAR
+004D: goto_if_false @EXITF
+01B2: locate_car_2d 4@ point -48.4 109.8 radius 25.0 25.0 sphere 0
+004D: goto_if_false @wait3
+
+04D7: PLANE_GOTO_COORDS 4@ coords -342.7 -1777.2 20.0 value 85
+:wait4
+0001: wait 1000
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @passed
+011B:   is_player_still_alive $PLAYER_CHAR
+004D: goto_if_false @EXITF
+01B2: locate_car_2d 4@ point -342.7 -1777.2 radius 25.0 25.0 sphere 0
+004D: goto_if_false @wait4
+
+
+04D7: PLANE_GOTO_COORDS 4@ coords -1499.8 -1027.1 15.2 value 70
+:wait5
+0001: wait 1000
+00AC:   is_car_still_alive 4@
+004D: goto_if_false @passed
+011B:   is_player_still_alive $PLAYER_CHAR
+004D: goto_if_false @EXITF
+01B2: locate_car_2d 4@ point -1499.8 -1027.1 radius 25.0 25.0 sphere 0
+004D: goto_if_false @wait5
+
+03E7: char 30@ exit_car
+0001: wait 100
+03E7: char 31@ exit_car
+01D5: set_char_obj_flee_player_on_foot_always 30@ player $PLAYER_CHAR
+01D5: set_char_obj_flee_player_on_foot_always 31@ player $PLAYER_CHAR
+00BA: print_big 'M_FAIL' time 1000 style 1
+00BA: print_big '~r~the dodo reached its destination' time 1000 style 2
+0002: goto @EXIT
+
+:passed
+0004: 60@ = 50000
+01E8: print_with_number_big 'M_PASS' number 60@ time 2000 style 1
+010E: add_score $PLAYER_CHAR value 60@
+0399: play_mission_passed_tune 1
+0002: goto @EXIT
+
+
+:EXITF
+00BA: print_big 'M_FAIL' time 1000 style 1
+
+:EXIT
+01C7: mark_char_as_no_longer_needed 30@
+01C7: mark_char_as_no_longer_needed 31@
+0169: remove_blip 9@
+0169: remove_blip 24@
+01C8: mark_car_as_no_longer_needed 4@
+01C8: mark_car_as_no_longer_needed 23@
+024E: mark_model_as_no_longer_needed 164
+024E: mark_model_as_no_longer_needed 213
+
+004E: terminate_this_script
