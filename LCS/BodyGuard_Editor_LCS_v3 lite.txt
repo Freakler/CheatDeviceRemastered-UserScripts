@@ -46,7 +46,7 @@
 
 0178: set_char_heading $PLAYER_ACTOR to 180.00
 0001: wait 90
-04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 2.0 3.0 -0.85 store_to 1@ 2@ 3@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 2.0 3.0 -0.85 store_to 12@ 13@ 14@
 0378: set_camera_behind_player 
 //01B9: set_player_control $PLAYER_CHAR to 0 //Can set on or off
 
@@ -58,7 +58,7 @@
 0001: wait 90
 024C: request_model 0@
 0390: load_all_models_now 
-009A: create_char 1 model 0@ at 1@ 2@ 3@ store_to 4@
+009A: create_char 1 model 0@ at 12@ 13@ 14@ store_to 4@
 018C: add_blip_for_char 4@ store_to 5@
 016A: change_blip_colour 5@ to 7
 

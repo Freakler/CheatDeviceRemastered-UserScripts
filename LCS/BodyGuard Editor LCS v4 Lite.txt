@@ -66,7 +66,7 @@
 
 0178: set_char_heading $PLAYER_ACTOR to 180.00
 0001: wait 90
-04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 2.0 3.0 -0.85 store_to 1@ 2@ 3@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 2.0 3.0 -0.85 store_to 12@ 13@ 14@
 0378: set_camera_behind_player 
 //01B9: set_player_control $PLAYER_CHAR to 0 //Can set on or off
 
@@ -78,7 +78,7 @@
 0001: wait 50
 024C: request_model 0@
 0390: load_all_models_now 
-009A: create_char 1 model 0@ at 1@ 2@ 3@ store_to 4@
+009A: create_char 1 model 0@ at 12@ 13@ 14@ store_to 4@
 018C: add_blip_for_char 4@ store_to 5@
 016A: change_blip_colour 5@ to 7
 
@@ -130,7 +130,7 @@
 01B7: give_weapon_to_char 4@ weapon 1@ ammo 9999  //bodyguards AMMO
 
 :CHOOSE
-0001: wait 0
+0001: wait 10
 00BC: print_now '~b~Press Up: Change current weapon ~g~Press Right: Recruit bodyguard ~r~Press Down: Dismiss & close current bodyguard ~t~Left:special traits' time 50 flag 1
 00E6:   is_button_pressed 0 button 8
 004C: goto_if_true @WEPUP1
@@ -151,6 +151,7 @@
 0002: goto @WEPUP
 
 :FAILSAVE4
+0001: wait 10
 0007: 1@ = 0
 0002: goto @CHOOSE
 
