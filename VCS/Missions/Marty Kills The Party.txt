@@ -1,6 +1,6 @@
 #Game: Vice City Stories
 #Author: danssmnt
-#Version: v1.02
+#Version: v1.03
 #Category: Missions
 #Date: 2024-09-04
 #Description: Phil's concert is today, but Marty's "friends" wanna ruin it, stop them!
@@ -33,19 +33,19 @@
 0006: $1000 = 'Marty Kills The Party!'
 
 // Pager String
-0006: $1001 = 'Bro, some crazy shit will happen, come quickly to my house!'
+0006: $1001 = 'Lance: Brother, some ludicrous shit is about to happen, get your ass over here NOW!'
 
 // Vic Reaction to the Pager Dialog
 0006: $1030 = 'What?'
 0006: $1031 = 'You`re kidding right?'
 
 // Cutscene dialog
-0006: $1002 = 'What shit did you do this time LANCE?'
-0006: $1003 = 'IT AIN`T MY FAULT MAN!'
+0006: $1002 = 'What the fuck did you do this time LANCE?'
+0006: $1003 = 'I AIN`T DO NOTHING MAN!'
 0006: $1004 = 'Remember when you killed Marty?'
 0006: $1021 = 'Unfortunately yes. What is it?'
 0006: $1005 = 'Guess what! They will avenge him by killing Phil Collins!'
-0006: $1028 = 'Motherfucker.' 
+0006: $1028 = 'Motherfucker.'
 0006: $1006 = 'C`mon! Let`s pop like cola!'
 0006: $1013 = 'So, what`s the plan?'
 0006: $1014 = 'Let`s go!'
@@ -58,13 +58,13 @@
 // Car Dialog
 0006: $1007 = 'Just chill man. Be cool.'
 0006: $1008 = 'Chill? Man, I`m getting too deep into this shit.'
-0006: $1009 = 'Give me a break Vic. It`s not even my fault this time!'
-0006: $1010 = 'Let`s get after them.'
+0006: $1009 = 'Give me a break Vic. It`s your fault after all!'
+0006: $1010 = 'Let`s get after them!'
 
 // Player Instructions
 0006: $1011 = 'Go to the ~y~Hyman Memorial Stadium~w~ before 19:00.'
 0006: $1012 = 'Go to the ~y~concert stage~w~ before 20:00.'
-0006: $1015 = 'Marty`s ~r~goons~w~ will appear soon, protect the concert!'
+0006: $1015 = 'Marty`s ~r~assassins~w~ will appear soon, protect the party!'
 0006: $1029 = '~r~They~w~ won`t give up easily, kill them!'
 0006: $1032 = 'DIA2_H3' // 'Hold~h~ ~k~ ~SNSLO~ ~w~to make fine adjustments to your aim.'  
 
@@ -208,7 +208,7 @@
 
 // Easter Egg (1/50 chance)
 0139: generate_random_int_in_range 0 50 store_to $3057
-001B:   $3057 == 1
+001B:   $3057 == 25
 0022: goto_if_false @MISSION_LOOP0
 037A: args 0 out 0 locals_base_index 0 call_func @EASTER_EGG
 
@@ -319,7 +319,7 @@
 :SETUP_MISSION
 0472: add_pager_message 0@ 100 1 0
 // Do nothing while the pager is shown
-0001: wait 3000
+0001: wait 6000
 
 // LANCAHH -> '~w~What?'
 // $1030 -> 'What now?' 
@@ -339,7 +339,7 @@
 037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1031 0
 0059: clear_prints
 
-0001: wait 1000
+0001: wait 1500
 
 // Spawn Spheres for mission start
 037A: args 3 out 2 locals_base_index 0 call_func @SPAWN_MISSION $3003 $3004 $3005 $3006 $3007
@@ -476,7 +476,7 @@
 037A: args 2 out 0 locals_base_index 0 call_func @PRINT_LEGEND $1021 0
 
 // LANCBAB -> '~w~Man, we're wasting our time, bitch is dead already.'
-// $1005 -> 'Guess what! Theyll avenge him by killing Phil Collins!'
+// $1005 -> 'Guess what! They`ll avenge him by killing Phil Collins!'
 037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
 0257: load_mission_audio slot $3015 name 'LANCBAB'
 037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015 
@@ -598,7 +598,7 @@
 037A: args 1 out 0 locals_base_index 0 call_func @DIALOG_CAR $1008
 
 // LANB2BE -> '~w~Man, give me a break. There's no winning with you.'
-// $1009 -> 'Give me a break Vic. Its not my fault!'
+// $1009 -> 'Give me a break Vic. It`s your fault after all!'
 037A: args 0 out 1 locals_base_index 1 call_func @GET_AUDIO_SLOT $3015
 0257: load_mission_audio slot $3015 name 'LANB2BE'
 037A: args 1 out 0 locals_base_index 1 call_func @WAIT_UNTIL_AUDIO_LOAD $3015
@@ -900,14 +900,14 @@
 03A1: set_wants_to_draw_hud 1
 0107: set_player_control $PLAYER_CHAR to 1
 
-// Radio OFF (unfortunally, you can't force the player to set only this radio, so they can switch and stop listening to Phil Concert)
+// Radio OFF (unfortunately, you can't force the player to set only this radio, so they can switch and stop listening to Phil Concert)
 028E: set_radio_channel 9 0
 
 // Drive Heli to coords
 02DA: heli_goto_coords $3019 coords -1538.80 1274.39 -224.27 speed 30
 00C9: do_fade 500 fade 1
 
-// $1015 -> 'Martys ~r~goons~w~ will appear soon, protect the concert!'
+// $1015 -> 'Martys ~r~assassins~w~ will appear soon, protect the concert!'
 0057: print_now $1015 time 3000 flag 1
 
 // Set Color of on-screen counter (Light Blue)
@@ -1522,7 +1522,7 @@
 0001: wait 1000
 
 :MISSION_PASSED
-// Tan, tan, tan, tan, TAN! (lmao)
+// Play Jingle
 022B: play_mission_passed_tune 1
 
 // M_PASS -> 'MISSION PASSED!'
@@ -1578,8 +1578,8 @@
 0492: set_radar_display_mode 0
 010A: release_weather
 
-// This makes time go crazy until it reaches the current time, not a big deal tho lol 
 04DE: freeze_time 0
+005B: set_time_of_day 4 0
 
 03A1: set_wants_to_draw_hud 1
 

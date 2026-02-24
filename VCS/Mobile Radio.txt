@@ -1,6 +1,6 @@
 #Game: Vice City Stories
 #Author: MicSuit
-#Version: 1.0
+#Version: 1.01
 #Category: Radio
 #Date: 2022-07-05
 #Description: A portable radio to listen to your favourite radio stations!
@@ -27,13 +27,13 @@
 0107: set_player_control $PLAYER_CHAR to 0
 
 :SHOW_BG
-044E: unknown_empire_display_command_7317 0 1 // Show to screen
-0453: unknown_empire_display_command_7217 0 0 0 0 500 // Border settings
-0452: unknown_empire_display_command_3866 0 25 25 25 150 // Background settings
-0451: unknown_empire_display_command_6b43 0 175 25 // Size settings
-0450: unknown_empire_display_command_91e4 0 300 130 // Position on screen
+044E: unknown_empire_display_command_7317 1 1 // Show to screen
+0453: unknown_empire_display_command_7217 1 0 0 0 500 // Border settings
+0452: unknown_empire_display_command_3866 1 25 25 25 150 // Background settings
+0451: unknown_empire_display_command_6b43 1 175 25 // Size settings
+0450: unknown_empire_display_command_91e4 1 300 130 // Position on screen
 
-:MAIN
+:MAIN_RADIO
 0001: wait 0
 007F: is_button_pressed 0 button 9 // Down
 0021: goto_if_true @BAILOUT_MAIN
@@ -59,11 +59,11 @@
 
 0009: $1000 -= 1
 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :CHECKS_VALID
 007E:   is_char_in_any_car $PLAYER_CHAR
-0021: goto_if_true @MAIN
+0021: goto_if_true @MAIN_RADIO
 001B:   $32 == 1
 0021: goto_if_true @AUDIO_FOLLOW_PLAYER
 0002: goto @CHECKS_BUTTONS_1
@@ -78,7 +78,7 @@
 0021: goto_if_true @HS_RADIO
 001B:   $1 == 0.01 // (int) var == num
 0022: goto_if_false @CHECKS_BUTTONS_2
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :CHECKS_BUTTONS_2
 007F:   is_button_pressed 0 button 11 //Right
@@ -89,13 +89,13 @@
 0021: goto_if_true @PLAY_RADIO
 007F:   is_button_pressed 0 button 14 // Square
 0021: goto_if_true @STOP_RADIO
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 
 :INC_ID
 0015:   $30 >= 8 // (int) var > num
 0022: goto_if_false @INC_2_ID
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 
 :INC_2_ID
@@ -106,7 +106,7 @@
 :DEC_ID
 0015:   $30 >= 1 // (int) var > num
 0021: goto_if_true @DEC_2_ID
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 
 :DEC_2_ID
@@ -137,47 +137,47 @@
 :NAME_0
 0006: $31 = 'FEA_FM0' // Radio Name
 0006: $33 = 350.0
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_1
 0006: $31 = 'FEA_FM1'
 0006: $33 = 357.0 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_2
 0006: $31 = 'FEA_FM2'
 0006: $33 = 353.0 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_3
 0006: $31 = 'FEA_FM3'
 0006: $33 = 362.5 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_4
 0006: $31 = 'FEA_FM4'
 0006: $33 = 344.0 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_5
 0006: $31 = 'FEA_FM5'
 0006: $33 = 334.0 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_6
 0006: $31 = 'FEA_FM6'
 0006: $33 = 334.0 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_7
 0006: $31 = 'FEA_FM7'
 0006: $33 = 346.0 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :NAME_8
 0006: $31 = 'FEA_FM8'
 0006: $33 = 336.5 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 
 :HS_RADIO
@@ -185,21 +185,21 @@
 0021: goto_if_true @SHOW_RADIO
 
 0107: set_player_control $PLAYER_CHAR to 1
-044E: unknown_empire_display_command_7317 0 0 // Show to screen
+044E: unknown_empire_display_command_7317 1 0 // Show to screen
 0005: $1 = 0.01 // Text Size
 0005: $2 = 0.01
 007F:   is_buttton_pressed 0 button 8 // Up
 0021: goto_if_true @RADIO_WINDOW
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :SHOW_RADIO
 0107: set_player_control $PLAYER_CHAR to 0
-044E: unknown_empire_display_command_7317 0 1 // Show to screen
+044E: unknown_empire_display_command_7317 1 1 // Show to screen
 0005: $1 = 0.4 // Text Size
 0005: $2 = 0.75
 007F:   is_buttton_pressed 0 button 8 // Up
 0021: goto_if_true @RADIO_WINDOW
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 
 :RADIO_WINDOW
@@ -222,16 +222,16 @@
 007F:   is_buttton_pressed 0 button 8 // Up
 0021: goto_if_true @RADIO_WINDOW
 
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :PLAY_RADIO
 0004: $32 = 1
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 :STOP_RADIO
 0004: $32 = 0
 0418: unknown_audio_command_8451 point 1@ 2@ 3@ // Stops audio
-0002: goto @MAIN
+0002: goto @MAIN_RADIO
 
 
 :BAILOUT_MAIN
@@ -258,7 +258,7 @@
  
 
 :TERMINATE_RADIO
-044E: unknown_empire_display_command_7317 0 0 // Show to screen
+044E: unknown_empire_display_command_7317 1 0 // Show to screen
 0107: set_player_control $PLAYER_CHAR to 1
 0418: unknown_audio_command_8451 point 1@ 2@ 3@ // Stops audio
 0023: terminate_this_script
