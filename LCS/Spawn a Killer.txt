@@ -1,47 +1,89 @@
 #Game: Liberty City Stories
-#Author: MicSuit
-#Version: 1.0
+#Author: danssmnt
+#Version: 1.1
 #Category: Pedestrians
-#Date: 2022-07-21
-#Description: Spawns a random ped that tries to kill you! Kill him first!
+#Date: 2026-03-14
+#Description: Spawns a random ped that will try to kill you! Kill him first!
+
+// $50XX -> YY
+// XX -> Weapon ID
+// YY -> Weapon Model ID
+// Get Model from Weapon ID -> $5000(WeaponID,37)
+:WEAPON_MODEL_IDS
+0004: $5000 = -1
+0004: $5001 = 259
+0004: $5002 = 260
+0004: $5003 = 261
+0004: $5004 = 262
+0004: $5005 = 263
+0004: $5006 = 264
+0004: $5007 = 265
+0004: $5008 = 266
+0004: $5009 = 267
+0004: $5010 = 268
+0004: $5011 = 269
+0004: $5012 = 270
+0004: $5013 = 270
+0004: $5014 = 271
+0004: $5015 = 272
+0004: $5016 = 273
+0004: $5017 = 274
+0004: $5018 = 275
+0004: $5019 = 277
+0004: $5020 = 278
+0004: $5021 = 279
+0004: $5022 = 281
+0004: $5023 = 282
+0004: $5024 = 283
+0004: $5025 = 284
+0004: $5026 = 280
+0004: $5027 = 276
+0004: $5028 = 285
+0004: $5029 = 286
+0004: $5030 = 287
+0004: $5031 = 288
+0004: $5032 = 289
+0004: $5033 = 290
+0004: $5034 = 291
+0004: $5035 = 289
+0004: $5036 = 292
 
 :COORDINATES_ENEMY
-020D: generate_random_float_in_range -3.0 3.0 store_to 5@ //left right of player
-020D: generate_random_float_in_range 2.0 5.0 store_to 6@ //in front of player
-04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 5@ 6@ 0.0 store_to 5@ 6@ 7@
+020D: generate_random_float_in_range -3.0 3.0 store_to 5@ // X Pos Variance
+020D: generate_random_float_in_range 2.0 5.0 store_to 6@ // Y Pos Variance
+01FA: get_player_char $PLAYER_CHAR store_to 1@
+04C9: get_offset_from_char_in_world_coords 1@ offset 5@ 6@ 0.0 store_to 5@ 6@ 7@
 
 :SPAWN_ENEMY
-020E: generate_random_int_in_range 0 37 store_to 10@ // Give the killer a random weapon
-0039:   10@ == 11 // Can't spawn chainsaw, uzi or m4, it crashes the game
-004C: goto_if_true @NOT_CRASH
-0039:   10@ == 22 
-004C: goto_if_true @NOT_CRASH
-0039:   10@ == 24 
-004C: goto_if_true @NOT_CRASH
-
-:SPAWN_ENEMY_2
-01EA: print_with_number_now '~b~Weapon ID: ~1~~w~' numbers 10@ time 1500 flag 1
-024C: request_model 10@
+020E: generate_random_int_in_range 0 36 store_to 21@ // Generate random Weapon ID
+024C: request_model $5000(21@,37)
 0390: load_all_models_now
 
-:SPAWN_ENEMY_3
+:LOAD_WEAPON_MODEL
 0001: wait 0
-824D:   not has_model_loaded 10@
-004C: goto_if_true @SPAWN_ENEMY_3
+824D:   not has_model_loaded $5000(21@,37)
+004C: goto_if_true @LOAD_WEAPON_MODEL
 
-037B: create_random_char 5@ 6@ 7@ store_to $5348
-0002: goto @ENEMY_SETTINGS
+:SETUP_ENEMY
+037B: create_random_char 5@ 6@ 7@ store_to 0@ // Create random char at pos
 
-:NOT_CRASH
-000A: 10@ += 1
-0002: goto @SPAWN_ENEMY_2
+020E: generate_random_int_in_range 30 800 store_to 22@ // Generate random health
+0630: set_char_max_health 0@ to 22@ // Fix visual bug
+0228: set_char_health 0@ to 22@ // Health = 100
 
-:ENEMY_SETTINGS
-0228: set_char_health $5348 to 100 // Health = 100
-0403: set_char_money $5348 to 0 // Money = 0$ 
-04C7: set_char_obj_walk_to_char $5348 char $PLAYER_ACTOR // Walk to player
-01B7: give_weapon_to_char $5348 weapon 10@ ammo 9999 // Give the weapon to the random ped
-01CE: set_char_obj_kill_char_on_foot $5348 char $PLAYER_ACTOR // Kill player
+0403: set_char_money 0@ to 0 // Money = 0$
+
+01B7: give_weapon_to_char 0@ weapon 21@ ammo 9999 // Give weapon to the random ped
+
+020E: generate_random_int_in_range 0 100 store_to 22@ // Generate random accuracy
+02E7: set_char_accuracy 0@ to 22@
+
+04C7: set_char_obj_walk_to_char 0@ char 1@ // Walk to player
+01D1: set_char_obj_kill_player_any_means 0@ player $PLAYER_CHAR
+
+01E9: print_with_number '~b~Weapon ID: ~1~~w~' number 21@  time 2000 flag 0
+
 
 :TERMINATE_SCRIPT
+024E: release_model $5000(21@,37)
 004E: terminate_this_script
