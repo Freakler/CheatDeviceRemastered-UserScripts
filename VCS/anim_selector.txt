@@ -1,0 +1,107 @@
+#Game: Vice City Stories
+#Author: ~w~Nobody_n32
+#Version: ~b~0.3
+#Category: ~y~Misc
+#Date: ~w~14.03.2026
+#Description: ~w~Preview animations on Vic.
+
+
+0004: 0@ = 0 // (int)
+0004: 1@ = 0 // (int)
+0004: 2@ = 0 // (int)
+0268: clear_help
+0323: print_help_forever '~w~Press D-PAD ~b~LEFT ~w~and ~b~RIGHT ~w~to change values anim, ~b~UP ~w~and ~b~DOWN ~w~to change anim id file. Combination with ~b~R ~w~button with any D-PAD will make them increase by 10. ~g~Triangle ~w~to exit.'
+:anim_1
+0001: wait 1
+01D9: print_with_2_numbers_now '~w~anim file id: ~b~~1~ ~w~anim id: ~b~~1~' numbers 1@ 0@ time 200 flag 1
+0078: if and
+007F:  is_button_pressed 0 button 6
+007F:  is_button_pressed 0 button 8
+0021: goto_if_true @anim_10
+
+007F:  is_button_pressed 0 button 8
+0022: goto_if_false @anim_2
+0007: 1@ += 1 // (int)
+:anim_2
+0001: wait 1
+0078: if and
+007F:  is_button_pressed 0 button 6
+007F:  is_button_pressed 0 button 9
+0021: goto_if_true @anim_11
+
+007F:  is_button_pressed 0 button 9
+0022: goto_if_false @anim_3
+0009: 1@ -= 1 // (int)
+:anim_3
+0001: wait 1
+0078: if and
+007F:  is_button_pressed 0 button 6
+007F:  is_button_pressed 0 button 10
+0021: goto_if_true @anim_12
+
+007F:  is_button_pressed 0 button 10
+0022: goto_if_false @anim_4
+0009: 0@ -= 1 // (int)
+:anim_4
+0001: wait 1
+0078: if and
+007F:  is_button_pressed 0 button 6
+007F:  is_button_pressed 0 button 11
+0021: goto_if_true @anim_13
+
+007F:  is_button_pressed 0 button 11
+0022: goto_if_false @anim_5
+0007: 0@ += 1 // (int)
+:anim_5
+0001: wait 1
+
+007F:  is_button_pressed 0 button 16
+0022: goto_if_false @anim_6
+:anim_5a
+
+001B:  1@ == 0 // (int) var == num
+0022: goto_if_false @anim_5b
+0002: goto @anim_5c
+:anim_5b
+
+001B:  1@ == 2@ // (int) var == num
+0022: goto_if_false @anim_9
+0002: goto @anim_7
+:anim_5c
+0352: stop_char $PLAYER_CHAR
+04B4: unknown_char_animation_6727 $PLAYER_CHAR values 1@ 0@ 4.0
+:anim_6
+0001: wait 1
+
+007F:  is_button_pressed 0 button 15
+0022: goto_if_false @anim_1
+0268: clear_help
+0352: stop_char $PLAYER_CHAR
+0023: terminate_this_script
+:anim_7
+0004: 2@ = 1@ // (int)
+0443: request_anims 1@
+:anim_8
+0001: wait 0
+
+0445: have_anims_loaded 1@
+0022: goto_if_false @anim_8
+0002: goto @anim_5c
+:anim_9
+0444: remove_anims 2@
+
+001B:  1@ == 0 // (int) var == num
+0022: goto_if_false @anim_7
+0002: goto @anim_5c
+:anim_10
+0007: 1@ += 10 // (int)
+0002: goto @anim_2
+:anim_11
+0009: 1@ -= 10 // (int)
+0002: goto @anim_3
+:anim_12
+0009: 0@ -= 10 // (int)
+0002: goto @anim_4
+:anim_13
+0007: 0@ += 10 // (int)
+0002: goto @anim_5
