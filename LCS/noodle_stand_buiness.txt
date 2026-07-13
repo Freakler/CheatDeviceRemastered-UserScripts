@@ -1,0 +1,235 @@
+#Game: Liberty City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.5
+#Category: ~y~Custom Buiness
+#Date: ~w~2026-05-09
+#Description: ~w~Make some cash from fat man selling noodles.
+
+0000: NOP
+
+0572:  does_char_exist $PLAYER_ACTOR
+004C: goto_if_true @N_B0
+03EA: print_help '~r~Player dosent exist'
+004E: terminate_this_script
+:N_B
+03EA: print_help '~r~You must be inside the city to do deals'
+004E: terminate_this_script
+:N_B0
+00DB: if or
+0126:  is_player_in_zone $PLAYER_CHAR zone 'IND_ZON'
+0126:  is_player_in_zone $PLAYER_CHAR zone 'COM_ZON'
+0126:  is_player_in_zone $PLAYER_CHAR zone 'SUB_ZON'
+004D: goto_if_false @N_B
+0054: get_player_coordinates $PLAYER_CHAR store_to 0@ 1@ 2@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0 4.0 0 store_to 3@ 4@ 5@
+00DB: if and
+033E:  is_area_occupied 0@ 1@ 2@ to 3@ 4@ 5@ solid 1 car 0 char 0 object 1 particle 0
+038F:  is_point_obscured_by_a_mission_entity 3@ 4@ 5@ radius 2.0 2.0 2.0
+004D: goto_if_false @N_B1
+03EA: print_help '~r~This area is occupied. Try empty spots...'
+004E: terminate_this_script
+:N_B1
+0001: wait 0
+02D3: get_ground_z_for_3d_coord 3@ 4@ 5@ store_to 5@
+039A: clear_area 3@ 4@ 5@ radius 4.0 clear_particles 1
+0006: 6@ = 606
+0006: 7@ = 0
+0050: gosub @N_B2
+0175: get_player_heading $PLAYER_CHAR store_to 0@
+000F: 0@ -= 90.0
+010C: create_object 6@ at 3@ 4@ 5@ store_to 8@
+017C: set_object_heading 8@ to 0@
+0050: gosub @N_B5
+0006: 6@ = 15
+0050: gosub @N_B2
+009A: create_char 4 model 6@ at 0 0 0 store_to 1@
+04F9: attach_char_to_object 1@ object 8@ offset 0.355 -0.25 -0.125 orientation 0 angle_limit 360.0 weapon 0
+000B: 0@ += 270.0
+0178: set_char_heading 1@ to 0@
+0121: set_char_obj_no_obj 1@
+0197: set_char_obj_wait_on_foot 1@
+056D: set_char_never_targetted 1@ to 1
+0050: gosub @N_B5
+0006: 9@ = 0
+0002: goto @N_B7
+:N_B2
+
+024D:  has_model_loaded 6@
+004D: goto_if_false @N_B3
+0051: return
+:N_B3
+024C: request_model 6@
+0390: load_all_models_now
+:N_B4
+0001: wait 0
+
+024D:  has_model_loaded 6@
+004D: goto_if_false @N_B4
+0006: 7@ = 1
+0051: return
+:N_B5
+
+0039:  7@ == 1
+004C: goto_if_true @N_B6
+0051: return
+:N_B6
+0006: 7@ = 0
+024E: mark_model_as_no_longer_needed 6@
+0051: return
+:N_B7
+0001: wait 0
+000A: 9@ += 1
+
+0189:  is_char_health_greater 1@ than 95
+004D: goto_if_false @N_B9
+
+0100:  locate_player_any_means_char_3d $PLAYER_CHAR char 1@ radius 100.0 100.0 200.0 sphere 0
+004D: goto_if_false @N_B11
+
+0029:  9@ >= 40
+004D: goto_if_false @N_B7
+0006: 9@ = 0
+
+0159:  is_char_in_zone 1@ zone 'IND_ZON'
+004D: goto_if_false @N_B7a
+02E2: get_random_char_in_zone 'IND_ZON' civilian 1 gang 0 criminal/prostitute 1 store_to 10@
+0002: goto @N_B7c
+:N_B7a
+
+0159:  is_char_in_zone 1@ zone 'COM_ZON'
+004D: goto_if_false @N_B7b
+02E2: get_random_char_in_zone 'COM_ZON' civilian 1 gang 0 criminal/prostitute 1 store_to 10@
+0001: wait 0
+0002: goto @N_B7c
+:N_B7b
+0001: wait 0
+
+0159:  is_char_in_zone 1@ zone 'SUB_ZON'
+004D: goto_if_false @N_B7
+02E2: get_random_char_in_zone 'SUB_ZON' civilian 1 gang 0 criminal/prostitute 1 store_to 10@
+:N_B7c
+
+0572:  does_char_exist 10@
+004D: goto_if_false @N_B7
+00A0: get_char_coordinates 10@ store_to 0@ 2@ 11@
+0405: get_offset_from_object_in_world_coords 8@ offset 2.25 -0.25 -1.0 store_to 3@ 4@ 5@
+050E: get_distance_between_coords_2d 0@ 2@ and 3@ 4@ store_to 11@
+
+0031:  11@ >= 8.0
+004D: goto_if_false @N_B7d
+008C: 11@ = float_to_int 11@
+0012: 11@ *= 8
+000A: 11@ += 60
+0002: goto @N_B7e
+:N_B7d
+0006: 11@ = 124
+:N_B7e
+0121: set_char_obj_no_obj 10@
+0416: set_char 10@ use_pednode_seek 1
+023E: set_char_obj_run_to_coord 10@ run_to 3@ 4@
+057E: stop_char 1@
+0377: set_char 1@ anim 16 wait_state_time -1 ms
+0002: goto @N_B12
+:N_B8
+056D: set_char_never_targetted 1@ to 0
+046A: detach_char_from_car 1@
+057E: stop_char 1@
+01C7: mark_char_as_no_longer_needed 1@
+01C9: mark_object_as_no_longer_needed 8@
+
+8189:   not is_char_health_greater 1@ than 0
+004C: goto_if_true @N_B8a
+0198: set_char_obj_flee_on_foot_till_safe 1@
+00BE: clear_prints
+00BC: print_now '~r~Seller got injured and ran' time 2000 flag 1
+0051: return
+:N_B8a
+00BE: clear_prints
+00BC: print_now '~r~Seller died' time 2000 flag 1
+0051: return
+:N_B9
+0050: gosub @N_B8
+004E: terminate_this_script
+:N_B10
+009B: delete_char 1@
+010D: delete_object 8@
+00BE: clear_prints
+00BC: print_now '~r~You left the seller behind' time 2000 flag 1
+0051: return
+:N_B11
+0050: gosub @N_B10
+004E: terminate_this_script
+:N_B12
+0001: wait 0
+000A: 9@ += 1
+
+0189:  is_char_health_greater 1@ than 95
+004D: goto_if_false @N_B15
+
+0100:  locate_player_any_means_char_3d $PLAYER_CHAR char 1@ radius 100.0 100.0 200.0 sphere 0
+004D: goto_if_false @N_B16
+
+0107:  locate_stopped_char_on_foot_3d 10@ coord 3@ 4@ 5@ radius 2.0 2.0 2.0 sphere 0
+004C: goto_if_true @N_B17
+
+011D:  is_char_dead 10@
+004C: goto_if_true @N_B19
+
+0029:  9@ >= 11@
+004D: goto_if_false @N_B12
+0006: 9@ = 0
+057E: stop_char 10@
+01C7: mark_char_as_no_longer_needed 10@
+0002: goto @N_B7
+:N_B13
+01C7: mark_char_as_no_longer_needed 10@
+0051: return
+:N_B14
+009B: delete_char 10@
+0051: return
+:N_B15
+0050: gosub @N_B8
+0050: gosub @N_B13
+004E: terminate_this_script
+:N_B16
+0050: gosub @N_B10
+0050: gosub @N_B14
+004E: terminate_this_script
+:N_B17
+0006: 9@ = 0
+057E: stop_char 1@
+057E: stop_char 10@
+0213: turn_char_to_face_char 1@ char 10@
+0213: turn_char_to_face_char 10@ char 1@
+0377: set_char 10@ anim 19 wait_state_time -1 ms
+0377: set_char 1@ anim 25 wait_state_time -1 ms
+:N_B18
+0001: wait 0
+000A: 9@ += 1
+
+0189:  is_char_health_greater 1@ than 95
+004D: goto_if_false @N_B15
+
+0100:  locate_player_any_means_char_3d $PLAYER_CHAR char 1@ radius 100.0 100.0 200.0 sphere 0
+004D: goto_if_false @N_B16
+
+011D:  is_char_dead 10@
+004C: goto_if_true @N_B19
+
+0029:  9@ >= 50
+004D: goto_if_false @N_B18
+0377: set_char 1@ anim 0 wait_state_time -1 ms
+0377: set_char 10@ anim 0 wait_state_time -1 ms
+057E: stop_char 1@
+057E: stop_char 10@
+01C7: mark_char_as_no_longer_needed 10@
+020E: generate_random_int_in_range 20 80 store_to 2@
+010E: add_score $PLAYER_CHAR value 2@ // money
+01C0: get_object_coordinates 8@ store_to 0@ 2@ 3@
+0191: add_one_off_sound 0@ 2@ 3@ sound 13
+0006: 9@ = 0
+0002: goto @N_B7
+:N_B19
+0006: 9@ = 0
+01C7: mark_char_as_no_longer_needed 1@
+0002: goto @N_B7
