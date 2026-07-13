@@ -1,0 +1,92 @@
+#Game: Liberty City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Animation
+#Date: ~w~23.06.2026
+#Description: ~w~Play animation`s on Toni.
+
+0000: NOP
+0006: 0@ = 0
+0006: 1@ = -1
+03EB: clear_help
+0517: print_help_forever '~w~LEFT and RIGHT D-PAD`s to cycle trough ID`s, combine them with R to increase by 10. CROSS to play animation, TRAINGLE to exit.'
+:0_0
+0001: wait 150
+00BE: clear_prints
+01E9: print_with_number '~w~Animation: ~w~~1~' number 0@ time 300 flag 1
+
+00E6:  is_button_pressed 0 button 10
+004D: goto_if_false @0_2
+
+00E6:  is_button_pressed 0 button 6
+004D: goto_if_false @0_1
+000E: 0@ -= 10
+0002: goto @0_2
+:0_1
+000E: 0@ -= 1
+:0_2
+0001: wait 0
+
+00E6:  is_button_pressed 0 button 11
+004D: goto_if_false @0_4
+
+00E6:  is_button_pressed 0 button 6
+004D: goto_if_false @0_3
+000A: 0@ += 10
+0002: goto @0_4
+:0_3
+000A: 0@ += 1
+:0_4
+0001: wait 0
+
+00E6:  is_button_pressed 0 button 16
+004D: goto_if_false @0_5
+00DB: if and
+0029:  0@ >= 36
+001B:  86 > 0@
+004C: goto_if_true @0_6
+00DB: if or
+001B:  0 > 0@
+0039:  0@ == 28
+0039:  0@ == 29
+0039:  0@ == 32
+0039:  0@ == 34
+0029:  0@ >= 86
+004C: goto_if_true @0_8
+:0_4a
+057E: stop_char $PLAYER_ACTOR
+0377: set_char $PLAYER_ACTOR anim 0@ wait_state_time -1 ms
+:0_5
+0001: wait 0
+
+00E6:  is_button_pressed 0 button 15
+004D: goto_if_false @0_0
+03EB: clear_help
+00BE: clear_prints
+057E: stop_char $PLAYER_ACTOR
+00DB: if and
+0029:  0@ >= 36
+001B:  86 > 0@
+004C: goto_if_true @0_5a
+004E: terminate_this_script
+:0_5a
+061D: unload_non_standard_ped_animations 0@
+004E: terminate_this_script
+:0_6
+
+0039:  0@ == 1@
+004D: goto_if_false @0_7
+061C: load_non_standard_ped_animations 0@
+0006: 1@ = 0@
+0002: goto @0_4a
+:0_7
+0001: wait 0
+061D: unload_non_standard_ped_animations 0@
+0006: 1@ = 0@
+0002: goto @0_6
+:0_8
+00BE: clear_prints
+061A: clear_big_messages
+01E8: print_with_number_big '~w~Anims ~r~~1~ ~w~not supported. Sorry' number 0@ time 1000 style 8
+0001: wait 1000
+0002: goto @0_5
