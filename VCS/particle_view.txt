@@ -1,0 +1,66 @@
+#Game: Vice City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Particles
+#Date: ~w~2026-06-06
+#Description: ~w~See particles ID`s.
+
+0000: NOP
+0268: clear_help
+0323: print_help_forever '~w~Cycle trough particles ID ~b~D-PAD ~w~left and right, ~b~R ~w~to increase by 5, ~b~CROSS ~w~to trigger ~b~029F ~w~opcode particle ~b~SQUARE ~w~to trigger opcode ~b~0231 ~w~particle. ~g~TRIANGLE ~w~to exit.'
+0004: 0@ = 0 // (int)
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0 2.0 1.0 store_to 1@ 2@ 3@
+02EE: get_offset_from_char_in_world_coords $PLAYER_CHAR offset 0 5.0 1.0 store_to 4@ 5@ 6@
+00B9: set_fixed_camera_position 1@ 2@ 3@ rotation 0 0 0
+00BA: point_camera_at_point 4@ 5@ 6@ switchstyle 2
+03A1: set_wants_to_draw_hud 0
+0107: set_player_control $PLAYER_CHAR to 0
+:000
+0001: wait 100
+0059: clear_prints
+011F: print_with_number_now '~w~PARTICLE: ~b~~1~' number 0@ time 200 flag 1
+
+007F:  is_button_pressed 0 button 10
+0022: goto_if_false @002
+
+007F:  is_button_pressed 0 button 6
+0021: goto_if_true @001
+0009: 0@ -= 1 // (int)
+0002: goto @002
+:001
+0009: 0@ -= 5 // (int)
+:002
+
+007F:  is_button_pressed 0 button 11
+0022: goto_if_false @004
+
+007F:  is_button_pressed 0 button 6
+0021: goto_if_true @003
+0007: 0@ += 1 // (int)
+0002: goto @004
+:003
+0007: 0@ += 5 // (int)
+:004
+0001: wait 0
+
+007F:  is_button_pressed 0 button 14
+0022: goto_if_false @005
+022C: clear_area 4@ 5@ 6@ radius 1.0 clear_particles 1
+0231: add_moving_particle_effect 0@ at 4@ 5@ 6@ 0 0 0 values 0.5 0 0 0 1000
+:005
+
+007F:  is_button_pressed 0 button 16
+0022: goto_if_false @006
+022C: clear_area 4@ 5@ 6@ radius 1.0 clear_particles 1
+029F: create_single_particle 0@ at 4@ 5@ 6@ 0 0 0 0.5
+:006
+0001: wait 0
+
+007F:  is_button_pressed 0 button 15
+0022: goto_if_false @000
+0268: clear_help
+0059: clear_prints
+03A1: set_wants_to_draw_hud 1
+0107: set_player_control $PLAYER_CHAR to 1
+01CF: restore_camera_jumpcut
+0023: terminate_this_script
