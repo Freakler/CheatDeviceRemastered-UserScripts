@@ -1,0 +1,175 @@
+#Game: Vice City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Radio Station
+#Date: ~w~2026-07-11
+#Description: ~w~Switch radio station time and play.
+
+0000: NOP
+0107: set_player_control $PLAYER_CHAR to 0
+0004: 0@ = 0 // (int)
+0004: 1@ = 0 // (int)
+0004: 2@ = 0 // (int)
+0004: 3@ = 0 // (int)
+0004: 7@ = -1
+0268: clear_help
+0323: print_help_forever '~b~DPAD`s ~w~left and right to switch ID radio (on foot), ~b~CROSS ~w~to select, play & stop (on foot), ~b~DPAD`s ~w~up and down to switch the play time, ~b~SQUARE ~w~to copy time play. ~g~TRAINGLE ~w~to exit.'
+:000
+0001: wait 0
+0015:  0@ >= 0 // (int) var >= num
+0022: goto_if_false @016
+0016:  8 >= 0@ // (int) num >= var
+0022: goto_if_false @017
+0001: wait 0
+0059: clear_prints
+01DB: print_with_3_numbers '~w~Station: ~y~~1~ ~w~Set time: ~b~~1~ ~w~Play time: ~b~~1~' numbers 0@ 1@ 2@ time 400 flag 1
+0055: print_big '~w~Combine ~b~DPAD`s ~w~up or down with ~b~R ~w~to increase by 250k or joystick increase by 2.5m, ~b~L ~w~to set time zero. ~b~CIRCLE ~w~to set time to play time' time 400 style 8
+007E:  is_char_in_any_car $PLAYER_CHAR
+0022: goto_if_false @00a
+032A: get_radio_channel 0@
+0004: 7@ = 0@
+0004: 3@ = 1
+001B:  0@ == -1 // (int) var == num
+0021: goto_if_true @015
+0078: if or
+02DF:  is_char_in_any_heli $PLAYER_CHAR
+02E0:  is_char_in_any_plane $PLAYER_CHAR
+0022: goto_if_false @002
+024B: store_car_char_is_in_no_save $PLAYER_CHAR store_to 8@
+0325: freeze_car_position 8@ set_to 1
+0002: goto @002
+:00a
+007F:  is_button_pressed 0 button 10
+0022: goto_if_false @001
+0009: 0@ -= 1 // (int)
+:001
+0001: wait 0
+007F:  is_button_pressed 0 button 11
+0022: goto_if_false @002
+0007: 0@ += 1 // (int)
+:002
+0001: wait 0
+007F:  is_button_pressed 0 button 8
+0022: goto_if_false @004
+007F:  is_button_pressed 0 button 6
+0022: goto_if_false @003
+0007: 1@ += 250000 // (int)
+0002: goto @004
+:003
+0001: wait 0
+007F:  is_button_pressed 0 button 0
+0021: goto_if_true @0a3
+0007: 1@ += 50000 // (int)
+0002: goto @004
+:0a3
+0007: 1@ += 2500000 // (int)
+:004
+0001: wait 0
+007F:  is_button_pressed 0 button 9
+0022: goto_if_false @006
+007F:  is_button_pressed 0 button 6
+0022: goto_if_false @005
+0009: 1@ -= 250000 // (int)
+0002: goto @006
+:005
+0001: wait 0
+007F:  is_button_pressed 0 button 0
+0021: goto_if_true @0a5
+0009: 1@ -= 50000 // (int)
+0002: goto @006
+:0a5
+0009: 1@ -= 2500000 // (int)
+:006
+0001: wait 0
+007F:  is_button_pressed 0 button 15
+0022: goto_if_false @007
+:aa6
+0268: clear_help
+0059: clear_prints
+001B:  3@ == 1 // (int) var == num
+0022: goto_if_false @0a6
+0418: unknown_audio_command_8451 point 4@ 5@ 6@
+:0a6
+0001: wait 0
+007E:  is_char_in_any_car $PLAYER_CHAR
+0021: goto_if_true @0b6
+:0b6
+0078: if or
+02DF:  is_char_in_any_heli $PLAYER_CHAR
+02E0:  is_char_in_any_plane $PLAYER_CHAR
+0022: goto_if_false @0c6
+024B: store_car_char_is_in_no_save $PLAYER_CHAR store_to 8@
+0325: freeze_car_position 8@ set_to 0
+:0c6
+0001: wait 500
+0107: set_player_control $PLAYER_CHAR to 1
+0023: terminate_this_script
+:007
+0001: wait 0
+007E:  is_char_in_any_car $PLAYER_CHAR
+0021: goto_if_true @009
+007F:  is_button_pressed 0 button 16
+0022: goto_if_false @009
+001B:  3@ == 0 // (int) var == num
+0022: goto_if_false @008
+:0a7
+0043: get_char_coordinates $PLAYER_CHAR store_to 4@ 5@ 6@
+0417: unknown_audio_command_7532 point 4@ 5@ 6@ values 100 0@
+0004: 3@ = 1
+0004: 7@ = 0@
+0002: goto @009
+:008
+0001: wait 0
+0418: unknown_audio_command_8451 point 4@ 5@ 6@
+0004: 2@ = 0
+0004: 3@ = 0
+001C:  0@ == 7@ // (int) var == var
+0022: goto_if_false @0a7
+:009
+0001: wait 0
+007F:  is_button_pressed 0 button 14
+0022: goto_if_false @011
+001B:  3@ == 1 // (int) var == num
+0022: goto_if_false @011
+0004: 1@ = 2@
+:011
+0001: wait 0
+007F:  is_button_pressed 0 button 17
+0022: goto_if_false @013
+001B:  3@ == 1 // (int) var == num
+0022: goto_if_false @013
+007E:  is_char_in_any_car $PLAYER_CHAR
+0022: goto_if_false @a11
+021D: switch_car_radio 0
+0001: wait 250
+028E: set_radio_channel 7@ 1@
+021D: switch_car_radio 7@
+0002: goto @013
+:a11
+0418: unknown_audio_command_8451 point 4@ 5@ 6@
+0001: wait 250
+028E: set_radio_channel 7@ 1@
+0002: goto @0a7
+:013
+0001: wait 0
+001B:  3@ == 1 // (int) var == num
+0022: goto_if_false @014
+04FB: unknown_audio_get_command_7219 2@
+:014
+0001: wait 0
+007F:  is_button_pressed 0 button 4
+0022: goto_if_false @000
+0004: 1@ = 0
+0002: goto @000
+:015
+0059: clear_prints
+0268: clear_help
+0323: print_help_forever '~r~Car unsupported radio station, returned null'
+0001: wait 3500
+0002: goto @aa6
+:016
+0004: 0@ = 8
+0002: goto @000
+:017
+0004: 0@ = 0
+0002: goto @000
