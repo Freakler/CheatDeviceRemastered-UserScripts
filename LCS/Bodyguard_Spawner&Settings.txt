@@ -1,0 +1,579 @@
+#Game: Liberty City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Defense
+#Date: ~w~2026-05-01
+#Description: ~w~Spawn bodyguard in your style.
+
+0000: NOP
+0006: 0@ = 0
+0006: 1@ = 50
+0006: 2@ = 1000
+0006: 3@ = 0
+0006: 4@ = 259
+0006: 5@ = 0
+024C: request_model 3979
+0390: load_all_models_now
+:0
+0001: wait 0
+
+024D:  has_model_loaded 3979
+004D: goto_if_false @0
+02A0: create_object_no_offset 3979 at 4.0 -1.4 501.0 store_to 7@
+017C: set_object_heading 7@ to 76.0
+024E: mark_model_as_no_longer_needed 3979
+01B9: set_player_control $PLAYER_CHAR to 0
+03C4: set_everyone_ignore_player $PLAYER_CHAR to 1
+02A8: switch_widescreen 1
+0164: set_fixed_camera_position 0 0 500.0 rotation 0 0 0
+0165: point_camera_at_point 4.75 0.14 500.0 switchstyle 2
+009A: create_char 1 model 0@ at 3.49 0.11 499.0 store_to 6@
+0178: set_char_heading 6@ to 90.0
+0228: set_char_health 6@ to 2@
+044B: set_char_suffers_critical_hits 6@ enable 0
+02E7: set_char_accuracy 6@ to 1@
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0296: set_char_heed_threats 6@ flag 0
+0567: set_char_ignore_threats_behind_objects 6@ on 1
+031E: set_char 6@ running 1
+04DC: freeze_char_position 6@ set_to 1
+:1
+00BE: clear_prints
+03EB: clear_help
+062E: print_help_permanent_always_allow '~w~Press L & R to change settings menu, triangle to exit.'
+0001: wait 200
+:0_0
+0001: wait 150
+00BE: clear_prints
+00BC: print_now '~w~Press CROSS to start' time 150 flag 1
+
+00E6:  is_button_pressed 0 button 4
+004C: goto_if_true @4_21
+
+00E6:  is_button_pressed 0 button 6
+004C: goto_if_true @1_2
+
+00E6:  is_button_pressed 0 button 15
+004C: goto_if_true @1_1
+
+00E6:  is_button_pressed 0 button 16
+004D: goto_if_false @0_0
+04AA: get_dead_char_pickup_coords $PLAYER_ACTOR store_to 0@ 1@ 2@
+000B: 2@ += 1.5
+00A1: set_char_coordinates 6@ to 0@ 1@ 2@
+04DC: freeze_char_position 6@ set_to 0
+01C7: mark_char_as_no_longer_needed 6@
+0121: set_char_obj_no_obj 6@
+01E4: tie_char 6@ to_player $PLAYER_CHAR
+056D: set_char_never_targetted 6@ to 1
+:1_0
+03EB: clear_help
+061A: clear_big_messages
+00BE: clear_prints
+010D: delete_object 7@
+01B9: set_player_control $PLAYER_CHAR to 1
+03C4: set_everyone_ignore_player $PLAYER_CHAR to 0
+02A8: switch_widescreen 0
+02F0: restore_camera_jumpcut
+004E: terminate_this_script
+:1_1
+009B: delete_char 6@
+0002: goto @1_0
+:1_2
+00BE: clear_prints
+03EB: clear_help
+062E: print_help_permanent_always_allow '~w~Press L & R to change settings menu, D-PAD left & right to change HP. Combination SQUARE with D-PAD left or right will make them increase by 250.'
+0001: wait 200
+:0_1
+0001: wait 150
+0019:  2@ > 49
+004D: goto_if_false @2_3
+0228: set_char_health 6@ to 2@
+00BE: clear_prints
+01E9: print_with_number '~w~Health: ~1~' number 2@ time 150 flag 1
+
+00E6:  is_button_pressed 0 button 4
+004C: goto_if_true @1
+
+00E6:  is_button_pressed 0 button 6
+004C: goto_if_true @2_4
+
+00E6:  is_button_pressed 0 button 10
+004D: goto_if_false @2_1
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @2_0
+000E: 2@ -= 50
+0002: goto @2_1
+:2_0
+000E: 2@ -= 250
+
+:2_1
+
+00E6:  is_button_pressed 0 button 11
+004D: goto_if_false @0_1
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @2_2
+000A: 2@ += 50
+0002: goto @0_1
+:2_2
+000A: 2@ += 250
+0002: goto @0_1
+:2_3
+0006: 2@ = 50
+0002: goto @0_1
+:2_4
+00BE: clear_prints
+03EB: clear_help
+062E: print_help_permanent_always_allow '~w~Press L & R to change settings menu, D-PAD left & right to change model character and UP & DOWN to change accuracy values. Combination SQUARE with D-PAD left or right or UP & DOWN will make them increase by 10.'
+0001: wait 200
+0178: set_char_heading 6@ to 90.0
+0006: 8@ = 0@
+:0_2
+0001: wait 50
+
+0019:  1@ > 0
+004D: goto_if_false @3_4
+
+001B:  101 > 1@
+004D: goto_if_false @3_4a
+0050: gosub @3_17
+0050: gosub @3_19
+00BE: clear_prints
+0302: print_with_2_numbers_now 'Ped Model: ~1~ Accuracy: ~1~%' numbers 0@ 1@ time 400 flag 1
+
+00E6:  is_button_pressed 0 button 4
+004C: goto_if_true @1_2
+
+00E6:  is_button_pressed 0 button 6
+004C: goto_if_true @3_20
+
+0039:  0@ == 8
+004C: goto_if_true @3_13
+00DB: if and
+0019:  0@ > 68
+001B:  79 > 0@
+004C: goto_if_true @3_15
+
+00E6:  is_button_pressed 0 button 10
+004D: goto_if_false @3_1
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @3_0
+000E: 0@ -= 1
+0002: goto @3_1
+:3_0
+000E: 0@ -= 10
+
+:3_1
+0039:  0@ == 8
+004C: goto_if_true @3_14
+00DB: if and
+0019:  0@ > 68
+001B:  79 > 0@
+004C: goto_if_true @3_16
+
+00E6:  is_button_pressed 0 button 11
+004D: goto_if_false @3_3
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @3_2
+000A: 0@ += 1
+0002: goto @3_3
+:3_2
+000A: 0@ += 10
+
+:3_3
+0001: wait 0
+
+00E6:  is_button_pressed 0 button 8
+004D: goto_if_false @3_5
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @3_3a
+
+000A: 1@ += 1
+0002: goto @3_5
+:3_3a
+000A: 1@ += 10
+0002: goto @3_5
+:3_4
+0006: 1@ = 100
+0002: goto @0_2
+:3_4a
+0006: 1@ = 1
+0002: goto @0_2
+
+:3_5
+
+00E6:  is_button_pressed 0 button 9
+004D: goto_if_false @3_6
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @3_5a
+
+000E: 1@ -= 1
+0002: goto @3_6
+:3_5a
+000E: 1@ -= 10
+0002: goto @3_6
+:3_6
+0050: gosub @3_17
+0050: gosub @3_19
+0039:  0@ == 8
+004C: goto_if_true @0_2
+00DB: if and
+0019:  0@ > 68
+001B:  79 > 0@
+004C: goto_if_true @0_2
+00DB: if and
+002A:  1@ >= 1
+002B:  100 >= 1@
+004D: goto_if_false @0_2
+
+0039:  0@ == 8@
+004C: goto_if_true @0_2
+:3_7
+0006: 8@ = 0@
+0006: 3@ = 0
+0006: 5@ = 0
+009B: delete_char 6@
+
+8039:   not  0@ == 0
+004D: goto_if_false @3_8a
+
+024D:  has_model_loaded 0@
+004D: goto_if_false @3_8
+:3_8a
+0050: gosub @3_10
+0002: goto @0_2
+:3_8
+024C: request_model 0@
+0390: load_all_models_now
+:3_9
+0001: wait 0
+
+024D:  has_model_loaded 0@
+004D: goto_if_false @3_9
+0050: gosub @3_10
+024E: mark_model_as_no_longer_needed 0@
+0002: goto @0_2
+:3_10
+009A: create_char 1 model 0@ at 3.49 0.11 499.0 store_to 6@
+0178: set_char_heading 6@ to 90.0
+0228: set_char_health 6@ to 2@
+044B: set_char_suffers_critical_hits 6@ enable 0
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0296: set_char_heed_threats 6@ flag 0
+0567: set_char_ignore_threats_behind_objects 6@ on 1
+031E: set_char 6@ running 1
+04DC: freeze_char_position 6@ set_to 1
+0051: return
+:3_11
+0006: 0@ = 104
+0051: return
+:3_12
+0006: 0@ = 0
+0051: return
+:3_13
+0006: 0@ = 9
+0002: goto @0_2
+:3_14
+0006: 0@ = 7
+0002: goto @0_2
+:3_15
+0006: 0@ = 79
+0002: goto @0_2
+:3_16
+0006: 0@ = 68
+0002: goto @0_2
+:3_17
+
+002A:  0@ >= 0
+004D: goto_if_false @3_11
+
+002B:  104 >= 0@
+004D: goto_if_false @3_12
+0051: return
+:3_19
+02E7: set_char_accuracy 6@ to 1@
+0051: return
+:3_20
+00BE: clear_prints
+03EB: clear_help
+062E: print_help_permanent_always_allow '~w~Press L & R to change settings menu, D-PAD left & right to change weapons. Combination SQUARE with D-PAD left or right will make increase by 5.'
+0001: wait 200
+0178: set_char_heading 6@ to 180.0
+:0_3
+0001: wait 150
+
+0019:  3@ > -1
+004D: goto_if_false @4_5
+
+001B:  37 > 3@
+004D: goto_if_false @4_6
+
+00BE: clear_prints
+01E9: print_with_number '~w~Weapon: ~1~' number 3@ time 150 flag 1
+
+00E6:  is_button_pressed 0 button 4
+004C: goto_if_true @2_4
+
+00E6:  is_button_pressed 0 button 6
+004C: goto_if_true @4_21
+
+00E6:  is_button_pressed 0 button 10
+004D: goto_if_false @4_2
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @4_0
+000E: 3@ -= 1
+0002: goto @4_1
+:4_0
+000E: 3@ -= 5
+
+:4_1
+0002: goto @4_4
+:4_2
+
+00E6:  is_button_pressed 0 button 11
+004D: goto_if_false @0_3
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @4_3
+000A: 3@ += 1
+0002: goto @4_4
+:4_3
+000A: 3@ += 5
+
+:4_4
+
+002A:  3@ >= 0
+004D: goto_if_false @4_5
+
+002B:  36 >= 3@
+004D: goto_if_false @4_6
+
+0039:  3@ == 0
+004D: goto_if_false @4_7
+0494: remove_all_char_weapons 6@
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0002: goto @0_3
+:4_5
+0006: 3@ = 36
+0002: goto @4_20
+:4_6
+0006: 3@ = 0
+0002: goto @4_4
+:4_7
+0001: wait 0
+
+0039:  3@ == 1
+004D: goto_if_false @4_9
+0006: 4@ = 259
+:4_8
+
+024D:  has_model_loaded 4@
+004D: goto_if_false @4_8a
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0050: gosub @4_8c
+00DB: if or
+0039:  3@ == 13
+0039:  3@ == 33
+004C: goto_if_true @4_8d
+0002: goto @0_3
+:4_8a
+024C: request_model 4@
+0390: load_all_models_now
+:4_8b
+0001: wait 0
+
+024D:  has_model_loaded 4@
+004D: goto_if_false @4_8b
+0050: gosub @4_8c
+024E: mark_model_as_no_longer_needed 4@
+00DB: if or
+0039:  3@ == 13
+0039:  3@ == 33
+004C: goto_if_true @4_8d
+0002: goto @0_3
+:4_8c
+0494: remove_all_char_weapons 6@
+01B7: give_weapon_to_char 6@ weapon 3@ ammo 100000
+01BE: set_current_char_weapon 6@ to 3@
+:4_8d
+0051: return
+:4_9
+00DB: if and
+0019:  3@ > 1
+001B:  13 > 3@
+004D: goto_if_false @4_10
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0006: 4@ = 258
+000A: 4@ += 3@
+0002: goto @4_8
+:4_10
+0001: wait 0
+
+0039:  3@ == 13
+004D: goto_if_false @4_11
+0006: 8@ = 291
+:4_9a
+
+024D:  has_model_loaded 8@
+004D: goto_if_false @4_9b
+0050: gosub @4_8
+0002: goto @0_3
+:4_9b
+024C: request_model 8@
+0390: load_all_models_now
+:4_9c
+024D:  has_model_loaded 8@
+004D: goto_if_false @4_9a
+0050: gosub @4_8
+024E: mark_model_as_no_longer_needed 8@
+0002: goto @0_3
+
+:4_11
+00DB: if and
+0019:  3@ > 13
+001B:  19 > 3@
+004D: goto_if_false @4_12
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0006: 4@ = 257
+000A: 4@ += 3@
+0002: goto @4_8
+:4_12
+0001: wait 0
+00DB: if and
+0019:  3@ > 18
+001B:  22 > 3@
+004D: goto_if_false @4_13
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 1
+0006: 4@ = 258
+000A: 4@ += 3@
+0002: goto @4_8
+:4_13
+00DB: if and
+0019:  3@ > 21
+001B:  26 > 3@
+004D: goto_if_false @4_14
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 1
+0006: 4@ = 259
+000A: 4@ += 3@
+0002: goto @4_8
+:4_14
+0001: wait 0
+
+0039:  3@ == 26
+004D: goto_if_false @4_15
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 1
+0006: 4@ = 280
+0002: goto @4_8
+:4_15
+
+0039:  3@ == 27
+004D: goto_if_false @4_16
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 1
+0006: 4@ = 276
+0002: goto @4_8
+:4_16
+0001: wait 0
+00DB: if and
+0019:  3@ > 27
+001B:  33 > 3@
+004D: goto_if_false @4_17
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 1
+0006: 4@ = 257
+000A: 4@ += 3@
+0002: goto @4_8
+:4_17
+
+0039:  3@ == 33
+004D: goto_if_false @4_18
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 1
+0006: 4@ = 290
+0006: 8@ = 294
+0002: goto @4_9a
+:4_18
+0001: wait 0
+
+0039:  3@ == 34
+004D: goto_if_false @4_19
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0006: 4@ = 291
+0002: goto @4_8
+:4_19
+
+0039:  3@ == 35
+004D: goto_if_false @4_20
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 1
+0006: 4@ = 289
+0002: goto @4_8
+:4_20
+0001: wait 0
+
+0039:  3@ == 36
+004D: goto_if_false @0_3
+0578: set_char_stop_shoot_dont_seek_entity 6@ on 0
+0006: 4@ = 292
+0002: goto @4_8
+:4_21
+00BE: clear_prints
+03EB: clear_help
+062E: print_help_permanent_always_allow '~w~L & R to change settings menu, D-PAD left & right to change values. Combine SQUARE with D-PAD left or right to increase by 15. CROSS to add search threat from current value or CIRCLE to clear all search threat.'
+0001: wait 200
+0178: set_char_heading 6@ to 90.0
+:0_4
+0001: wait 150
+
+0019:  5@ > -1
+004D: goto_if_false @5_5
+
+00BE: clear_prints
+01E9: print_with_number '~w~Search Threat: ~1~' number 5@ time 250 flag 1
+
+00E6:  is_button_pressed 0 button 4
+004C: goto_if_true @3_20
+
+00E6:  is_button_pressed 0 button 6
+004C: goto_if_true @1
+
+00E6:  is_button_pressed 0 button 10
+004D: goto_if_false @5_1
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @5_0
+000E: 5@ -= 1
+0002: goto @5_1
+:5_0
+000E: 5@ -= 15
+:5_1
+
+00E6:  is_button_pressed 0 button 11
+004D: goto_if_false @5_3
+
+00E6:  is_button_pressed 0 button 14
+004C: goto_if_true @5_2
+000A: 5@ += 1
+0002: goto @5_3
+:5_2
+000A: 5@ += 15
+:5_3
+0001: wait 0
+
+00E6:  is_button_pressed 0 button 16
+004D: goto_if_false @5_4
+011F: set_char 6@ search_threat 5@
+0191: add_one_off_sound 0 0 500.0 sound 16
+:5_4
+
+00E6:  is_button_pressed 0 button 17
+004D: goto_if_false @0_4
+01F2: clear_char_threat_search 6@
+0191: add_one_off_sound 0 0 500.0 sound 18
+0002: goto @0_4
+:5_5
+0006: 5@ = 0
+0002: goto @0_4
