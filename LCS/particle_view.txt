@@ -1,0 +1,66 @@
+#Game: Liberty City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Particles
+#Date: ~w~2026-06-06
+#Description: ~w~See particles ID`s.
+
+0000: NOP
+03EB: clear_help
+0517: print_help_forever '~w~Cycle trough particles ID ~b~D-PAD ~w~left and right, ~b~R ~w~to increase by 5, ~b~CROSS ~w~to trigger ~b~029F ~w~opcode particle ~b~SQUARE ~w~to trigger opcode ~b~0231 ~w~particle. ~g~TRIANGLE ~w~to exit.'
+0006: 0@ = 0 // (int)
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0 2.0 1.0 store_to 1@ 2@ 3@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0 5.0 1.0 store_to 4@ 5@ 6@
+0164: set_fixed_camera_position 1@ 2@ 3@ rotation 0 0 0
+0165: point_camera_at_point 4@ 5@ 6@ switchstyle 2
+05D5: set_wants_to_draw_hud 0
+01B9: set_player_control $PLAYER_CHAR to 0
+:000
+0001: wait 100
+00BE: clear_prints
+01EA: print_with_number_now '~w~PARTICLE: ~b~~1~' number 0@ time 200 flag 1
+
+00E6:  is_button_pressed 0 button 10
+004D: goto_if_false @002
+
+00E6:  is_button_pressed 0 button 6
+004C: goto_if_true @001
+000E: 0@ -= 1 // (int)
+0002: goto @002
+:001
+000E: 0@ -= 5 // (int)
+:002
+
+00E6:  is_button_pressed 0 button 11
+004D: goto_if_false @004
+
+00E6:  is_button_pressed 0 button 6
+004C: goto_if_true @003
+000A: 0@ += 1 // (int)
+0002: goto @004
+:003
+000A: 0@ += 5 // (int)
+:004
+0001: wait 0
+
+00E6:  is_button_pressed 0 button 14
+004D: goto_if_false @005
+039A: clear_area 4@ 5@ 6@ radius 1.0 clear_particles 1
+03A2: add_moving_particle_effect 0@ at 4@ 5@ 6@ 0 0 0 values 0.5 0 0 0 1000
+:005
+
+00E6:  is_button_pressed 0 button 16
+004D: goto_if_false @006
+039A: clear_area 4@ 5@ 6@ radius 1.0 clear_particles 1
+043C: create_single_particle 0@ at 4@ 5@ 6@ 0 0 0 0.5
+:006
+0001: wait 0
+
+00E6:  is_button_pressed 0 button 15
+004D: goto_if_false @000
+03EB: clear_help
+00BE: clear_prints
+05D5: set_wants_to_draw_hud 1
+01B9: set_player_control $PLAYER_CHAR to 1
+02F0: restore_camera_jumpcut
+004E: terminate_this_script
