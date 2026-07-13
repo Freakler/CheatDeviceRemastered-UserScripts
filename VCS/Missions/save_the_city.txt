@@ -1,0 +1,376 @@
+#Game: Vice City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Mission
+#Date: ~w~2026-05-23
+#Description: ~w~Defened the city from terrorist.
+
+// Unfinished mission
+0000: NOP
+
+034A:  does_char_exist $PLAYER_CHAR
+0021: goto_if_true @a_0
+0267: print_help '~r~Player dosent exist'
+0023: terminate_this_script
+:a_0
+
+001B:  $ONMISSION == 0 // (int) var == num
+0021: goto_if_true @a_1
+0267: print_help '~r~Complete the current mission before jumping on this'
+0023: terminate_this_script
+:a_1
+0001: wait 0
+0004: 0@ = 0 // (int)
+0004: 1@ = 0 // (int)
+0004: 2@ = 1 // (int)
+0004: $ONMISSION = 1 // (int)
+00C3: add_blip_for_coord -1708.00 -299.15 13.98 store_to 3@
+00BC: change_blip_colour 3@ to 5
+00BF: change_blip_scale 3@ to 3
+0472: add_pager_message 'Sergeant: Vic, come by at Fort Baxers. We got a terrorist to take care of....' 100 1 0
+0002: goto @a_2
+:g_0
+0078: if or
+009F:  is_char_dead $PLAYER_CHAR
+00A5:  has_player_been_arrested $PLAYER_CHAR
+0021: goto_if_true @g_0a
+0026: return
+:g_0a
+0004: 0@ = 1 // (int)
+0026: return
+:g_1
+04E0: clear_pager
+0268: clear_help
+03C2: clear_big_messages
+0059: clear_prints
+0026: return
+:g_2
+0001: wait 0
+0055: print_big 'M_FAIL' time 1000 style 1
+0002: goto @g_4
+:g_3
+011D: print_with_number_big 'M_PASS' number 10000 time 1000 style 1
+022B: play_mission_passed_tune 1
+0094: add_score $PLAYER_CHAR value 10000 // money
+009B: clear_wanted_level $PLAYER_CHAR
+:g_4
+0004: $ONMISSION = 0 // (int)
+0023: terminate_this_script
+:g_5
+0025: gosub @g_1
+0002: goto @g_2
+:g_6
+0025: gosub @g_1
+0002: goto @g_3
+:g_7
+00BB: remove_blip 3@
+0026: return
+:g_8
+0025: gosub @g_7
+0002: goto @g_5
+:a_2
+0001: wait 0
+0025: gosub @g_0
+
+001B:  0@ == 1 // (int) var == num
+0021: goto_if_true @g_8
+
+008A:  locate_char_on_foot_3d $PLAYER_CHAR coord -1708.00 -299.15 13.98 radius 3.0 3.0 3.0 sphere 1
+0022: goto_if_false @a_2
+0044: set_char_coordinates $PLAYER_CHAR to -1708.00 -299.15 13.98
+010B: set_current_char_weapon $PLAYER_CHAR to 0
+0025: gosub @g_7
+0025: gosub @g_9
+0002: goto @a_3
+:g_9
+0352: stop_char $PLAYER_CHAR
+0107: set_player_control $PLAYER_CHAR to 1@
+01AE: switch_widescreen 2@
+03A1: set_wants_to_draw_hud 1@
+0401: disable_access_to_pause_menu 2@
+0026: return
+:a_3
+0025: gosub @g_1
+0055: print_big 'Save The City' time 2000 style 2
+00B9: set_fixed_camera_position -1704.98 -301.95 16.0 rotation 0 0 0
+00BA: point_camera_at_point -1719.32 -297.78 15.0 switchstyle 2
+0001: wait 0
+02B4: set_interpolation_parameters 1.0 time 4500
+00B9: set_fixed_camera_position -1704.98 -301.95 18.0 rotation 0 0 0
+00BA: point_camera_at_point -1719.32 -297.78 15.0 switchstyle 1
+00EE: char $PLAYER_CHAR walk_to -1719.16 -297.30
+:a_4
+0001: wait 0
+0078: if or
+007F:  is_button_pressed 0 button 16
+8046:   not is_char_in_area_2d $PLAYER_CHAR from -1708.00 -299.15 to -1719.16 -297.30 sphere 0
+0080:  locate_char_any_means_2d $PLAYER_CHAR coord -1719.16 -297.30 radius 5.0 5.0 sphere 0
+0022: goto_if_false @a_4
+00C8: set_fading_colour 0 0 0
+00C9: do_fade 1250 fade 0
+0025: gosub @g_10
+0025: gosub @g_1
+0002: goto @a_5
+:g_10
+0001: wait 0
+
+80CA:   not get_fading_status
+0022: goto_if_false @g_10
+0026: return
+:a_5
+00A2: set_char_obj_no_obj $PLAYER_CHAR
+0044: set_char_coordinates $PLAYER_CHAR to -1719.68 -297.30 14.02
+00CF: set_char_heading $PLAYER_CHAR to 90.0
+00B9: set_fixed_camera_position -1717.77 -301.02 15.5 rotation 0 0 0
+00BA: point_camera_at_point -1720.82 -297.89 14.7 switchstyle 2
+022C: clear_area -1719.32 -297.78 14.7 radius 20.0 clear_particles 1
+00C9: do_fade 1250 fade 1
+0025: gosub @g_10
+0057: print_now '~b~Vic~w~: Anybody there?' time 2000 flag 1
+0220: set_char $PLAYER_CHAR anim 19 wait_state_time 2000 ms
+:a_6
+0001: wait 0
+0078: if or
+007F:  is_button_pressed 0 button 16
+8485:   not unknown_char_check_command_5936 $PLAYER_CHAR id 14
+0022: goto_if_false @a_6
+0059: clear_prints
+0472: add_pager_message 'Sergeant: Inside Escobar International airport, there`s group of terrorist stealing military biplane. I wan`t you to get over there before they blow up the entire city....' 100 1 0
+0004: 1@ = 1 // (int)
+0004: 2@ = 0 // (int)
+0025: gosub @g_9
+01CF: restore_camera_jumpcut
+0221: set_camera_behind_player
+01F9: create_pickup_with_ammo 356 type 4 ammo 50 at -1721.04 -301.38 14.58 store_to 3@
+00C3: add_blip_for_coord -1568.34 -1209.55 13.87 store_to 3@
+00BC: change_blip_colour 3@ to 5
+00BF: change_blip_scale 3@ to 3
+:a_7
+0001: wait 0
+0025: gosub @g_0
+
+001B:  0@ == 1 // (int) var == num
+0021: goto_if_true @g_8
+
+0080:  locate_char_any_means_2d $PLAYER_CHAR coord -1568.34 -1209.55 radius 120.0 120.0 sphere 0
+0022: goto_if_false @a_7
+0025: gosub @g_7
+022C: clear_area -1568.34 -1209.55 13.87 radius 60.0 clear_particles 1
+0160: request_model 33
+0160: request_model 52
+0160: request_model 78
+0160: request_model 222
+0160: request_model 348
+0228: load_all_models_now
+:a_8
+0001: wait 0
+0078: if and
+0161:  has_model_loaded 33
+0161:  has_model_loaded 52
+0161:  has_model_loaded 78
+0161:  has_model_loaded 222
+0161:  has_model_loaded 348
+0022: goto_if_false @a_8
+0048: create_car 222 at -1568.34 -1209.55 13.87 store_to 4@
+00D1: set_car_heading 4@ to 32.0
+0150: change_car_colour 4@ primary_to 1 secondary_to 1
+014C: set_car_health 4@ to 1400
+0126: set_car_heavy 4@ to 1
+01B0: set_car_only_damaged_by_player 4@ to 1
+00C0: add_blip_for_car 4@ store_to 3@
+00BC: change_blip_colour 3@ to 2
+00BF: change_blip_scale 3@ to 2
+00A4: create_char_inside_car 4@ pedtype 4 model 78 store_to 5@
+01B1: set_char_proofs 5@ BP 1 FP 1 EP 1 CP 1 MP 1
+0232: set_char_cant_be_dragged_out 5@ to 1
+003E: create_char 4 model 33 at -1557.44 -1219.38 13.87 store_to 6@
+00CF: set_char_heading 6@ to 267.0
+0213: add_armour_to_char 6@ armour 100
+02A5: set_char_suffers_critical_hits 6@ enable 1
+01C9: set_char_accuracy 6@ to 65
+0106: give_weapon_to_char 6@ weapon 29 ammo 10000
+010B: set_current_char_weapon 6@ to 29
+01AF: set_char_only_damaged_by_player 6@ to 1
+003E: create_char 4 model 52 at -1558.61 -1223.62 13.87 store_to 7@
+00CF: set_char_heading 7@ to 164.0
+0213: add_armour_to_char 7@ armour 100
+02A5: set_char_suffers_critical_hits 7@ enable 1
+01C9: set_char_accuracy 7@ to 65
+0106: give_weapon_to_char 7@ weapon 29 ammo 10000
+010B: set_current_char_weapon 7@ to 29
+01AF: set_char_only_damaged_by_player 7@ to 1
+0025: gosub @g_1
+0057: print_now '~w~Try to get the ~b~biplane ~w~back to military base.' time 6000 flag 1
+0002: goto @a_9
+:g_11
+00C9: do_fade 1000 fade 0
+0025: gosub @g_10
+003F: delete_char 5@
+020D: remove_char_elegantly 6@
+020D: remove_char_elegantly 7@
+0049: delete_car 4@
+00C9: do_fade 1000 fade 1
+0025: gosub @g_10
+0026: return
+:g_12
+0162: mark_model_as_no_longer_needed 33
+0162: mark_model_as_no_longer_needed 52
+0162: mark_model_as_no_longer_needed 78
+0162: mark_model_as_no_longer_needed 222
+0162: mark_model_as_no_longer_needed 348
+0026: return
+:g_13
+0078: if and
+80A0:   not is_car_dead 4@
+0132:  locate_char_any_means_car_2d $PLAYER_CHAR car 4@ radius 240.0 240.0 sphere 0
+0022: goto_if_false @g_0a
+0026: return
+:g_14
+0025: gosub @g_7
+0025: gosub @g_11
+0025: gosub @g_12
+0002: goto @g_5
+:a_9
+0001: wait 0
+0025: gosub @g_0
+0025: gosub @g_13
+
+001B:  0@ == 1 // (int) var == num
+0021: goto_if_true @g_14
+
+0078: if or
+0326:  has_char_been_damaged_by_char 6@ char $PLAYER_CHAR
+0326:  has_char_been_damaged_by_char 7@ char $PLAYER_CHAR
+0218:  has_char_spotted_char 6@ char $PLAYER_CHAR
+0218:  has_char_spotted_char 7@ char $PLAYER_CHAR
+0135:  locate_char_any_means_car_3d $PLAYER_CHAR car 4@ radius 40.0 40.0 40.0 sphere 0
+0022: goto_if_false @a_9
+0352: stop_char 6@
+0352: stop_char 7@
+00E4: set_char_obj_kill_char_on_foot 6@ char $PLAYER_CHAR
+00E4: set_char_obj_kill_char_on_foot 7@ char $PLAYER_CHAR
+0002: goto @a_10
+:g_15
+0078: if or
+007C:  is_char_in_car $PLAYER_CHAR car 4@
+807C:   not is_char_in_car 5@ car 4@
+0021: goto_if_true @g_16
+0026: return
+:g_16
+0216: warp_char_from_car_to_coord $PLAYER_CHAR coord -1568.34 -1209.55 15.87
+014B: set_char_health $PLAYER_CHAR to 0
+0352: stop_char $PLAYER_CHAR
+0002: goto @g_14
+:a_10
+0001: wait 0
+0025: gosub @g_0
+0025: gosub @g_13
+0025: gosub @g_15
+
+001B:  0@ == 1 // (int) var == num
+0021: goto_if_true @g_14
+
+0078: if and
+8328:   not has_car_been_damaged_by_char 4@ char $PLAYER_CHAR
+8135:   not locate_char_any_means_car_3d $PLAYER_CHAR car 4@ radius 12.0 12.0 12.0 sphere 0
+0021: goto_if_true @a_10
+0025: gosub @g_1
+0057: print_now '~w~Change of plan`s, the ~r~biplane ~w~is about to take off! Get the rocket launcher and blow it up.' time 12000 flag 1
+01F9: create_pickup_with_ammo 359 type 4 ammo 8 at -1564.63 -1204.74 14.37 store_to 8@
+02F4: plane_goto_coords 4@ coords -1607.05 -1147.48 14.73 value 14
+00BC: change_blip_colour 3@ to 0
+0002: goto @b_0
+:g_17
+01B2: set_car_proofs 4@ BP 1 FP 1 EP 1 CP 1 MP 1
+004E: set_car_coordinates 4@ to -1607.05 -1147.48 14.73
+02F4: plane_goto_coords 4@ coords -1676.84 -1041.86 40.0 value 30
+0004: 1@ = 0 // (int)
+0004: 2@ = 1 // (int)
+0025: gosub @g_9
+00B9: set_fixed_camera_position -1686.15 -1064.82 18.5 rotation 0 0 0
+00B4: point_camera_at_car 4@ mode 15 switchstyle 2
+:g_17a
+0001: wait 0
+
+0102:  locate_car_2d 4@ point -1676.84 -1041.86 radius 14.0 14.0 sphere 0
+0022: goto_if_false @g_17a
+00C9: do_fade 1500 fade 0
+0025: gosub @g_10
+022C: clear_area -1196.95 -599.15 30.0 radius 50.0 clear_particles 1
+022C: clear_area -1078.10 -592.20 10.17 radius 50.0 clear_particles 1
+0044: set_char_coordinates $PLAYER_CHAR to -1098.89 -609.28 10.56
+004C: car_set_idle 4@
+0325: freeze_car_position 4@ set_to 1
+004E: set_car_coordinates 4@ to -1196.95 -599.15 30.0
+00D1: set_car_heading 4@ to 280.0
+0222: create_random_char -1078.10 -592.20 10.17 store_to 6@
+00CF: set_char_heading 6@ to 100.0
+00B9: set_fixed_camera_position -1072.21 -592.13 12.07 rotation 0 0 0
+00BA: point_camera_at_point -1103.24 -591.57 13.0 switchstyle 2
+00C9: do_fade 1000 fade 1
+0025: gosub @g_10
+0325: freeze_car_position 4@ set_to 0
+02F4: plane_goto_coords 4@ coords -972.01 -570.07 27.0 value 30
+00EE: char 6@ walk_to -1181.17 -605.87
+:g_17b
+0001: wait 0
+
+0132:  locate_char_any_means_car_2d 6@ car 4@ radius 50.0 50.0 sphere 0
+0022: goto_if_false @g_17b
+027F: get_offset_from_car_in_world_coords 4@ offset 0 0 -1.5 store_to 7@ 8@ 9@
+02EE: get_offset_from_char_in_world_coords 6@ offset 0 5.0 0 store_to 10@ 11@ 12@
+04BC: create_flying_projectile_shot_by_car weapon_type 18 start_coords 7@ 8@ 9@ target_coords 10@ 11@ 12@ power 0.5 shooting_car_handle 4@ flag 0 store_to 7@
+:g_17c
+0001: wait 0
+
+009F:  is_char_dead 6@
+0022: goto_if_false @g_17c
+00C8: set_fading_colour 255 255 255
+00C9: do_fade 500 fade 0
+0025: gosub @g_10
+01CF: restore_camera_jumpcut
+0004: 1@ = 1 // (int)
+0004: 2@ = 0 // (int)
+0025: gosub @g_9
+0044: set_char_coordinates $PLAYER_CHAR to -1588.06 -1218.75 13.86
+0002: goto @g_14
+:b_0
+0001: wait 0
+0025: gosub @g_0
+0025: gosub @g_15
+
+001B:  0@ == 1 // (int) var == num
+0021: goto_if_true @g_14
+0078: if or
+0102:  locate_car_2d 4@ point -1607.05 -1147.48 radius 4.0 4.0 sphere 0
+8132:   not locate_char_any_means_car_2d $PLAYER_CHAR car 4@ radius 100.0 100.0 sphere 0
+0021: goto_if_true @g_17
+
+80D8:   not is_car_health_greater 4@ than 0
+0022: goto_if_false @b_0
+0025: gosub @g_7
+0112: mark_char_as_no_longer_needed 5@
+004D: get_car_coordinates 4@ store_to 8@ 9@ 10@
+013C: add_explosion 8@ 9@ 10@ type 0
+013B: explode_car 4@
+0113: mark_car_as_no_longer_needed 4@
+0002: goto @b_1
+:g_18
+0112: mark_char_as_no_longer_needed 6@
+0112: mark_char_as_no_longer_needed 7@
+0002: goto @g_5
+:b_1
+0001: wait 0
+0025: gosub @g_0
+0078: if and
+001B:  0@ == 0 // (int) var == num
+0086:  locate_char_any_means_char_2d $PLAYER_CHAR char 6@ radius 100.0 100.0 sphere 0
+0086:  locate_char_any_means_char_2d $PLAYER_CHAR char 7@ radius 100.0 100.0 sphere 0
+0022: goto_if_false @g_18
+0078: if and
+009F:  is_char_dead 6@
+009F:  is_char_dead 7@
+0022: goto_if_false @b_1
+0025: gosub @g_12
+0267: print_help 'Still working on this mission, i rushed to make this.'
+0002: goto @g_3
