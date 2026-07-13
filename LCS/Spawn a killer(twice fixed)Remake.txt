@@ -1,0 +1,192 @@
+#Game: Liberty City Stories
+#Author: ~w~Originally MicSuit.
+#Version: ~w~1.0
+#Category: ~w~Pedestrians
+#Date: ~w~2026-05-13
+#Description: ~w~Spawn a killer, remake by No Body_n32. Credits to MicSuit...
+
+0000: NOP
+// there are lots of reused coding from Bodyguard_Spawner&Settings, cause i were lazy to remake weapon loading scheme.
+020D: generate_random_float_in_range -3.0 3.0 store_to 0@
+020D: generate_random_float_in_range 2.0 5.0 store_to 1@
+04C9: get_offset_from_char_in_world_coords $PLAYER_ACTOR offset 0@ 1@ 0 store_to 0@ 1@ 5@
+020E: generate_random_int_in_range 0 37 store_to 2@
+:3_13
+0001: wait 0
+020E: generate_random_int_in_range 0 104 store_to 3@
+
+0039:  3@ == 8
+004C: goto_if_true @3_13
+00DB: if and
+0019:  3@ > 68
+001B:  79 > 3@
+004C: goto_if_true @3_13
+
+8039:   not  3@ == 0
+004D: goto_if_false @3_8a
+
+024D:  has_model_loaded 3@
+004D: goto_if_false @3_8
+:3_8a
+0050: gosub @3_10
+0002: goto @3_11
+:3_8
+024C: request_model 3@
+0390: load_all_models_now
+:3_9
+0001: wait 0
+
+024D:  has_model_loaded 3@
+004D: goto_if_false @3_9
+0050: gosub @3_10
+024E: mark_model_as_no_longer_needed 3@
+0002: goto @3_11
+:3_10
+009A: create_char 4 model 3@ at 0@ 1@ 5@ store_to 6@
+0228: set_char_health 6@ to 100
+0403: set_char_money 6@ to 0
+0051: return
+:3_11
+
+0039:  2@ == 1
+004D: goto_if_false @4_9
+0006: 4@ = 259
+:4_8
+
+024D:  has_model_loaded 4@
+004D: goto_if_false @4_8a
+0050: gosub @4_8c
+00DB: if or
+0039:  2@ == 13
+0039:  2@ == 33
+004C: goto_if_true @4_8d
+0002: goto @4_21
+:4_8a
+024C: request_model 4@
+0390: load_all_models_now
+:4_8b
+0001: wait 0
+
+024D:  has_model_loaded 4@
+004D: goto_if_false @4_8b
+0050: gosub @4_8c
+024E: mark_model_as_no_longer_needed 4@
+00DB: if or
+0039:  2@ == 13
+0039:  2@ == 33
+004C: goto_if_true @4_8d
+0002: goto @4_21
+:4_8c
+01B7: give_weapon_to_char 6@ weapon 2@ ammo 100000
+01BE: set_current_char_weapon 6@ to 2@
+:4_8d
+0051: return
+:4_9
+00DB: if and
+0019:  2@ > 1
+001B:  13 > 2@
+004D: goto_if_false @4_10
+0006: 4@ = 258
+000A: 4@ += 2@
+0002: goto @4_8
+:4_10
+0001: wait 0
+
+0039:  2@ == 13
+004D: goto_if_false @4_11
+0006: 8@ = 291
+:4_9a
+
+024D:  has_model_loaded 8@
+004D: goto_if_false @4_9b
+0050: gosub @4_8
+0002: goto @4_21
+:4_9b
+024C: request_model 8@
+0390: load_all_models_now
+:4_9c
+024D:  has_model_loaded 8@
+004D: goto_if_false @4_9a
+0050: gosub @4_8
+024E: mark_model_as_no_longer_needed 8@
+0002: goto @4_21
+
+:4_11
+00DB: if and
+0019:  2@ > 13
+001B:  19 > 2@
+004D: goto_if_false @4_12
+0006: 4@ = 257
+000A: 4@ += 2@
+0002: goto @4_8
+:4_12
+0001: wait 0
+00DB: if and
+0019:  2@ > 18
+001B:  22 > 2@
+004D: goto_if_false @4_13
+0006: 4@ = 258
+000A: 4@ += 2@
+0002: goto @4_8
+:4_13
+00DB: if and
+0019:  2@ > 21
+001B:  26 > 2@
+004D: goto_if_false @4_14
+0006: 4@ = 259
+000A: 4@ += 2@
+0002: goto @4_8
+:4_14
+0001: wait 0
+
+0039:  2@ == 26
+004D: goto_if_false @4_15
+0006: 4@ = 280
+0002: goto @4_8
+:4_15
+
+0039:  2@ == 27
+004D: goto_if_false @4_16
+0006: 4@ = 276
+0002: goto @4_8
+:4_16
+0001: wait 0
+00DB: if and
+0019:  2@ > 27
+001B:  33 > 2@
+004D: goto_if_false @4_17
+0006: 4@ = 257
+000A: 4@ += 2@
+0002: goto @4_8
+:4_17
+
+0039:  2@ == 33
+004D: goto_if_false @4_18
+0006: 4@ = 290
+0006: 8@ = 294
+0002: goto @4_9a
+:4_18
+0001: wait 0
+
+0039:  2@ == 34
+004D: goto_if_false @4_19
+0006: 4@ = 291
+0002: goto @4_8
+:4_19
+
+0039:  2@ == 35
+004D: goto_if_false @4_20
+0006: 4@ = 289
+0002: goto @4_8
+:4_20
+0001: wait 0
+
+0039:  2@ == 36
+004D: goto_if_false @4_21
+0006: 4@ = 292
+0002: goto @4_8
+:4_21
+04C7: set_char_obj_walk_to_char 6@ char $PLAYER_ACTOR
+01D1: set_char_obj_kill_player_any_means 6@ player $PLAYER_CHAR
+0302: print_with_2_numbers_now '~b~Ped id ~1~ Weapon id ~1~' numbers 3@ 2@ time 1500 flag 1
+004E: terminate_this_script
