@@ -1,5 +1,5 @@
 #Game: Vice City Stories
-#Author: MicSuit
+#Author: daniemun
 #Version: 1.0
 #Category: Misc
 #Date: 2023-03-20

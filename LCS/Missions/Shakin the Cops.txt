@@ -1,5 +1,5 @@
 #Game: Liberty City Stories
-#Author: MicSuit
+#Author: daniemun
 #Version: 1.2.1
 #Category: Missions
 #Date: 2022-06-05

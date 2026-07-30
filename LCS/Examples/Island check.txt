@@ -1,5 +1,5 @@
 #Game: Liberty City Stories
-#Author: Freakler & MicSuit
+#Author: Freakler & daniemun
 #Version: 1.0
 #Category: World
 #Date: 2022-09-08

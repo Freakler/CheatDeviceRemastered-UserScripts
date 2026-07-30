@@ -1,5 +1,5 @@
 #Game: Vice City Stories
-#Author: MicSuit
+#Author: daniemun
 #Version: 1.0
 #Category: Missions
 #Date: 2022-07-24

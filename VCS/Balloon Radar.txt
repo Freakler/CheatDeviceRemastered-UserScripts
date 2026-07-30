@@ -1,5 +1,5 @@
 #Game: Vice City Stories
-#Author: danssmnt
+#Author: daniemun
 #Version: v0.1
 #Category: Side Missions
 #Date: 2025-12-02
@@ -229,7 +229,7 @@
 
 // LOGIC /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-03D3: print_help_always_allow 'Balloon Radar v0.1 by ~h~danssmnt~w~~n~~n~Press~h~ ~k~ ~TGSUB~ ~w~to turn off the Radar.'
+03D3: print_help_always_allow 'Balloon Radar v0.1 by ~h~daniemun~w~~n~~n~Press~h~ ~k~ ~TGSUB~ ~w~to turn off the Radar.'
 
 // Setup balloons and then run main loop
 037A: args 0 out 0 locals_base_index 0 call_func @INIT_BLIP_ARRAY_LOOP

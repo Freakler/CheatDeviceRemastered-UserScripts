@@ -1,5 +1,5 @@
 #Game: Vice City Stories
-#Author: MicSuit
+#Author: daniemun
 #Version: 1.1
 #Category: Weapons
 #Date: 2022-06-21

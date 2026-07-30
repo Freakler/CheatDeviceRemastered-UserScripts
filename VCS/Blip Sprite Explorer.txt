@@ -1,5 +1,5 @@
 #Game: Vice City Stories
-#Author: ~h~danssmnt~w~
+#Author: ~h~daniemun~w~
 #Version: v1.0
 #Category: Map
 #Date: 2025-11-29
@@ -22,7 +22,7 @@
 
 // VARIABLES ///////////////////////////////////////////////////
 
-03D3: print_help_always_allow 'Blip Sprite Explorer v1.0 by ~h~danssmnt~w~~n~~n~Press ~h~ ~k~ ~AMLEF~ ~w~ or ~h~ ~k~ ~AMRIG~ ~w~ to change sprite ID.~n~Press ~h~ ~k~ ~VEEE~ ~w~ to spawn sprite.~n~Press ~h~ ~k~ ~TGSUB~ ~w~ to exit explorer.'
+03D3: print_help_always_allow 'Blip Sprite Explorer v1.0 by ~h~daniemun~w~~n~~n~Press ~h~ ~k~ ~AMLEF~ ~w~ or ~h~ ~k~ ~AMRIG~ ~w~ to change sprite ID.~n~Press ~h~ ~k~ ~VEEE~ ~w~ to spawn sprite.~n~Press ~h~ ~k~ ~TGSUB~ ~w~ to exit explorer.'
 
 0002: goto @MAINLOOP
 

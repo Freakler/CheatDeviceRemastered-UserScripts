@@ -1,11 +1,11 @@
 #Game: Vice City Stories
-#Author: danssmnt
+#Author: daniemun
 #Version: v1.03
 #Category: Missions
 #Date: 2024-09-04
 #Description: Phil's concert is today, but Marty's "friends" wanna ruin it, stop them!
 
-// Hello, danssmnt here, I just wanted to say that making the gigantic script was pretty bad and took a long time
+// Hello, daniemun here, I just wanted to say that making the gigantic script was pretty bad and took a long time
 // Took me almost 2 months to write this, but finally finished it, and the final result is good enough (at least for me)
 
 // Anyway, if you're interested in analysing the code, just know that it's not the best.
@@ -74,7 +74,7 @@
 0006: $1019 = '~r~You can`t start this mission while you haven`t completed 100% of the game! Sorry!~w~'
 0006: $1020 = '~r~You can`t start this mission while on another mission!~w~'
 0006: $1025 = '~r~You have already started this mission!~w~'
-0006: $1026 = 'Thank you for playing my mission! Hope you liked it! Made by ~h~danssmnt~w~'
+0006: $1026 = 'Thank you for playing my mission! Hope you liked it! Made by ~h~daniemun~w~'
 
 0006: $1027 = 'Congratulations, there`s only 2% chance of triggering this ~h~easter egg~w~! Here`s 50000$!'
 

@@ -1,9 +1,9 @@
 #Game: Liberty City Stories
-#Author: ~w~Originally MicSuit.
+#Author: ~w~Originally daniemun.
 #Version: ~w~1.0
 #Category: ~w~Pedestrians
 #Date: ~w~2026-05-13
-#Description: ~w~Spawn a killer, remake by No Body_n32. Credits to MicSuit...
+#Description: ~w~Spawn a killer, remake by No Body_n32. Credits to daniemun...
 
 0000: NOP
 // there are lots of reused coding from Bodyguard_Spawner&Settings, cause i were lazy to remake weapon loading scheme.

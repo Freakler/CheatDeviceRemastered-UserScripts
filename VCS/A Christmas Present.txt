@@ -1,5 +1,5 @@
 #Game: Vice City Stories
-#Author: ~r~Mic~w~ ~g~Suit~w~
+#Author: ~r~danie~w~ ~g~mun~w~
 #Version: 1.0
 #Category: Miscellaneous
 #Date: 2022-12-24

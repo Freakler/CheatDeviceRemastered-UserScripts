@@ -1,5 +1,5 @@
 #Game: Liberty City Stories
-#Author: ~r~Mic~w~ ~g~Suit~w~
+#Author: ~r~danie~w~ ~g~mun~w~
 #Version: 1.0
 #Category: Missions
 #Date: 2022-12-24
