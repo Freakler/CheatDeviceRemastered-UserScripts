@@ -1,0 +1,9 @@
+#Game: Liberty City Stories
+#Author: daniemun
+#Version: 1.0
+#Category: Miscellaneous
+#Date: 2026-11-03
+#Description: Keep the change!
+
+010E: add_score $PLAYER_CHAR value 99999999
+004E: terminate_this_script

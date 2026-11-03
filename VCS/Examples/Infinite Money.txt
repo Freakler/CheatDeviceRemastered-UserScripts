@@ -1,0 +1,9 @@
+#Game: Vice City Stories
+#Author: daniemun
+#Version: 1.0
+#Category: Miscellaneous
+#Date: 2026-11-03
+#Description: Keep the change!
+
+0094: add_score $PLAYER_CHAR value 99999999
+0023: terminate_this_script
