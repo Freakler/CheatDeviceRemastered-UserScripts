@@ -1,0 +1,11 @@
+#Game: Vice City Stories
+#Author: daniemun
+#Version: 1.0
+#Category: Miscellaneous
+#Date: 2026-11-14
+#Description: Give a weapon to the player.
+
+0160: request_model 354
+0228: load_all_models_now
+0106: give_weapon_to_char $PLAYER_CHAR weapon 25 ammo 500
+0023: terminate_this_script
