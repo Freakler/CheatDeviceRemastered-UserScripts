@@ -6,6 +6,6 @@
 #Description: Give a weapon to the player.
 
 024C: request_model 282
-0390: load_all_models_now 
-01B6: give_player $PLAYER_CHAR weapon 282 ammo 500
+0390: load_all_models_now
+01B6: give_player $PLAYER_CHAR weapon 23 ammo 500
 004E: terminate_this_script
