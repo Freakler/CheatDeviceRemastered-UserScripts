@@ -1,0 +1,9 @@
+#Game: Vice City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Miscellaneous
+#Date: ~w~2026-14-11
+#Description: Clear all weapons from your inventory, you`ll lose them permanently!
+
+02D4: remove_all_char_weapons $PLAYER_CHAR
+0023: terminate_this_script

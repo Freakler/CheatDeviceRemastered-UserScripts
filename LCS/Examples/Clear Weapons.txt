@@ -1,0 +1,9 @@
+#Game: Liberty City Stories
+#Author: ~w~No body_n32
+#Version: ~b~1.0
+#Category: ~y~Miscellaneous
+#Date: ~w~2026-14-11
+#Description: Clear all weapons from your inventory, you`ll lose them permanently!
+
+03BD: clear_weapons_from_player $PLAYER_CHAR
+004E: terminate_this_script
