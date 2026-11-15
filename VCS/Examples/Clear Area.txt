@@ -1,0 +1,9 @@
+#Game: Vice City Stories
+#Author: Skibidi11 
+#Version: 3
+#Category: Misc
+#Date: 2026-11-05
+#Description: Clear the unmarked vehicles and pedestrians.
+022C: clear_area 0.0 0.0 0.0 radius 99999999.9 clear_particles 0
+0055: print_big 'Area cleared successfully!' time 3000 style 6
+0023: terminate_this_script
